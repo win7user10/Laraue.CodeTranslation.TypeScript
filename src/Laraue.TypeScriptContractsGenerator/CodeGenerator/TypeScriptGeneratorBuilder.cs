@@ -37,7 +37,7 @@ namespace Laraue.TypeScriptContractsGenerator.CodeGenerator
         /// </summary>
         /// <param name="indentSize"></param>
         /// <returns></returns>
-        public TypeScriptGeneratorBuilder WithindentSize(int indentSize)
+        public TypeScriptGeneratorBuilder WithIndentSize(int indentSize)
         {
             _indentSize = indentSize;
             return this;
