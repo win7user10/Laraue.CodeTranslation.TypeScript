@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <Description>Library for generating typescript contracts from existing CSharp code.</Description>
+    <RepositoryUrl>https://github.com/win7user10/Laraue.TypeScriptContractsGenerator</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <Authors>Belyanskiy Ilya</Authors>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.1.1</Version>
+    <PackageProjectUrl>https://github.com/win7user10/Laraue.TypeScriptContractsGenerator</PackageProjectUrl>
+    <PackageTags>typescript;CSharp;code generation;contracts</PackageTags>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+</Project>
