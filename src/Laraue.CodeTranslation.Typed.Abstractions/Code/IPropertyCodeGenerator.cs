@@ -6,19 +6,19 @@ namespace Laraue.CodeTranslation.Typed.Abstractions.Code
 	public interface IPropertyCodeGenerator : CodeTranslation.Abstractions.Code.IPropertyCodeGenerator
 	{
 		/// <summary>
-		/// Get translated access modifier of a <see cref="IPropertyMetadata">property</see>.
+		/// Get translated access modifier of a <see cref="PropertyMetadata">property</see>.
 		/// </summary>
 		/// <param name="metadata"></param>
 		/// <returns></returns>
 		[CanBeNull]
-		string GetAccessModifier(IPropertyMetadata metadata);
+		string GetAccessModifier(PropertyMetadata metadata);
 
 		/// <summary>
-		/// Get translated type of a <see cref="IPropertyMetadata">property</see>.
+		/// Get translated type of a <see cref="PropertyMetadata">property</see>.
 		/// </summary>
 		/// <param name="metadata"></param>
 		/// <returns></returns>
 		[CanBeNull]
-		string GetType(IPropertyMetadata metadata);
+		string GetType(PropertyMetadata metadata);
 	}
 }

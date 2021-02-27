@@ -6,17 +6,17 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 	/// <summary>
 	/// Contains meta information of some <see cref="Type">Clr type</see> or <see cref="System.Reflection.MemberInfo">Clr property</see>.
 	/// </summary>
-	public interface IMetadata
+	public abstract record Metadata
 	{
 		/// <summary>
 		/// Source Clr Type.
 		/// </summary>
 		[NotNull]
-		Type ClrType { get; set; }
+		public Type ClrType { get; init; }
 
 		/// <summary>
 		/// Does type should be generic.
 		/// </summary>
-		bool IsGeneric { get; set; }
+		public bool IsGeneric { get; init; }
 	}
 }

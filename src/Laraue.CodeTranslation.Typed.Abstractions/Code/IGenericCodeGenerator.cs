@@ -6,10 +6,10 @@ namespace Laraue.CodeTranslation.Typed.Abstractions.Code
 	public interface IGenericCodeGenerator : ICodeGenerator
 	{
 		/// <summary>
-		/// Get translated generic type from a <see cref="IMetadata">metadata</see>.
+		/// Get translated generic type from a <see cref="Metadata">metadata</see>.
 		/// </summary>
 		/// <param name="metadata"></param>
 		/// <returns></returns>
-		public string GenerateCode(IMetadata metadata);
+		public string GenerateCode(Metadata metadata);
 	}
 }

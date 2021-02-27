@@ -5,9 +5,9 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 	/// <summary>
 	/// Contains meta information of some <see cref="System.Type">Clr type</see>.
 	/// </summary>
-	public interface ITypeMetadata : IMetadata
+	public record TypeMetadata : Metadata
 	{
 		[CanBeNull]
-		public ITypeMetadata ParentTypeMetadata { get; set; }
+		public TypeMetadata ParentTypeMetadata { get; set; }
 	}
 }
