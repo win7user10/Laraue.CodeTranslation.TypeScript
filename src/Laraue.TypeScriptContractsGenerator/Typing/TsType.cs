@@ -5,7 +5,7 @@ namespace Laraue.TypeScriptContractsGenerator.Typing
 {
     public class TsType : TsReflectionClass
     {
-        internal TsType(Type clrType, TsTypeGenerator tsTypeGenerator, TsCodeGenerator tsCodeGenerator)
+        public TsType(Type clrType, TsTypeGenerator tsTypeGenerator, TsCodeGenerator tsCodeGenerator)
             : base (clrType, tsTypeGenerator, tsCodeGenerator)
         {
         }

@@ -16,6 +16,7 @@ namespace Laraue.TypeScriptContractsGenerator.Generators
             [typeof(int)] = TsTypes.Number,
             [typeof(long)] = TsTypes.Number,
             [typeof(decimal)] = TsTypes.Number,
+            [typeof(double)] = TsTypes.Number,
             [typeof(float)] = TsTypes.Number,
             [typeof(Guid)] = TsTypes.String,
             [typeof(Uri)] = TsTypes.String,
