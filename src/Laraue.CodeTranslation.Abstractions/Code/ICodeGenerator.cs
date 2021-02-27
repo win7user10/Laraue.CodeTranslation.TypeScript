@@ -1,4 +1,4 @@
-﻿namespace Laraue.TypeScriptContractsGenerator.Abstractions.Code
+﻿namespace Laraue.CodeTranslation.Abstractions.Code
 {
 	/// <summary>
 	/// Class can generates some result code.

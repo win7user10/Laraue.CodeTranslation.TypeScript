@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>Latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Laraue.CodeTranslation.Abstractions\Laraue.CodeTranslation.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,6 +1,6 @@
-﻿using Laraue.TypeScriptContractsGenerator.Abstractions.Metadata;
+﻿using Laraue.CodeTranslation.Abstractions.Metadata;
 
-namespace Laraue.TypeScriptContractsGenerator.Abstractions.Code
+namespace Laraue.CodeTranslation.Abstractions.Code
 {
 	/// <summary>
 	/// Class can generates result code for <see cref="ITypeMetadata">type</see>.

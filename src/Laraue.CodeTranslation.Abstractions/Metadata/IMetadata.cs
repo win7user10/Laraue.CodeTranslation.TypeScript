@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Laraue.TypeScriptContractsGenerator.Abstractions.Metadata
+namespace Laraue.CodeTranslation.Abstractions.Metadata
 {
 	/// <summary>
 	/// Contains meta information of some <see cref="Type">Clr type</see> or <see cref="System.Reflection.MemberInfo">Clr property</see>.

@@ -1,6 +1,6 @@
-﻿using Laraue.TypeScriptContractsGenerator.Abstractions.Metadata;
+﻿using Laraue.CodeTranslation.Abstractions.Metadata;
 
-namespace Laraue.TypeScriptContractsGenerator.Abstractions.Code
+namespace Laraue.CodeTranslation.Abstractions.Code
 {
 	/// <summary>
 	/// Class can generates result code for <see cref="IPropertyMetadata">property</see>.
@@ -13,5 +13,12 @@ namespace Laraue.TypeScriptContractsGenerator.Abstractions.Code
 		/// <param name="metadata"></param>
 		/// <returns></returns>
 		string GenerateCode(IPropertyMetadata metadata);
+
+		/// <summary>
+		/// Get translated name of <see cref="IPropertyMetadata">property</see>.
+		/// </summary>
+		/// <param name="metadata"></param>
+		/// <returns></returns>
+		string GetName(IPropertyMetadata metadata);
 	}
 }

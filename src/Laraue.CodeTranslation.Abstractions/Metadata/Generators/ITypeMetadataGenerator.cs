@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Laraue.TypeScriptContractsGenerator.Abstractions.Metadata.Generators
+namespace Laraue.CodeTranslation.Abstractions.Metadata.Generators
 {
 	/// <summary>
 	/// Class can generates <see cref="ITypeMetadata">metadata</see> for <see cref="ITypeMetadata">type</see>.
