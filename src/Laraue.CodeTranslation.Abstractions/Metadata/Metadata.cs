@@ -20,6 +20,11 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		public bool IsGeneric { get; init; }
 
 		/// <summary>
+		/// Generic types of the metadata.
+		/// </summary>
+		public Metadata[] GenericTypeArguments { get; init; }
+
+		/// <summary>
 		/// Does the type should be enum value.
 		/// </summary>
 		public bool IsEnum { get; init; }

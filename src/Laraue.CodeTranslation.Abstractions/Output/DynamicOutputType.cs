@@ -7,7 +7,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 	/// </summary>
 	public class DynamicOutputType : OutputType
 	{
-		public DynamicOutputType(Func<Metadata.Metadata, string> getNameFunc) : base(getNameFunc)
+		public DynamicOutputType(Func<Metadata.Metadata, OutputTypeName> getNameFunc) : base(getNameFunc)
 		{ }
 	}
 }

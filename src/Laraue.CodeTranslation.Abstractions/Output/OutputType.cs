@@ -4,14 +4,14 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 {
 	public abstract class OutputType
 	{
-		private readonly Func<Metadata.Metadata, string> _getNameFunc;
+		private readonly Func<Metadata.Metadata, OutputTypeName> _getNameFunc;
 
-		protected OutputType(Func<Metadata.Metadata, string> getNameFunc)
+		protected OutputType(Func<Metadata.Metadata, OutputTypeName> getNameFunc)
 		{
 			_getNameFunc = getNameFunc;
 		}
 
-		public string GetName(Metadata.Metadata metadata)
+		public OutputTypeName GetName(Metadata.Metadata metadata)
 		{
 			return _getNameFunc.Invoke(metadata);
 		}

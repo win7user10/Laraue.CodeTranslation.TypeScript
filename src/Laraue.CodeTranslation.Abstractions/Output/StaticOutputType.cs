@@ -5,7 +5,7 @@
 	/// </summary>
 	public class StaticOutputType : OutputType
 	{
-		public StaticOutputType(string type) : base(x => type)
+		public StaticOutputType(string type) : base(x => new OutputTypeName { Name = type })
 		{ }
 	}
 }
