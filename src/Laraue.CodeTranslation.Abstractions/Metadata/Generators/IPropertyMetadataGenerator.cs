@@ -9,10 +9,10 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata.Generators
 	public interface IPropertyMetadataGenerator : IMetadataGenerator
 	{
 		/// <summary>
-		/// Generates <see cref="PropertyMetadata">metadata</see> for some <see cref="MemberInfo">Clr property</see>.
+		/// Generates <see cref="PropertyMetadata">metadata</see> for some <see cref="PropertyInfo">Clr property</see>.
 		/// </summary>
 		/// <returns></returns>
 		[NotNull]
-		PropertyMetadata GetMetadata(MemberInfo property);
+		PropertyMetadata GetMetadata(PropertyInfo property);
 	}
 }

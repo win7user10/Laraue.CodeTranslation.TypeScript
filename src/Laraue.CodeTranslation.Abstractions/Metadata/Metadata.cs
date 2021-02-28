@@ -15,7 +15,7 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		public Type ClrType { get; init; }
 
 		/// <summary>
-		/// Does the type should be generic.
+		/// Is this type a generic type.
 		/// </summary>
 		public bool IsGeneric { get; init; }
 
@@ -25,8 +25,13 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		public Metadata[] GenericTypeArguments { get; init; }
 
 		/// <summary>
-		/// Does the type should be enum value.
+		/// Is the type an enum value.
 		/// </summary>
 		public bool IsEnum { get; init; }
+
+		/// <summary>
+		/// Is this type an array value.
+		/// </summary>
+		public bool IsEnumerable { get; init; }
 	}
 }

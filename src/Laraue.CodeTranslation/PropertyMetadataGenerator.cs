@@ -5,21 +5,26 @@ using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 
 namespace Laraue.CodeTranslation
 {
-	public class PropertyMetadataGenerator : MetadataGenerator, IPropertyMetadataGenerator
+	public class PropertyMetadataGenerator : TypeMetadataGenerator, IPropertyMetadataGenerator
 	{
 		/// <inheritdoc />
-		public PropertyMetadata GetMetadata(MemberInfo property)
+		public PropertyMetadata GetMetadata(PropertyInfo property)
 		{
+			var type = GetClrType(property);
+
 			return new()
 			{
-				ClrType = GetClrType(property) ?? throw new ArgumentOutOfRangeException(),
-				IsGeneric = IsGeneric(property.ReflectedType),
+				ClrType = type ?? throw new ArgumentOutOfRangeException(),
+				IsGeneric = IsGeneric(type),
+				IsEnum = IsEnum(type),
+				GenericTypeArguments = GetGenericTypeParameters(type),
+				IsEnumerable = IsEnumerable(type),
 			};
 		}
 
-		protected virtual Type GetClrType(MemberInfo property)
+		protected virtual Type GetClrType(PropertyInfo property)
 		{
-			return property.ReflectedType;
+			return property.PropertyType;
 		}
 	}
 }
