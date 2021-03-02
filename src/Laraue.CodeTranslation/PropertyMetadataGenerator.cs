@@ -19,6 +19,7 @@ namespace Laraue.CodeTranslation
 				IsEnum = IsEnum(type),
 				GenericTypeArguments = GetGenericTypeParameters(type),
 				IsEnumerable = IsEnumerable(type),
+				IsDictionary = IsDictionary(type),
 			};
 		}
 

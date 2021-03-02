@@ -33,5 +33,10 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		/// Is this type an array value.
 		/// </summary>
 		public bool IsEnumerable { get; init; }
+
+		/// <summary>
+		/// Is this type an array value.
+		/// </summary>
+		public bool IsDictionary { get; init; }
 	}
 }

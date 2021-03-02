@@ -7,7 +7,7 @@ namespace Laraue.CodeTranslation
 	{
 		protected virtual bool IsGeneric(Type type)
 		{
-			return type.GenericTypeArguments.Length > 0 || type.IsGenericEnumerable();
+			return type.GenericTypeArguments.Length > 0 || type.IsDictionary() || type.IsGenericEnumerable();
 		}
 
 		protected virtual bool IsEnum(Type type)
@@ -17,7 +17,12 @@ namespace Laraue.CodeTranslation
 
 		protected virtual bool IsEnumerable(Type type)
 		{
-			return type.IsArray || type.IsGenericEnumerable();
+			return IsDictionary(type) || type.IsArray || type.IsGenericEnumerable();
+		}
+
+		protected virtual bool IsDictionary(Type type)
+		{
+			return type.IsDictionary();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Laraue.TypeScriptContractsGenerator.UnitTests
 {
@@ -24,6 +25,8 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests
 		public TwoTypeGenericSubClass<int, decimal> TwoTypesGenericSubValue { get; set; }
 		public TwoTypeGenericSubClass<int, decimal>[] TwoTypesGenericSubValueArray { get; set; }
 		public IEnumerable<TwoTypeGenericSubClass<int, decimal>> TwoTypesGenericSubValueEnumerable { get; set; }
+		public Dictionary<int, string> DictionaryIntStringValue { get; set; }
+		public JObject jObjectValue { get; set; }
 	}
 
 	public class SubClass

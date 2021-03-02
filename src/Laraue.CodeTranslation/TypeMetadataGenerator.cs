@@ -22,9 +22,11 @@ namespace Laraue.CodeTranslation
 
 		protected virtual TypeMetadata[] GetGenericTypeParameters(Type type)
 		{
-			return type.IsGenericEnumerable()
-				? new[] { GetMetadata(type.GetGenericEnumerableType()) }
-				: type.GenericTypeArguments.Select(GetMetadata).ToArray();
+			return type.IsDictionary()
+				? type.GetDictionaryTypes().Select(GetMetadata).ToArray()
+				: type.IsGenericEnumerable()
+					? new[] { GetMetadata(type.GetGenericEnumerableType()) }
+					: type.GenericTypeArguments.Select(GetMetadata).ToArray();
 		}
 	}
 }
