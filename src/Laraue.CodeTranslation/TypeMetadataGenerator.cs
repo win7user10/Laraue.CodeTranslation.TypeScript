@@ -14,10 +14,13 @@ namespace Laraue.CodeTranslation
 		{
 			return new()
 			{
-				ClrType = type,
+				ClrType = type ?? throw new ArgumentOutOfRangeException(),
 				IsGeneric = IsGeneric(type),
+				IsEnum = IsEnum(type),
 				GenericTypeArguments = GetGenericTypeParameters(type),
 				IsEnumerable = IsEnumerable(type),
+				IsDictionary = IsDictionary(type),
+				ParentTypeMetadata = type.BaseType is not null ? GetMetadata(type.BaseType) : null,
 			};
 		}
 

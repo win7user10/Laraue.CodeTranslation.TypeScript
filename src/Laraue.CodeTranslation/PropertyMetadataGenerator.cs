@@ -8,7 +8,7 @@ namespace Laraue.CodeTranslation
 	public class PropertyMetadataGenerator : TypeMetadataGenerator, IPropertyMetadataGenerator
 	{
 		/// <inheritdoc />
-		public PropertyMetadata GetMetadata(PropertyInfo property)
+		public virtual PropertyMetadata GetMetadata(PropertyInfo property)
 		{
 			var type = GetClrType(property);
 

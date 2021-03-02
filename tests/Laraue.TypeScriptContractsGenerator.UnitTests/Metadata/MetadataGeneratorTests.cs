@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 using Newtonsoft.Json.Linq;
@@ -47,10 +48,12 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 			Assert.Equal(typeof(int), genericTypeGenericType.ClrType);
 		}
 
-		[Fact]
-		public void GenerateIntStringDictionaryMetadata()
+		[Theory]
+		[InlineData(nameof(MainClass.DictionaryIntStringValue), typeof(int), typeof(string))]
+		[InlineData(nameof(MainClass.JObjectValue), typeof(string), typeof(JToken))]
+		public void GenerateDictionaryMetadata(string propertyName, Type exceptedKeyType, Type exceptedValueType)
 		{
-			var meta = _generator.GetMetadata(nameof(MainClass.DictionaryIntStringValue).GetPropertyInfo<MainClass>());
+			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>());
 			Assert.False(meta.IsEnum);
 			Assert.True(meta.IsEnumerable);
 			Assert.True(meta.IsGeneric);
@@ -59,24 +62,25 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 			Assert.Equal(2, genericTypeArgs.Length);
 			var firstGenericType = genericTypeArgs[0];
 			var secondGenericType = genericTypeArgs[1];
-			Assert.Equal(typeof(int), firstGenericType.ClrType);
-			Assert.Equal(typeof(string), secondGenericType.ClrType);
+			Assert.Equal(exceptedKeyType, firstGenericType.ClrType);
+			Assert.Equal(exceptedValueType, secondGenericType.ClrType);
 		}
 
-		[Fact]
-		public void GenerateJObjectMetadata()
+
+		[Theory]
+		[InlineData(nameof(MainClass.TwoTypesGenericSubValueArray))]
+		[InlineData(nameof(MainClass.TwoTypesGenericSubValueEnumerable))]
+		public void GenerateTwoTypesGenericSubValueArrayMetadata(string propertyName)
 		{
-			var meta = _generator.GetMetadata(nameof(MainClass.jObjectValue).GetPropertyInfo<MainClass>());
+			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>());
 			Assert.False(meta.IsEnum);
 			Assert.True(meta.IsEnumerable);
 			Assert.True(meta.IsGeneric);
-			Assert.True(meta.IsDictionary);
-			var genericTypeArgs = meta.GenericTypeArguments.ToArray();
-			Assert.Equal(2, genericTypeArgs.Length);
-			var firstGenericType = genericTypeArgs[0];
-			var secondGenericType = genericTypeArgs[1];
-			Assert.Equal(typeof(string), firstGenericType.ClrType);
-			Assert.Equal(typeof(JToken), secondGenericType.ClrType);
+			var genericType = Assert.Single(meta.GenericTypeArguments);
+			var genericTypeGenericTypeArgs = genericType.GenericTypeArguments.ToArray();
+			Assert.Equal(2, genericTypeGenericTypeArgs.Length);
+			Assert.Equal(typeof(int), genericTypeGenericTypeArgs[0].ClrType);
+			Assert.Equal(typeof(decimal), genericTypeGenericTypeArgs[1].ClrType);
 		}
 	}
 }

@@ -26,7 +26,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests
 		public TwoTypeGenericSubClass<int, decimal>[] TwoTypesGenericSubValueArray { get; set; }
 		public IEnumerable<TwoTypeGenericSubClass<int, decimal>> TwoTypesGenericSubValueEnumerable { get; set; }
 		public Dictionary<int, string> DictionaryIntStringValue { get; set; }
-		public JObject jObjectValue { get; set; }
+		public JObject JObjectValue { get; set; }
 	}
 
 	public class SubClass
