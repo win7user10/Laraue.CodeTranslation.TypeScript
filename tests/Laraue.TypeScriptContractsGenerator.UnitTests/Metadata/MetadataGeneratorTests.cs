@@ -1,5 +1,7 @@
-﻿using Laraue.CodeTranslation;
+﻿using System.Linq;
+using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
@@ -53,11 +55,28 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 			Assert.True(meta.IsEnumerable);
 			Assert.True(meta.IsGeneric);
 			Assert.True(meta.IsDictionary);
-			Assert.Equal(2, meta.GenericTypeArguments.Length);
-			var firstGenericType = meta.GenericTypeArguments[0];
-			var secondGenericType = meta.GenericTypeArguments[1];
+			var genericTypeArgs = meta.GenericTypeArguments.ToArray();
+			Assert.Equal(2, genericTypeArgs.Length);
+			var firstGenericType = genericTypeArgs[0];
+			var secondGenericType = genericTypeArgs[1];
 			Assert.Equal(typeof(int), firstGenericType.ClrType);
 			Assert.Equal(typeof(string), secondGenericType.ClrType);
+		}
+
+		[Fact]
+		public void GenerateJObjectMetadata()
+		{
+			var meta = _generator.GetMetadata(nameof(MainClass.jObjectValue).GetPropertyInfo<MainClass>());
+			Assert.False(meta.IsEnum);
+			Assert.True(meta.IsEnumerable);
+			Assert.True(meta.IsGeneric);
+			Assert.True(meta.IsDictionary);
+			var genericTypeArgs = meta.GenericTypeArguments.ToArray();
+			Assert.Equal(2, genericTypeArgs.Length);
+			var firstGenericType = genericTypeArgs[0];
+			var secondGenericType = genericTypeArgs[1];
+			Assert.Equal(typeof(string), firstGenericType.ClrType);
+			Assert.Equal(typeof(JToken), secondGenericType.ClrType);
 		}
 	}
 }

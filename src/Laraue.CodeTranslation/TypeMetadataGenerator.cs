@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
@@ -20,13 +21,18 @@ namespace Laraue.CodeTranslation
 			};
 		}
 
-		protected virtual TypeMetadata[] GetGenericTypeParameters(Type type)
+		protected virtual IEnumerable<TypeMetadata> GetGenericTypeParameters(Type type)
 		{
-			return type.IsDictionary()
-				? type.GetDictionaryTypes().Select(GetMetadata).ToArray()
+			var clrTypes = type.IsDictionary()
+				? type.GetDictionaryTypes()
 				: type.IsGenericEnumerable()
-					? new[] { GetMetadata(type.GetGenericEnumerableType()) }
-					: type.GenericTypeArguments.Select(GetMetadata).ToArray();
+					? new[] { type.GetGenericEnumerableType() }
+					: type.GenericTypeArguments;
+
+			foreach (var clrType in clrTypes)
+			{
+				yield return GetMetadata(clrType);
+			}
 		}
 	}
 }

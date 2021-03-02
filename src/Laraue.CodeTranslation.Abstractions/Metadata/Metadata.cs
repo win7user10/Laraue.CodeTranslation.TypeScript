@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 
 namespace Laraue.CodeTranslation.Abstractions.Metadata
@@ -22,7 +23,7 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		/// <summary>
 		/// Generic types of the metadata.
 		/// </summary>
-		public Metadata[] GenericTypeArguments { get; init; }
+		public IEnumerable<Metadata> GenericTypeArguments { get; init; }
 
 		/// <summary>
 		/// Is the type an enum value.
