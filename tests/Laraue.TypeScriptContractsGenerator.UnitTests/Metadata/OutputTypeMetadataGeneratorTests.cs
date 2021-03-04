@@ -5,6 +5,7 @@ using Laraue.CodeTranslation.Abstractions.Output.Metadata;
 using Laraue.TypeScriptContractsGenerator.Architecture;
 using Laraue.TypeScriptContractsGenerator.Architecture.Types;
 using Xunit;
+using Array = Laraue.TypeScriptContractsGenerator.Architecture.Types.Array;
 using String = Laraue.TypeScriptContractsGenerator.Architecture.Types.String;
 
 namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
@@ -23,9 +24,10 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		[InlineData(typeof(string), typeof(String))]
 		[InlineData(typeof(Guid), typeof(String))]
 		[InlineData(typeof(MainClass), typeof(Class))]
-		public void GenerateCommonTypes(Type clrType, Type tsType)
+		[InlineData(typeof(MainClass[]), typeof(Array))]
+		public void GenerateOutputTypes(Type clrType, Type tsType)
 		{
-			var metadata = _generator.Generate(new TypeMetadata { ClrType = clrType });
+			var metadata = _generator.Generate(new TypeMetadata { ClrType = clrType, IsEnumerable = clrType.IsArray });
 			Assert.Equal(tsType, metadata.OutputType.GetType());
 		}
 	}
