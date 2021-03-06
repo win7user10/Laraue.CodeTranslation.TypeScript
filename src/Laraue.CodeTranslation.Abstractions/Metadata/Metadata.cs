@@ -23,7 +23,7 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		/// <summary>
 		/// Generic types of the metadata.
 		/// </summary>
-		public IEnumerable<Metadata> GenericTypeArguments { get; init; }
+		public IEnumerable<TypeMetadata> GenericTypeArguments { get; init; }
 
 		/// <summary>
 		/// Is the type an enum value.

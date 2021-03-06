@@ -1,16 +1,12 @@
-﻿using Laraue.CodeTranslation.Abstractions.Metadata;
-
-namespace Laraue.CodeTranslation.Abstractions.Output
+﻿namespace Laraue.CodeTranslation.Abstractions.Output
 {
 	public class Class : OutputType
 	{
-		public readonly TypeMetadata Metadata;
+		public override OutputTypeName Name { get; }
 
-		public override string Name => Metadata.ClrType.Name;
-
-		public Class(TypeMetadata metadata)
+		public Class(OutputTypeName name)
 		{
-			Metadata = metadata;
+			Name = name;
 		}
 	}
 }

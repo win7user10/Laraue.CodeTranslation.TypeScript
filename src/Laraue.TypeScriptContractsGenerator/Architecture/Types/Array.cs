@@ -8,7 +8,7 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture.Types
 		private readonly TypeMetadata _metadata;
 
 		/// <inheritdoc />
-		public override string Name => "Array";
+		public override OutputTypeName Name => "Array";
 
 		public Array(TypeMetadata metadata)
 		{

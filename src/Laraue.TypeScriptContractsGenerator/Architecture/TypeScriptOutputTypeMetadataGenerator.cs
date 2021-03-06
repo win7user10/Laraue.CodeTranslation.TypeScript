@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
@@ -30,10 +32,11 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 
 		public virtual Class GetClassMetadata(TypeMetadata metadata)
 		{
-			return new (metadata);
+			var typeName = GetTypeName(metadata);
+			return new (typeName);
 		}
 
-		public virtual Array GetArrayMetadata(TypeMetadata metadata)
+		protected virtual Array GetArrayMetadata(TypeMetadata metadata)
 		{
 			return new(metadata);
 		}
@@ -43,6 +46,25 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 		{
 			var descriptor = Collection.GetMap(metadata);
 			return descriptor.GetOutputType(metadata);
+		}
+
+		protected virtual TypeMetadata[] GetGenericTypeArguments(TypeMetadata metadata)
+		{
+			return metadata.GenericTypeArguments.ToArray();
+		}
+
+		protected virtual string GetNonGenericStringTypeName(Metadata metadata)
+		{
+			var typeName = metadata.ClrType.Name;
+			return Regex.Replace(typeName, @"`\d+", string.Empty);
+		}
+
+		public OutputTypeName GetTypeName(TypeMetadata metadata)
+		{
+			var typeName = GetNonGenericStringTypeName(metadata);
+			var genericArgs = GetGenericTypeArguments(metadata);
+			var genericOutputTypes = genericArgs.Select(GetOutputType).ToArray();
+			return new OutputTypeName(typeName, genericOutputTypes.Select(x => x.Name));
 		}
 	}
 }

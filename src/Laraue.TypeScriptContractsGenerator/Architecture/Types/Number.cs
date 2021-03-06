@@ -4,6 +4,6 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture.Types
 {
 	public class Number : OutputType
 	{
-		public override string Name => "number";
+		public override OutputTypeName Name => "number";
 	}
 }

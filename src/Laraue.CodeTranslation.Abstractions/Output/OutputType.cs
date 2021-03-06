@@ -2,7 +2,7 @@
 {
 	public abstract class OutputType
 	{
-		public abstract string Name { get; }
+		public abstract OutputTypeName Name { get; }
 
 		/// <inheritdoc />
 		public override string ToString()

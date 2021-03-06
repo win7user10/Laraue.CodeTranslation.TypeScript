@@ -1,4 +1,5 @@
 ﻿using System;
+using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
@@ -29,6 +30,21 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		{
 			var metadata = _generator.Generate(new TypeMetadata { ClrType = clrType, IsEnumerable = clrType.IsArray });
 			Assert.Equal(tsType, metadata.OutputType.GetType());
+		}
+
+		[Theory]
+		[InlineData(typeof(TwoTypeGenericSubClass<int, decimal>), "TwoTypeGenericSubClass<number, number>")]
+		[InlineData(typeof(TwoTypeGenericSubClass<int, TwoTypeGenericSubClass<int, decimal>>), "TwoTypeGenericSubClass<number, TwoTypeGenericSubClass<number, number>>")]
+		public void GenerateTypeName(Type inputType, string exceptedName)
+		{
+			var typeMetadata = GetTypeMetadata(inputType);
+			var metadata = _generator.Generate(typeMetadata);
+			Assert.Equal(exceptedName, metadata.OutputType.Name);
+		}
+
+		private TypeMetadata GetTypeMetadata(Type type)
+		{
+			return new TypeMetadataGenerator().GetMetadata(type);
 		}
 	}
 }
