@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
@@ -33,12 +35,40 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 		public virtual Class GetClassMetadata(TypeMetadata metadata)
 		{
 			var typeName = GetTypeName(metadata);
-			return new (typeName);
+			return new (typeName, new HashSet<TypeMetadata>(GetUsedTypes(metadata)));
 		}
 
 		protected virtual Array GetArrayMetadata(TypeMetadata metadata)
 		{
-			return new(metadata);
+			var typeName = GetTypeName(metadata);
+			return new(typeName, new HashSet<TypeMetadata>(GetUsedTypes(metadata)));
+		}
+
+		protected virtual IEnumerable<TypeMetadata> GetUsedTypes(TypeMetadata metadata)
+		{
+			var parentType = GetUsedParentType(metadata);
+
+			if (parentType is not null)
+			{
+				yield return parentType;
+			}
+
+			foreach (var type in GetUsedGenericTypes(metadata))
+			{
+				yield return type;
+			}
+		}
+
+		[CanBeNull]
+		protected virtual TypeMetadata GetUsedParentType(TypeMetadata metadata)
+		{
+			throw new NotImplementedException();
+		}
+
+		[NotNull]
+		protected virtual IEnumerable<TypeMetadata> GetUsedGenericTypes(TypeMetadata metadata)
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <inheritdoc />

@@ -4,9 +4,9 @@ using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.TypeScriptContractsGenerator.Architecture.Types
 {
-	public class Array : ReferenceOutputType
+	public class Class : ReferenceOutputType
 	{
-		public Array(OutputTypeName name, IEnumerable<TypeMetadata> usedTypes)
+		public Class(OutputTypeName name, IEnumerable<TypeMetadata> usedTypes) 
 			: base(name, usedTypes)
 		{
 		}
