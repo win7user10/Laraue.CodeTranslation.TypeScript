@@ -52,7 +52,6 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 			var typeMetadata = GetTypeMetadata(inputType);
 			var metadata = _generator.Generate(typeMetadata);
 			Assert.Equal(exceptedTypes, metadata.OutputType.UsedTypes.Select(x => x.Name.Name));
-
 		}
 
 		private TypeMetadata GetTypeMetadata(Type type)

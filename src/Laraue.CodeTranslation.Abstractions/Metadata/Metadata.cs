@@ -40,5 +40,10 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		/// Is this type an array value.
 		/// </summary>
 		public bool IsDictionary { get; init; }
+
+		/// <summary>
+		/// Is this type assignable from <see cref="Nullable{T}"/>.
+		/// </summary>
+		public bool IsNullable { get; init; }
 	}
 }

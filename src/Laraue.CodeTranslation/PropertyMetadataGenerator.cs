@@ -10,16 +10,18 @@ namespace Laraue.CodeTranslation
 		/// <inheritdoc />
 		public virtual PropertyMetadata GetMetadata(PropertyInfo property)
 		{
-			var type = GetClrType(property);
+			var clrType = GetClrType(property);
+			var notNullableType = GetNotNullableType(clrType);
 
 			return new()
 			{
-				ClrType = type ?? throw new ArgumentOutOfRangeException(),
-				IsGeneric = IsGeneric(type),
-				IsEnum = IsEnum(type),
-				GenericTypeArguments = GetGenericTypeParameters(type),
-				IsEnumerable = IsEnumerable(type),
-				IsDictionary = IsDictionary(type),
+				ClrType = notNullableType ?? throw new ArgumentOutOfRangeException(),
+				IsGeneric = IsGeneric(notNullableType),
+				IsEnum = IsEnum(notNullableType),
+				GenericTypeArguments = GetGenericTypeParameters(notNullableType),
+				IsEnumerable = IsEnumerable(notNullableType),
+				IsDictionary = IsDictionary(notNullableType),
+				IsNullable = IsNullable(clrType),
 			};
 		}
 

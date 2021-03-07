@@ -82,5 +82,18 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 			Assert.Equal(typeof(int), genericTypeGenericTypeArgs[0].ClrType);
 			Assert.Equal(typeof(decimal), genericTypeGenericTypeArgs[1].ClrType);
 		}
+
+		[Theory]
+		[InlineData(nameof(MainClass.NullableIntValue), typeof(int))]
+		[InlineData(nameof(MainClass.NullableGuidValue), typeof(Guid))]
+		public void GenerateNullableMetadata(string propertyName, Type exceptedClrType)
+		{
+			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>());
+			Assert.False(meta.IsEnum);
+			Assert.False(meta.IsEnumerable);
+			Assert.False(meta.IsGeneric);
+			Assert.True(meta.IsNullable);
+			Assert.Equal(exceptedClrType, meta.ClrType);
+		}
 	}
 }

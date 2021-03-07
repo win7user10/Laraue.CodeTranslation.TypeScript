@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 using Laraue.CodeTranslation.Extensions;
@@ -12,15 +11,17 @@ namespace Laraue.CodeTranslation
 		/// <inheritdoc />
 		public TypeMetadata GetMetadata(Type type)
 		{
+			var notNullableType = GetNotNullableType(type);
 			return new()
 			{
-				ClrType = type ?? throw new ArgumentOutOfRangeException(),
-				IsGeneric = IsGeneric(type),
-				IsEnum = IsEnum(type),
-				GenericTypeArguments = GetGenericTypeParameters(type),
-				IsEnumerable = IsEnumerable(type),
-				IsDictionary = IsDictionary(type),
-				ParentTypeMetadata = type.BaseType is not null ? GetMetadata(type.BaseType) : null,
+				ClrType = notNullableType ?? throw new ArgumentOutOfRangeException(),
+				IsGeneric = IsGeneric(notNullableType),
+				IsEnum = IsEnum(notNullableType),
+				GenericTypeArguments = GetGenericTypeParameters(notNullableType),
+				IsEnumerable = IsEnumerable(notNullableType),
+				IsDictionary = IsDictionary(notNullableType),
+				ParentTypeMetadata = notNullableType.BaseType is not null ? GetMetadata(notNullableType.BaseType) : null,
+				IsNullable = IsNullable(type),
 			};
 		}
 

@@ -24,5 +24,16 @@ namespace Laraue.CodeTranslation
 		{
 			return type.IsDictionary();
 		}
+
+		protected virtual bool IsNullable(Type type)
+		{
+			return Nullable.GetUnderlyingType(type) is not null;
+		}
+
+		protected virtual Type GetNotNullableType(Type type)
+		{
+			var underlyingType = Nullable.GetUnderlyingType(type);
+			return underlyingType ?? type;
+		}
 	}
 }
