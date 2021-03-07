@@ -29,9 +29,8 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests
 		public JObject JObjectValue { get; set; }
 	}
 
-	public class SubClass
+	public class SubClass : MainClass
 	{
-		public int IntValue { get; set; }
 	}
 
 	public class OneTypeGenericSubClass<T>

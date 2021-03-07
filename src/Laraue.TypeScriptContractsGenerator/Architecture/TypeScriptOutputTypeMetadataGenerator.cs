@@ -35,40 +35,43 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 		public virtual Class GetClassMetadata(TypeMetadata metadata)
 		{
 			var typeName = GetTypeName(metadata);
-			return new (typeName, new HashSet<TypeMetadata>(GetUsedTypes(metadata)));
+			return new (typeName, GetUsedTypes(metadata));
 		}
 
 		protected virtual Array GetArrayMetadata(TypeMetadata metadata)
 		{
 			var typeName = GetTypeName(metadata);
-			return new(typeName, new HashSet<TypeMetadata>(GetUsedTypes(metadata)));
+			return new(typeName, GetUsedTypes(metadata));
 		}
 
-		protected virtual IEnumerable<TypeMetadata> GetUsedTypes(TypeMetadata metadata)
+		protected virtual IEnumerable<OutputType> GetUsedTypes(TypeMetadata metadata)
 		{
+			var allUsedTypes = new List<OutputType>(16);
 			var parentType = GetUsedParentType(metadata);
 
 			if (parentType is not null)
 			{
-				yield return parentType;
+				allUsedTypes.AddRange(GetUsedGenericTypes(parentType));
 			}
 
-			foreach (var type in GetUsedGenericTypes(metadata))
-			{
-				yield return type;
-			}
+			allUsedTypes.AddRange(GetUsedGenericTypes(metadata.GenericTypeArguments?.ToArray()));
+
+			var result = new HashSet<OutputType>(allUsedTypes, new UsedOutputTypesEqualityComparer());
+			return result.ToArray();
 		}
 
 		[CanBeNull]
 		protected virtual TypeMetadata GetUsedParentType(TypeMetadata metadata)
 		{
-			throw new NotImplementedException();
+			var parentMetadata = metadata.ParentTypeMetadata;
+			if (parentMetadata is null) return null;
+			return parentMetadata.ClrType.Assembly.FullName.Contains("System") ? null : parentMetadata;
 		}
 
 		[NotNull]
-		protected virtual IEnumerable<TypeMetadata> GetUsedGenericTypes(TypeMetadata metadata)
+		protected virtual IEnumerable<OutputType> GetUsedGenericTypes([CanBeNull] params TypeMetadata[] metadata)
 		{
-			throw new NotImplementedException();
+			return metadata?.Select(GetOutputType).Where(x => x is not ValueOutputType) ?? System.Array.Empty<OutputType>();
 		}
 
 		/// <inheritdoc />
@@ -78,9 +81,10 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 			return descriptor.GetOutputType(metadata);
 		}
 
+		[NotNull]
 		protected virtual TypeMetadata[] GetGenericTypeArguments(TypeMetadata metadata)
 		{
-			return metadata.GenericTypeArguments.ToArray();
+			return metadata.GenericTypeArguments?.ToArray() ?? System.Array.Empty<TypeMetadata>();
 		}
 
 		protected virtual string GetNonGenericStringTypeName(Metadata metadata)

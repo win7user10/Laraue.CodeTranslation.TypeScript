@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
-using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
 using Laraue.TypeScriptContractsGenerator.Architecture;
 using Laraue.TypeScriptContractsGenerator.Architecture.Types;
@@ -40,6 +40,19 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 			var typeMetadata = GetTypeMetadata(inputType);
 			var metadata = _generator.Generate(typeMetadata);
 			Assert.Equal(exceptedName, metadata.OutputType.Name);
+		}
+
+		[Theory]
+		[InlineData(typeof(int), new string[0])]
+		[InlineData(typeof(TwoTypeGenericSubClass<int, decimal>), new string[0])]
+		[InlineData(typeof(TwoTypeGenericSubClass<int, OneTypeGenericSubClass<int>>), new[]{ "OneTypeGenericSubClass" })]
+		[InlineData(typeof(SubClass), new[]{ "MainClass" })]
+		public void GenerateUsedTypes(Type inputType, string[] exceptedTypes)
+		{
+			var typeMetadata = GetTypeMetadata(inputType);
+			var metadata = _generator.Generate(typeMetadata);
+			Assert.Equal(exceptedTypes, metadata.OutputType.UsedTypes.Select(x => x.Name.Name));
+
 		}
 
 		private TypeMetadata GetTypeMetadata(Type type)

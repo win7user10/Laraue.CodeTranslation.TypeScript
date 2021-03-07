@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Laraue.CodeTranslation.Abstractions.Metadata;
 
 namespace Laraue.CodeTranslation.Abstractions.Output
 {
@@ -7,7 +6,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 	{
 		public abstract OutputTypeName Name { get; }
 
-		public abstract IEnumerable<TypeMetadata> UsedTypes { get; }
+		public abstract IEnumerable<OutputType> UsedTypes { get; }
 
 		/// <inheritdoc />
 		public override string ToString()
