@@ -61,6 +61,14 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 			Assert.Equal(exceptedTypes, metadata.OutputType.UsedTypes.Select(x => x.Name.Name));
 		}
 
+		[Fact]
+		public void GeneratePropertiesShouldNotThrowAnyException()
+		{
+			var typeMetadata = GetTypeMetadata(typeof(MainClass));
+			var metadata = _generator.Generate(typeMetadata);
+			_ = metadata.Source.PropertiesMetadata.ToArray();
+		}
+
 		private TypeMetadata GetTypeMetadata(Type type)
 		{
 			return new MetadataGenerator(new PropertyInfoResolver()).GetMetadata(type);

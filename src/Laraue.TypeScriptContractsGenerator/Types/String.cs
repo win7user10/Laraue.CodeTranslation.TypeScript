@@ -1,6 +1,6 @@
 ﻿using Laraue.CodeTranslation.Abstractions.Output;
 
-namespace Laraue.TypeScriptContractsGenerator.Architecture.Types
+namespace Laraue.TypeScriptContractsGenerator.Types
 {
 	public class String : ValueOutputType
 	{

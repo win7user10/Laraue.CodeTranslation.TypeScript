@@ -6,9 +6,9 @@ using JetBrains.Annotations;
 using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
-using Laraue.TypeScriptContractsGenerator.Architecture.Types;
-using Array = Laraue.TypeScriptContractsGenerator.Architecture.Types.Array;
-using String = Laraue.TypeScriptContractsGenerator.Architecture.Types.String;
+using Laraue.TypeScriptContractsGenerator.Types;
+using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
+using String = Laraue.TypeScriptContractsGenerator.Types.String;
 
 namespace Laraue.TypeScriptContractsGenerator.Architecture
 {
