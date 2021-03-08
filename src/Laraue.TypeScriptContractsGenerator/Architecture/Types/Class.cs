@@ -5,8 +5,8 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture.Types
 {
 	public class Class : ReferenceOutputType
 	{
-		public Class(OutputTypeName name, IEnumerable<OutputType> usedTypes) 
-			: base(name, usedTypes)
+		public Class(OutputTypeName name, IEnumerable<OutputType> usedTypes, IEnumerable<OutputPropertyType> properties) 
+			: base(name, usedTypes, properties)
 		{
 		}
 	}

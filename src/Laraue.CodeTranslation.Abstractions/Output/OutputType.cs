@@ -8,6 +8,8 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 
 		public abstract IEnumerable<OutputType> UsedTypes { get; }
 
+		public abstract IEnumerable<OutputPropertyType> Properties { get; }
+
 		/// <inheritdoc />
 		public override string ToString()
 		{

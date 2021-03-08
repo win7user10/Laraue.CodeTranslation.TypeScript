@@ -15,9 +15,10 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		public void GenerateIntMetadata()
 		{
 			var meta = _generator.GetMetadata(nameof(MainClass.IntValue).GetPropertyInfo<MainClass>());
-			Assert.False(meta.IsEnum);
-			Assert.False(meta.IsEnumerable);
-			Assert.False(meta.IsGeneric);
+			Assert.Equal("IntValue", meta.PropertyName);
+			Assert.False(meta.PropertyType.IsEnum);
+			Assert.False(meta.PropertyType.IsEnumerable);
+			Assert.False(meta.PropertyType.IsGeneric);
 		}
 
 		[Theory]
@@ -25,7 +26,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		[InlineData(nameof(MainClass.EnumerableIntValue))]
 		public void GenerateArrayIntMetadata(string propertyName)
 		{
-			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>());
+			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>()).PropertyType;
 			Assert.False(meta.IsEnum);
 			Assert.True(meta.IsEnumerable);
 			Assert.True(meta.IsGeneric);
@@ -38,7 +39,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		[InlineData(nameof(MainClass.EnumerableWithArrayIntValue))]
 		public void GenerateMultiDimensionArrayIntMetadata(string propertyName)
 		{
-			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>());
+			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>()).PropertyType;
 			Assert.False(meta.IsEnum);
 			Assert.True(meta.IsEnumerable);
 			Assert.True(meta.IsGeneric);
@@ -53,7 +54,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		[InlineData(nameof(MainClass.JObjectValue), typeof(string), typeof(JToken))]
 		public void GenerateDictionaryMetadata(string propertyName, Type exceptedKeyType, Type exceptedValueType)
 		{
-			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>());
+			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>()).PropertyType;
 			Assert.False(meta.IsEnum);
 			Assert.True(meta.IsEnumerable);
 			Assert.True(meta.IsGeneric);
@@ -72,7 +73,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		[InlineData(nameof(MainClass.TwoTypesGenericSubValueEnumerable))]
 		public void GenerateTwoTypesGenericSubValueArrayMetadata(string propertyName)
 		{
-			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>());
+			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>()).PropertyType;
 			Assert.False(meta.IsEnum);
 			Assert.True(meta.IsEnumerable);
 			Assert.True(meta.IsGeneric);
@@ -88,7 +89,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		[InlineData(nameof(MainClass.NullableGuidValue), typeof(Guid))]
 		public void GenerateNullableMetadata(string propertyName, Type exceptedClrType)
 		{
-			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>());
+			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>()).PropertyType;
 			Assert.False(meta.IsEnum);
 			Assert.False(meta.IsEnumerable);
 			Assert.False(meta.IsGeneric);

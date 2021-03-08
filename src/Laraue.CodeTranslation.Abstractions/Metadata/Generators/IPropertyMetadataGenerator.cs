@@ -4,12 +4,12 @@ using JetBrains.Annotations;
 namespace Laraue.CodeTranslation.Abstractions.Metadata.Generators
 {
 	/// <summary>
-	/// Class can generates <see cref="PropertyMetadata">metadata</see> for <see cref="PropertyMetadata">property</see>.
+	/// Class can generates <see cref="PropertyMetadata"/> for a <see cref="PropertyInfo"/>.
 	/// </summary>
 	public interface IPropertyMetadataGenerator : IMetadataGenerator
 	{
 		/// <summary>
-		/// Generates <see cref="PropertyMetadata">metadata</see> for some <see cref="PropertyInfo">Clr property</see>.
+		/// Generates <see cref="PropertyMetadata"/> for a some <see cref="PropertyInfo"/>.
 		/// </summary>
 		/// <returns></returns>
 		[NotNull]

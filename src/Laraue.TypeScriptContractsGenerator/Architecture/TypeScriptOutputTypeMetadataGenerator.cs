@@ -35,7 +35,18 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 		public virtual Class GetClassMetadata(TypeMetadata metadata)
 		{
 			var typeName = GetTypeName(metadata);
-			return new (typeName, GetUsedTypes(metadata));
+			var propertiesMetadata = metadata.PropertiesMetadata.Select(GetOutputPropertyType);
+			return new (typeName, GetUsedTypes(metadata), propertiesMetadata);
+		}
+
+		protected virtual OutputPropertyType GetOutputPropertyType(PropertyMetadata metadata)
+		{
+			return new ()
+			{
+				Source = metadata.Source,
+				OutputType = GetOutputType(metadata.PropertyType),
+				PropertyName = metadata.PropertyName,
+			};
 		}
 
 		protected virtual Array GetArrayMetadata(TypeMetadata metadata)
@@ -95,7 +106,7 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 			return metadata.GenericTypeArguments?.ToArray() ?? System.Array.Empty<TypeMetadata>();
 		}
 
-		protected virtual string GetNonGenericStringTypeName(Metadata metadata)
+		protected virtual string GetNonGenericStringTypeName(TypeMetadata metadata)
 		{
 			var typeName = metadata.ClrType.Name;
 			return Regex.Replace(typeName, @"`\d+", string.Empty);

@@ -37,24 +37,14 @@ namespace Laraue.CodeTranslation
 
 		public virtual PropertyMetadata GetMetadata(PropertyInfo property)
 		{
-			var clrType = GetClrType(property);
-			var notNullableType = GetNotNullableType(clrType);
+			var clrType = property.PropertyType;
 
 			return new()
 			{
-				ClrType = notNullableType ?? throw new ArgumentOutOfRangeException(),
-				IsGeneric = IsGeneric(notNullableType),
-				IsEnum = IsEnum(notNullableType),
-				GenericTypeArguments = GetGenericTypeParameters(notNullableType),
-				IsEnumerable = IsEnumerable(notNullableType),
-				IsDictionary = IsDictionary(notNullableType),
-				IsNullable = IsNullable(clrType),
+				Source = property,
+				PropertyType = GetMetadata(clrType),
+				PropertyName = property.Name,
 			};
-		}
-
-		protected virtual Type GetClrType(PropertyInfo property)
-		{
-			return property.PropertyType;
 		}
 
 		protected IEnumerable<PropertyMetadata> GetPropertiesMetadata(Type type)
