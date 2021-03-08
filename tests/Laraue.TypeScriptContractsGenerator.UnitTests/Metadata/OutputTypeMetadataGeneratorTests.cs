@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
@@ -26,15 +27,21 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		[InlineData(typeof(Guid), typeof(String))]
 		[InlineData(typeof(MainClass), typeof(Class))]
 		[InlineData(typeof(MainClass[]), typeof(Array))]
+		[InlineData(typeof(int?), typeof(Number))]
 		public void GenerateOutputTypes(Type clrType, Type tsType)
 		{
-			var metadata = _generator.Generate(new TypeMetadata { ClrType = clrType, IsEnumerable = clrType.IsArray });
+			var metadata = _generator.Generate(GetTypeMetadata(clrType));
 			Assert.Equal(tsType, metadata.OutputType.GetType());
 		}
 
 		[Theory]
 		[InlineData(typeof(TwoTypeGenericSubClass<int, decimal>), "TwoTypeGenericSubClass<number, number>")]
 		[InlineData(typeof(TwoTypeGenericSubClass<int, TwoTypeGenericSubClass<int, decimal>>), "TwoTypeGenericSubClass<number, TwoTypeGenericSubClass<number, number>>")]
+		[InlineData(typeof(IEnumerable<int>), "number[]")]
+		[InlineData(typeof(IEnumerable<IEnumerable<int>>), "number[][]")]
+		[InlineData(typeof(IEnumerable<int[]>), "number[][]")]
+		[InlineData(typeof(IEnumerable<TwoTypeGenericSubClass<int, string>>), "TwoTypeGenericSubClass<number, string>[]")]
+		[InlineData(typeof(IEnumerable<OneTypeGenericSubClass<OneTypeGenericSubClass<int[]>>>), "OneTypeGenericSubClass<OneTypeGenericSubClass<number[]>>[]")]
 		public void GenerateTypeName(Type inputType, string exceptedName)
 		{
 			var typeMetadata = GetTypeMetadata(inputType);

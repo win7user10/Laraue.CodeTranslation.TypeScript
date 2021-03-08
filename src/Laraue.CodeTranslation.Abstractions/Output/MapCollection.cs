@@ -27,7 +27,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 			return this;
 		}
 
-		public MapCollection AddMap<TOutput>(Func<TypeMetadata, bool> whenShouldBeUsed,  Func<TypeMetadata, TOutput> getOutputTypeFunc)
+		public MapCollection AddMap<TOutput>(Func<TypeMetadata, bool> whenShouldBeUsed, Func<TypeMetadata, TOutput> getOutputTypeFunc)
 			where TOutput : OutputType
 		{
 			_source.Add(new MapDescriptor()

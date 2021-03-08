@@ -12,5 +12,10 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 			Name = name;
 			UsedTypes = usedTypes;
 		}
+
+		protected ReferenceOutputType()
+		{
+
+		}
 	}
 }

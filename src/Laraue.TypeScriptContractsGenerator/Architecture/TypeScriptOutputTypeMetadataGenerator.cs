@@ -18,6 +18,7 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 			: base(new MapCollection())
 		{
 			Collection
+				.AddMap<Array>(metadata => metadata.IsEnumerable && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetArrayMetadata)
 				.AddMap<int, Number>()
 				.AddMap<decimal, Number>()
 				.AddMap<double, Number>()
@@ -26,7 +27,6 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 				.AddMap<float, Number>()
 				.AddMap<string, String>()
 				.AddMap<Guid, String>()
-				.AddMap<Array>(metadata => metadata.IsEnumerable && !metadata.IsDictionary, GetArrayMetadata)
 				.AddMap<Class>(metadata => metadata.ClrType.IsClass, GetClassMetadata);
 
 			setupMap?.Invoke(Collection);
@@ -40,8 +40,16 @@ namespace Laraue.TypeScriptContractsGenerator.Architecture
 
 		protected virtual Array GetArrayMetadata(TypeMetadata metadata)
 		{
-			var typeName = GetTypeName(metadata);
-			return new(typeName, GetUsedTypes(metadata));
+			var genericArgs = metadata.GenericTypeArguments?.ToArray();
+			if (genericArgs is null || genericArgs.Length != 1)
+			{
+				throw new ArgumentOutOfRangeException(nameof(genericArgs));
+			}
+
+			var enumerableType = genericArgs[0];
+
+			var type = GetOutputType(enumerableType);
+			return new(type.Name, GetUsedTypes(enumerableType));
 		}
 
 		protected virtual IEnumerable<OutputType> GetUsedTypes(TypeMetadata metadata)
