@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Laraue.CodeTranslation.Abstractions.Metadata
 {
@@ -8,6 +9,9 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 	public record TypeMetadata : Metadata
 	{
 		[CanBeNull]
-		public TypeMetadata ParentTypeMetadata { get; set; }
+		public TypeMetadata ParentTypeMetadata { get; init; }
+
+		[NotNull]
+		public IEnumerable<PropertyMetadata> PropertiesMetadata { get; init; }
 	}
 }

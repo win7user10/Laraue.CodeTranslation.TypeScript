@@ -19,7 +19,7 @@ namespace Laraue.CodeTranslation
 			return new OutputTypeMetadata
 			{
 				Source = metadata,
-				OutputType = GetOutputType(metadata)
+				OutputType = GetOutputType(metadata),
 			};
 		}
 

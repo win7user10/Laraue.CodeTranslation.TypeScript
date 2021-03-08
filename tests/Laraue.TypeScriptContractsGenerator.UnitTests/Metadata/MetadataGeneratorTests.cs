@@ -9,7 +9,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 {
 	public class MetadataGeneratorTests
 	{
-		private readonly IPropertyMetadataGenerator _generator = new PropertyMetadataGenerator();
+		private readonly IPropertyMetadataGenerator _generator = new MetadataGenerator(new PropertyInfoResolver());
 
 		[Fact]
 		public void GenerateIntMetadata()

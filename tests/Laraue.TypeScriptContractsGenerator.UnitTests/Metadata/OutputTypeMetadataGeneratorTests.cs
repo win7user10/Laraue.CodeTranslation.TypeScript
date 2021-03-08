@@ -63,7 +63,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 
 		private TypeMetadata GetTypeMetadata(Type type)
 		{
-			return new TypeMetadataGenerator().GetMetadata(type);
+			return new MetadataGenerator(new PropertyInfoResolver()).GetMetadata(type);
 		}
 	}
 }

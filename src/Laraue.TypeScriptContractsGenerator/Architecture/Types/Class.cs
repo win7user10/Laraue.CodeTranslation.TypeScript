@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.TypeScriptContractsGenerator.Architecture.Types
