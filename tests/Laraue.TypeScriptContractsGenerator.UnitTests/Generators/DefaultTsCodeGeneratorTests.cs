@@ -1,20 +1,11 @@
 using System.Linq;
-using Laraue.TypeScriptContractsGenerator.Generators;
-using Laraue.TypeScriptContractsGenerator.Typing;
+using Laraue.CodeTranslation;
 using Xunit;
 
 namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 {
 	public class DefaultTsCodeGeneratorTests
 	{
-		private string GetPropertySourceCode(string propertyName)
-		{
-			var tsType = new TsType(typeof(MainClass), new DefaultTsTypeGenerator(), new DefaultTsCodeGenerator());
-			var tsProperty = tsType.Properties.FirstOrDefault(x => x.PropertyInfo.Name == propertyName);
-			var code = new DefaultTsCodeGenerator().GetTsPropertyCode(tsProperty);
-			return code;
-		}
-
 		[Theory]
 		[InlineData(nameof(MainClass.IntValue), "intValue: number = 0;")]
 		[InlineData(nameof(MainClass.StringValue), "stringValue: string | null = null;")]
@@ -39,6 +30,21 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 		{
 			var code = GetPropertySourceCode(propertyName);
 			Assert.Equal(exceptedCode, code);
+		}
+
+		private string GetPropertySourceCode(string propertyName)
+		{
+			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
+			var typeMetadata = metadataGenerator.GetMetadata(typeof(MainClass));
+
+			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator();
+			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
+			var propertyOutputType = outputType.Properties.Single(x => x.Source.Name == propertyName);
+
+			var propertyCodeGenerator = new TypeScriptPropertyCodeGenerator();
+			var propertyCode = propertyCodeGenerator.GenerateCode(propertyOutputType);
+
+			return propertyCode;
 		}
 	}
 }

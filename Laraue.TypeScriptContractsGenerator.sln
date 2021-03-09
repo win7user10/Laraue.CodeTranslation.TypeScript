@@ -13,9 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laraue.TypeScriptContractsG
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laraue.CodeTranslation.Abstractions", "src\Laraue.CodeTranslation.Abstractions\Laraue.CodeTranslation.Abstractions.csproj", "{9A1F8746-DDE2-458D-9BF8-F1CE143E884C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laraue.CodeTranslation.Typed.Abstractions", "src\Laraue.CodeTranslation.Typed.Abstractions\Laraue.CodeTranslation.Typed.Abstractions.csproj", "{BBA9BB70-9BE5-44BC-869F-5BB1BA1BDBB9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laraue.CodeTranslation", "src\Laraue.CodeTranslation\Laraue.CodeTranslation.csproj", "{B8043393-E2BE-4A11-BCA7-80480EB84DFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laraue.CodeTranslation", "src\Laraue.CodeTranslation\Laraue.CodeTranslation.csproj", "{B8043393-E2BE-4A11-BCA7-80480EB84DFF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +33,6 @@ Global
 		{9A1F8746-DDE2-458D-9BF8-F1CE143E884C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A1F8746-DDE2-458D-9BF8-F1CE143E884C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A1F8746-DDE2-458D-9BF8-F1CE143E884C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BBA9BB70-9BE5-44BC-869F-5BB1BA1BDBB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBA9BB70-9BE5-44BC-869F-5BB1BA1BDBB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBA9BB70-9BE5-44BC-869F-5BB1BA1BDBB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBA9BB70-9BE5-44BC-869F-5BB1BA1BDBB9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B8043393-E2BE-4A11-BCA7-80480EB84DFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B8043393-E2BE-4A11-BCA7-80480EB84DFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8043393-E2BE-4A11-BCA7-80480EB84DFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,7 +45,6 @@ Global
 		{ECCF70FF-4296-4680-AD53-AA8352C4D663} = {9CDC27E2-01F4-4AA6-972C-D140415AA103}
 		{DB2373CB-F9EA-414A-8276-96FCE2F76E7D} = {E904A729-6FC1-471D-A324-7D82C92DF86A}
 		{9A1F8746-DDE2-458D-9BF8-F1CE143E884C} = {9CDC27E2-01F4-4AA6-972C-D140415AA103}
-		{BBA9BB70-9BE5-44BC-869F-5BB1BA1BDBB9} = {9CDC27E2-01F4-4AA6-972C-D140415AA103}
 		{B8043393-E2BE-4A11-BCA7-80480EB84DFF} = {9CDC27E2-01F4-4AA6-972C-D140415AA103}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

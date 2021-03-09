@@ -10,7 +10,7 @@ using Laraue.TypeScriptContractsGenerator.Types;
 using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
 using String = Laraue.TypeScriptContractsGenerator.Types.String;
 
-namespace Laraue.TypeScriptContractsGenerator.Architecture
+namespace Laraue.TypeScriptContractsGenerator
 {
 	public class TypeScriptOutputTypeMetadataGenerator : OutputTypeMetadataGenerator
 	{

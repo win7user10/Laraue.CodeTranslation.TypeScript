@@ -4,11 +4,10 @@ using System.Linq;
 using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
-using Laraue.TypeScriptContractsGenerator.Architecture;
-using Laraue.TypeScriptContractsGenerator.Architecture.Types;
+using Laraue.TypeScriptContractsGenerator.Types;
 using Xunit;
-using Array = Laraue.TypeScriptContractsGenerator.Architecture.Types.Array;
-using String = Laraue.TypeScriptContractsGenerator.Architecture.Types.String;
+using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
+using String = Laraue.TypeScriptContractsGenerator.Types.String;
 
 namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 {
@@ -62,7 +61,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
 		}
 
 		[Fact]
-		public void GeneratePropertiesShouldNotThrowAnyException()
+		public void GeneratePropertiesShouldNotThrowsAnyException()
 		{
 			var typeMetadata = GetTypeMetadata(typeof(MainClass));
 			var metadata = _generator.Generate(typeMetadata);
