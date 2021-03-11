@@ -7,6 +7,7 @@ using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.TypeScriptContractsGenerator.Types;
+using Newtonsoft.Json.Linq;
 using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
 using String = Laraue.TypeScriptContractsGenerator.Types.String;
 
@@ -18,7 +19,6 @@ namespace Laraue.TypeScriptContractsGenerator
 			: base(new MapCollection())
 		{
 			Collection
-				.AddMap<Array>(metadata => metadata.IsEnumerable && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetArrayMetadata)
 				.AddMap<int, Number>()
 				.AddMap<decimal, Number>()
 				.AddMap<double, Number>()
@@ -27,7 +27,11 @@ namespace Laraue.TypeScriptContractsGenerator
 				.AddMap<float, Number>()
 				.AddMap<string, String>()
 				.AddMap<Guid, String>()
-				.AddMap<Class>(metadata => metadata.ClrType.IsClass, GetClassMetadata);
+				.AddMap<JObject, Any>()
+				.AddMap<JToken, Any>()
+				.AddMap<Array>(metadata => metadata.IsEnumerable && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetArrayMetadata)
+				.AddMap<Class>(metadata => metadata.ClrType.IsClass && metadata.ClrType != typeof(string), GetClassMetadata)
+				.AddMap<Dictionary>(metadata => metadata.IsDictionary, GetDictionaryMetadata);
 
 			setupMap?.Invoke(Collection);
 		}
@@ -61,6 +65,18 @@ namespace Laraue.TypeScriptContractsGenerator
 
 			var type = GetOutputType(enumerableType);
 			return new(type.Name, GetUsedTypes(enumerableType));
+		}
+
+		protected virtual Dictionary GetDictionaryMetadata(TypeMetadata metadata)
+		{
+			var genericArgs = metadata.GenericTypeArguments?.ToArray();
+			if (genericArgs is null || genericArgs.Length != 2)
+			{
+				throw new ArgumentOutOfRangeException(nameof(genericArgs));
+			}
+
+			var keyValueTypeNames = genericArgs.Select(GetOutputType).Select(x => x.Name);
+			return new(keyValueTypeNames, GetUsedTypes(metadata));
 		}
 
 		protected virtual IEnumerable<OutputType> GetUsedTypes(TypeMetadata metadata)
