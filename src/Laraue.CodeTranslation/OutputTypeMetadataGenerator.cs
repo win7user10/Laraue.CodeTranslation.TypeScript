@@ -1,4 +1,5 @@
-﻿using Laraue.CodeTranslation.Abstractions.Metadata;
+﻿using JetBrains.Annotations;
+using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
 
@@ -23,6 +24,7 @@ namespace Laraue.CodeTranslation
 			};
 		}
 
-		public abstract OutputType GetOutputType(TypeMetadata metadata);
+		[CanBeNull]
+		public abstract OutputType GetOutputType(TypeMetadata metadata, int callNumber = 0);
 	}
 }

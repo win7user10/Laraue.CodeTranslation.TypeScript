@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.TypeScriptContractsGenerator.Types
@@ -24,7 +25,14 @@ namespace Laraue.TypeScriptContractsGenerator.Types
 
 		public OutputTypeName GetName(IEnumerable<OutputTypeName> typeNames)
 		{
-			return new ("Dictionary", typeNames, true);
+			try
+			{
+				return new("Dictionary", typeNames);
+			}
+			catch (Exception)
+			{
+				return new Any().Name;
+			}
 		}
 	}
 }

@@ -21,7 +21,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		public OutputTypeName([NotNull] string name, [NotNull] IEnumerable<OutputTypeName> genericNames, bool isArray = false)
 		{
 			Name = name;
-			GenericNames = genericNames.ToArray();
+			GenericNames = genericNames.Where(x => x != null).ToArray();
 			IsArray = isArray;
 		}
 

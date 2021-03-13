@@ -5,7 +5,10 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 {
 	public record MapDescriptor
 	{
-		public Func<TypeMetadata, OutputType> GetOutputType { get; init; }
+		/// <summary>
+		/// Method which allows to return output type from <see cref="TypeMetadata"/> and number of methodCall.
+		/// </summary>
+		public Func<TypeMetadata, int, OutputType> GetOutputType { get; init; }
 
 		public Func<TypeMetadata, bool> IsApplicable { get; init; }
 	}

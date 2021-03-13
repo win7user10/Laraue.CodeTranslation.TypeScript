@@ -7,7 +7,6 @@ using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.TypeScriptContractsGenerator.Types;
-using Newtonsoft.Json.Linq;
 using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
 using String = Laraue.TypeScriptContractsGenerator.Types.String;
 
@@ -27,33 +26,31 @@ namespace Laraue.TypeScriptContractsGenerator
 				.AddMap<float, Number>()
 				.AddMap<string, String>()
 				.AddMap<Guid, String>()
-				.AddMap<JObject, Any>()
-				.AddMap<JToken, Any>()
 				.AddMap<Array>(metadata => metadata.IsEnumerable && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetArrayMetadata)
-				.AddMap<Class>(metadata => metadata.ClrType.IsClass && metadata.ClrType != typeof(string), GetClassMetadata)
+				.AddMap<Class>(metadata => metadata.ClrType.IsClass && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetClassMetadata)
 				.AddMap<Dictionary>(metadata => metadata.IsDictionary, GetDictionaryMetadata);
 
 			setupMap?.Invoke(Collection);
 		}
 
-		public virtual Class GetClassMetadata(TypeMetadata metadata)
+		public virtual Class GetClassMetadata(TypeMetadata metadata, int callNumber)
 		{
 			var typeName = GetTypeName(metadata);
-			var propertiesMetadata = metadata.PropertiesMetadata.Select(GetOutputPropertyType);
+			var propertiesMetadata = metadata.PropertiesMetadata.Select(x => GetOutputPropertyType(x, callNumber));
 			return new (typeName, GetUsedTypes(metadata), propertiesMetadata);
 		}
 
-		protected virtual OutputPropertyType GetOutputPropertyType(PropertyMetadata metadata)
+		protected virtual OutputPropertyType GetOutputPropertyType(PropertyMetadata metadata, int callNumber)
 		{
 			return new ()
 			{
 				Source = metadata.Source,
-				OutputType = GetOutputType(metadata.PropertyType),
+				OutputType = GetOutputType(metadata.PropertyType, callNumber),
 				PropertyName = metadata.PropertyName,
 			};
 		}
 
-		protected virtual Array GetArrayMetadata(TypeMetadata metadata)
+		protected virtual Array GetArrayMetadata(TypeMetadata metadata, int callNumber)
 		{
 			var genericArgs = metadata.GenericTypeArguments?.ToArray();
 			if (genericArgs is null || genericArgs.Length != 1)
@@ -63,11 +60,11 @@ namespace Laraue.TypeScriptContractsGenerator
 
 			var enumerableType = genericArgs[0];
 
-			var type = GetOutputType(enumerableType);
-			return new(type.Name, GetUsedTypes(enumerableType));
+			var type = GetOutputType(enumerableType, callNumber);
+			return type is not null ? new(type.Name, GetUsedTypes(enumerableType)) : null;
 		}
 
-		protected virtual Dictionary GetDictionaryMetadata(TypeMetadata metadata)
+		protected virtual Dictionary GetDictionaryMetadata(TypeMetadata metadata, int callNumber)
 		{
 			var genericArgs = metadata.GenericTypeArguments?.ToArray();
 			if (genericArgs is null || genericArgs.Length != 2)
@@ -75,7 +72,7 @@ namespace Laraue.TypeScriptContractsGenerator
 				throw new ArgumentOutOfRangeException(nameof(genericArgs));
 			}
 
-			var keyValueTypeNames = genericArgs.Select(GetOutputType).Select(x => x.Name);
+			var keyValueTypeNames = genericArgs.Select(x => GetOutputType(x, callNumber)).Select(x => x.Name);
 			return new(keyValueTypeNames, GetUsedTypes(metadata));
 		}
 
@@ -110,10 +107,15 @@ namespace Laraue.TypeScriptContractsGenerator
 		}
 
 		/// <inheritdoc />
-		public override OutputType GetOutputType(TypeMetadata metadata)
+		public override OutputType GetOutputType(TypeMetadata metadata, int callNumber = 0)
 		{
+			if (callNumber > 10)
+			{
+				return null;
+			}
+
 			var descriptor = Collection.GetMap(metadata);
-			return descriptor.GetOutputType(metadata);
+			return descriptor.GetOutputType(metadata, ++callNumber);
 		}
 
 		[NotNull]
