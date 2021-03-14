@@ -47,6 +47,7 @@ namespace Laraue.TypeScriptContractsGenerator
 				Source = metadata.Source,
 				OutputType = GetOutputType(metadata.PropertyType, callNumber),
 				PropertyName = metadata.PropertyName,
+				PropertyMetadata = metadata,
 			};
 		}
 

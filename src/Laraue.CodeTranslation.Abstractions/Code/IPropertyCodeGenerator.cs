@@ -1,5 +1,4 @@
-﻿using Laraue.CodeTranslation.Abstractions.Metadata;
-using Laraue.CodeTranslation.Abstractions.Output;
+﻿using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.CodeTranslation.Abstractions.Code
 {
@@ -14,12 +13,5 @@ namespace Laraue.CodeTranslation.Abstractions.Code
 		/// <param name="property"></param>
 		/// <returns></returns>
 		string GenerateCode(OutputPropertyType property);
-
-		/// <summary>
-		/// Get translated name of <see cref="OutputPropertyType">property</see>.
-		/// </summary>
-		/// <param name="property"></param>
-		/// <returns></returns>
-		string GetName(OutputPropertyType property);
 	}
 }

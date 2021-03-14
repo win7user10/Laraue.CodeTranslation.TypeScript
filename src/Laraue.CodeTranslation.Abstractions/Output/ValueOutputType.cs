@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Laraue.CodeTranslation.Abstractions.Metadata;
 
 namespace Laraue.CodeTranslation.Abstractions.Output
 {
