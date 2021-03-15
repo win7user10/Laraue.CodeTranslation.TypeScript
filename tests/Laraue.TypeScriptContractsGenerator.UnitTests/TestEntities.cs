@@ -29,6 +29,8 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests
 		public JObject JObjectValue { get; set; }
 		public int? NullableIntValue { get; set; }
 		public Guid? NullableGuidValue { get; set; }
+		public EnumStartsWith0 EnumStartsWith0 { get; set; }
+
 	}
 
 	public class SubClass : MainClass
@@ -45,5 +47,17 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests
 		public T FirstGenericType { get; set; }
 
 		public U SecondGenericType { get; set; }
+	}
+
+	public enum EnumStartsWith0
+	{
+		Value0,
+		Value1,
+	}
+
+	public enum EnumStartsWith10
+	{
+		Value0 = 10,
+		Value1,
 	}
 }

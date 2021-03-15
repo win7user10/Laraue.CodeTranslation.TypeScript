@@ -1,15 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.TypeScriptContractsGenerator.Extensions;
 using Laraue.TypeScriptContractsGenerator.Types;
 using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
+using Enum = Laraue.TypeScriptContractsGenerator.Types.Enum;
 using String = Laraue.TypeScriptContractsGenerator.Types.String;
 
 namespace Laraue.TypeScriptContractsGenerator
 {
-	public class TypeScriptPropertyCodeGenerator : IPropertyCodeGenerator
+	public class TypeScriptCodeGenerator : ICodeGenerator
 	{
 		/// <inheritdoc />
 		public string GenerateCode(OutputPropertyType property)
@@ -26,13 +29,16 @@ namespace Laraue.TypeScriptContractsGenerator
 
 			return codeBuilder.ToString();
 		}
-		
-		public virtual string GenerateName(OutputPropertyType property)
+
+		public string GenerateCode(OutputType type)
 		{
-			return property.PropertyName.ToCamelCase();
+			throw new NotImplementedException();
 		}
 
-		public virtual string GenerateType(OutputPropertyType property)
+		protected virtual string GenerateName(OutputPropertyType property) => property.PropertyName.ToCamelCase();
+		protected virtual string GenerateName(OutputType type) => type.Name.Name.ToPascalCase();
+
+		protected virtual string GenerateType(OutputPropertyType property)
 		{
 			var codeBuilder = new StringBuilder(property.OutputType.Name);
 			if (IsNullableType(property))
@@ -43,7 +49,7 @@ namespace Laraue.TypeScriptContractsGenerator
 			return codeBuilder.ToString();
 		}
 
-		public virtual string GenerateDefaultValue(OutputPropertyType property)
+		protected virtual string GenerateDefaultValue(OutputPropertyType property)
 		{
 			if (IsNullableType(property))
 			{
@@ -60,10 +66,29 @@ namespace Laraue.TypeScriptContractsGenerator
 				return "''";
 			}
 
-			throw new NotImplementedException($"{property.OutputType.GetType()} default value is unknown!");
+			if (property.OutputType is Enum)
+			{
+				return GenerateDefaultEnumValue(property);
+			}
+
+			throw new NotImplementedException($"{property.OutputType.GetType()} default value is unknown");
 		}
 
-		public virtual bool ShouldBeUsedTypingInPropertyDefinition(OutputPropertyType property)
+		protected virtual string GenerateDefaultEnumValue(OutputPropertyType property)
+		{
+			if (property.OutputType is not Enum enumType)
+			{
+				throw new InvalidOperationException($"Impossible to get enum value from the type {property.OutputType.GetType()}");
+			}
+
+			var enumName = GenerateName(property.OutputType);
+			var enumValues = enumType.EnumValues;
+			var firstEnumValue = enumValues.OrderBy(x => x.Value).First().Key;
+			return $"{enumName}.{firstEnumValue}";
+
+		}
+
+		protected virtual bool ShouldBeUsedTypingInPropertyDefinition(OutputPropertyType property)
 		{
 			if (property.OutputType is Number)
 			{
@@ -81,7 +106,7 @@ namespace Laraue.TypeScriptContractsGenerator
 			return true;
 		}
 
-		public virtual bool IsNullableType(OutputPropertyType property)
+		protected virtual bool IsNullableType(OutputPropertyType property)
 		{
 			var propertyType = property.PropertyMetadata.PropertyType;
 			return propertyType.IsNullable

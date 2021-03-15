@@ -2,7 +2,7 @@
 
 namespace Laraue.TypeScriptContractsGenerator.Types
 {
-	public class String : ValueOutputType
+	public class String : StaticOutputType
 	{
 		public override OutputTypeName Name => "string";
 	}

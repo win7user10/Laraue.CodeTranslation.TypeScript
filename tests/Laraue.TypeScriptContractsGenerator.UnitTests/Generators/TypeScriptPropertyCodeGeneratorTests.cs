@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 {
-	public class DefaultTsCodeGeneratorTests
+	public class TypeScriptPropertyCodeGeneratorTests
 	{
 		[Theory]
 		[InlineData(nameof(MainClass.IntValue), "intValue = 0;")]
@@ -26,6 +26,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 		[InlineData(nameof(MainClass.TwoTypesGenericSubValue), "twoTypesGenericSubValue: TwoTypeGenericSubClass<number, number> | null = null;")]
 		[InlineData(nameof(MainClass.TwoTypesGenericSubValueArray), "twoTypesGenericSubValueArray: TwoTypeGenericSubClass<number, number>[] | null = null;")]
 		[InlineData(nameof(MainClass.TwoTypesGenericSubValueEnumerable), "twoTypesGenericSubValueEnumerable: TwoTypeGenericSubClass<number, number>[] | null = null;")]
+		[InlineData(nameof(MainClass.EnumStartsWith0), "enumStartsWith0: EnumStartsWith0 = EnumStartsWith0.Value0;")]
 		public void PropertyTranslation(string propertyName, string exceptedCode)
 		{
 			var code = GetPropertySourceCode(propertyName);
@@ -41,7 +42,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
 			var propertyOutputType = outputType.Properties.Single(x => x.Source.Name == propertyName);
 
-			var propertyCodeGenerator = new TypeScriptPropertyCodeGenerator();
+			var propertyCodeGenerator = new TypeScriptCodeGenerator();
 			var propertyCode = propertyCodeGenerator.GenerateCode(propertyOutputType);
 
 			return propertyCode;

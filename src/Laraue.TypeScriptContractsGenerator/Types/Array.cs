@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.TypeScriptContractsGenerator.Types
 {
-	public class Array : ReferenceOutputType
+	public class Array : DynamicOutputType
 	{
 		/// <inheritdoc />
 		public override OutputTypeName Name { get; }
@@ -11,7 +12,7 @@ namespace Laraue.TypeScriptContractsGenerator.Types
 		/// <inheritdoc />
 		public override IEnumerable<OutputType> UsedTypes { get; }
 
-		public Array(OutputTypeName name, IEnumerable<OutputType> usedTypes)
+		public Array(OutputTypeName name, IEnumerable<OutputType> usedTypes, TypeMetadata typeMetadata)
 		{
 			Name = GetName(name);
 			UsedTypes = usedTypes;

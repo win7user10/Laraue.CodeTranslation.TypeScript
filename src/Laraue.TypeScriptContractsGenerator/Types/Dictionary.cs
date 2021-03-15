@@ -4,7 +4,7 @@ using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.TypeScriptContractsGenerator.Types
 {
-	public class Dictionary : ReferenceOutputType
+	public class Dictionary : DynamicOutputType
 	{
 		/// <inheritdoc />
 		public override OutputTypeName Name => GetName(_genericArgNames);
