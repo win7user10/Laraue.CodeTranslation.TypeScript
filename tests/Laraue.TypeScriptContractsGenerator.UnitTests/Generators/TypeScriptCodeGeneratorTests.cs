@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 {
-	public class TypeScriptPropertyCodeGeneratorTests
+	public class TypeScriptCodeGeneratorTests
 	{
 		[Theory]
 		[InlineData(nameof(MainClass.IntValue), "intValue = 0;")]
@@ -33,6 +33,12 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 			Assert.Equal(exceptedCode, code);
 		}
 
+		[Fact]
+		public void CodeTranslation()
+		{
+			var code = GetTypeSourceCode();
+		}
+
 		private string GetPropertySourceCode(string propertyName)
 		{
 			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
@@ -46,6 +52,18 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 			var propertyCode = propertyCodeGenerator.GenerateCode(propertyOutputType);
 
 			return propertyCode;
+		}
+
+		private string GetTypeSourceCode()
+		{
+			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
+			var typeMetadata = metadataGenerator.GetMetadata(typeof(MainClass));
+
+			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator();
+			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
+
+			var codeGenerator = new TypeScriptCodeGenerator();
+			return codeGenerator.GenerateCode(outputType);
 		}
 	}
 }

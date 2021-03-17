@@ -6,10 +6,10 @@ namespace Laraue.CodeTranslation.Abstractions.Code
 	{
 		public IIndentedStringBuilder Indent();
 
-		public IIndentedStringBuilder Append(string value);
+		public void Append(string value);
 
-		public IIndentedStringBuilder AppendLine(string value);
+		public void AppendLine(string value);
 
-		public IIndentedStringBuilder AppendLine();
+		public void AppendLine();
 	}
 }

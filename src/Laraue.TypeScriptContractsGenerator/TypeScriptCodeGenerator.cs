@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.TypeScriptContractsGenerator.Extensions;
@@ -32,7 +33,19 @@ namespace Laraue.TypeScriptContractsGenerator
 
 		public string GenerateCode(OutputType type)
 		{
-			throw new NotImplementedException();
+			using var codeBuilder = new IndentedStringBuilder(2);
+
+			codeBuilder.AppendLine($"export class {GenerateName(type)} {{");
+			using (codeBuilder.Indent())
+			{
+				foreach (var propertyType in type.Properties)
+				{
+					codeBuilder.AppendLine(GenerateCode(propertyType));
+				}
+			}
+			codeBuilder.AppendLine("}");
+
+			return codeBuilder.ToString();
 		}
 
 		protected virtual string GenerateName(OutputPropertyType property) => property.PropertyName.ToCamelCase();

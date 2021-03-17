@@ -21,17 +21,16 @@ namespace Laraue.CodeTranslation
 			_indentSize = indentSize;
 		}
 
-		public IIndentedStringBuilder Append(string value)
+		public void Append(string value)
 		{
 			_stringBuilder.Append(IndentationString)
 				.Append(value);
-			return this;
 		}
 
-		public IIndentedStringBuilder AppendLine(string value)
+		public void AppendLine(string value)
 			=> Append(value + Environment.NewLine);
 
-		public IIndentedStringBuilder AppendLine()
+		public void AppendLine()
 			=> Append(Environment.NewLine);
 
 		public IIndentedStringBuilder Indent()
