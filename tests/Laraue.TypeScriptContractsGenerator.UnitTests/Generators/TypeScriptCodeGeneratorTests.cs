@@ -48,7 +48,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
 			var propertyOutputType = outputType.Properties.Single(x => x.Source.Name == propertyName);
 
-			var propertyCodeGenerator = new TypeScriptCodeGenerator();
+			var propertyCodeGenerator = new TypeScriptCodeGenerator(new TypePartsGenerator());
 			var propertyCode = propertyCodeGenerator.GenerateCode(propertyOutputType);
 
 			return propertyCode;
@@ -62,7 +62,7 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator();
 			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
 
-			var codeGenerator = new TypeScriptCodeGenerator();
+			var codeGenerator = new TypeScriptCodeGenerator(new TypePartsGenerator());
 			return codeGenerator.GenerateCode(outputType);
 		}
 	}
