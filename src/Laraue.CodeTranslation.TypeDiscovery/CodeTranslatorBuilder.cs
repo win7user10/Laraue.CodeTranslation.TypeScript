@@ -36,7 +36,7 @@ namespace Laraue.CodeTranslation.TypeDiscovery
                 .AddDependency<ITypePartsCodeGenerator, TypeScriptTypePartsGenerator>()
                 .AddDependency<IMetadataGenerator, MetadataGenerator>()
                 .AddDependency<IPropertyInfoResolver, PropertyInfoResolver>()
-                .AddDependency<IOutputTypeMetadataGenerator, OutputTypeMetadataGenerator>()
+                .AddDependency<IOutputTypeMetadataGenerator, TypeScriptOutputTypeMetadataGenerator>()
                 .AddDependency<IIndentedStringBuilder, IndentedStringBuilder>(sp =>
                     new IndentedStringBuilder(indentSize));
 

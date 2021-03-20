@@ -19,8 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Laraue.CodeTranslation.TypeDiscovery\Laraue.CodeTranslation.TypeDiscovery.csproj" />
     <ProjectReference Include="..\..\src\Laraue.CodeTranslation\Laraue.CodeTranslation.csproj" />
     <ProjectReference Include="..\..\src\Laraue.CodeTranslation.TypeScript\Laraue.CodeTranslation.TypeScript.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="TypeDiscovery\" />
   </ItemGroup>
 
 </Project>
