@@ -1,5 +1,5 @@
-﻿using JetBrains.Annotations;
-using Laraue.CodeTranslation.TypeDiscovery;
+﻿using Laraue.CodeTranslation.TypeDiscovery;
+using Laraue.CodeTranslation.TypeDiscovery.Extensions;
 using Xunit;
 
 namespace Laraue.CodeTranslation.UnitTests.TypeDiscovery
@@ -7,11 +7,13 @@ namespace Laraue.CodeTranslation.UnitTests.TypeDiscovery
     public class TypeCollectionTests
     {
         [Fact]
-        public void Test()
+        public void TypeDiscoveryTest()
         {
             var typeCollection = new TypeCollection()
                 .AddAssemblyTypes<MainClass>(
-                    x => x.WithAttribute<NotNullAttribute>());
+                    x => x.WithAttribute<ShouldBeTakenAttribute>());
+
+            Assert.Equal(2, typeCollection.Count);
         }
     }
 }

@@ -11,8 +11,9 @@ namespace Laraue.CodeTranslation.UnitTests.TypeDiscovery
         [Fact]
         public void BuiltCodeTranslatorShouldGenerateCodeWithoutException()
         {
-            var code = _translator.GenerateTypeCode<MainClass>();
-            Assert.NotEmpty(code);
+            var generatedCode = _translator.GenerateTypeCode(typeof(MainClass));
+            Assert.NotEmpty(generatedCode.Code);
+            Assert.NotEmpty(generatedCode.FilePathSegments);
         }
 
         public void Dispose()

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Laraue.CodeTranslation.TypeDiscovery
+namespace Laraue.CodeTranslation.TypeDiscovery.Extensions
 {
     public static class TypeCollectionExtensions
     {

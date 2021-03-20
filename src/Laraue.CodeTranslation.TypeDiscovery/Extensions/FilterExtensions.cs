@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Laraue.CodeTranslation.TypeDiscovery
+namespace Laraue.CodeTranslation.TypeDiscovery.Extensions
 {
     public static class FilterExtensions
     {
@@ -15,7 +15,6 @@ namespace Laraue.CodeTranslation.TypeDiscovery
             where TAttribute : Attribute
         {
             return type.GetCustomAttribute(typeof(TAttribute)) != null;
-            ;
         }
     }
 }

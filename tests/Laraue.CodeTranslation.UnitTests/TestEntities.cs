@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Laraue.CodeTranslation.UnitTests
 {
+	[ShouldBeTaken]
 	public class MainClass
 	{
 		public int IntValue { get; set; }

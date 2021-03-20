@@ -45,5 +45,12 @@ namespace Laraue.CodeTranslation.Abstractions.Code
         /// <param name="property"></param>
         /// <returns></returns>
         bool ShouldBeUsedTypingInPropertyDefinition(OutputPropertyType property);
+
+        /// <summary>
+        /// Returns path segments for specified type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        string[] GetFilePathParts(OutputType type);
     }
 }
