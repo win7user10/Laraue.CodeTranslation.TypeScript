@@ -11,7 +11,7 @@
     <PackageProjectUrl>https://github.com/win7user10/Laraue.TypeScriptContractsGenerator</PackageProjectUrl>
     <PackageTags>typescript;CSharp;code generation;contracts</PackageTags>
     <LangVersion>Latest</LangVersion>
-    <PackageId>Laraue.EfCoreTriggers</PackageId>
+    <PackageId>Laraue.TypeScriptContractsGenerator</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
