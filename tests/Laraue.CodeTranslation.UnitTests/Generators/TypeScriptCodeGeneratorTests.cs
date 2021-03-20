@@ -1,3 +1,5 @@
+using System.Linq;
+using Laraue.CodeTranslation.TypeScript;
 using Xunit;
 
 namespace Laraue.CodeTranslation.UnitTests.Generators
@@ -51,7 +53,7 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
 			var propertyOutputType = outputType.Properties.Single(x => x.Source.Name == propertyName);
 
-			var propertyCodeGenerator = new TypeScriptCodeGenerator(new TypePartsGenerator());
+			var propertyCodeGenerator = new TypeScriptCodeGenerator(new TypeScriptTypePartsGenerator());
 			var propertyCode = propertyCodeGenerator.GenerateCode(propertyOutputType);
 
 			return propertyCode;
@@ -65,7 +67,7 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator();
 			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
 
-			var codeGenerator = new TypeScriptCodeGenerator(new TypePartsGenerator());
+			var codeGenerator = new TypeScriptCodeGenerator(new TypeScriptTypePartsGenerator());
 			return codeGenerator.GenerateCode(outputType);
 		}
 	}

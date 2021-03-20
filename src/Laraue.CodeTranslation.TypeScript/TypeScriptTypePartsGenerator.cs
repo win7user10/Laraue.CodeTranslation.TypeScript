@@ -13,7 +13,7 @@ using String = Laraue.CodeTranslation.TypeScript.Types.String;
 
 namespace Laraue.CodeTranslation.TypeScript
 {
-    public class TypePartsGenerator : ITypePartsCodeGenerator
+    public class TypeScriptTypePartsGenerator : ITypePartsCodeGenerator
     {
         /// <inheritdoc />
         public string[] GenerateImportStrings(OutputType type)

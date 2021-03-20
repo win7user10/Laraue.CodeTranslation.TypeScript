@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
+using Laraue.CodeTranslation.TypeScript;
+using Laraue.CodeTranslation.TypeScript.Types;
 using Xunit;
-using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
-using String = Laraue.TypeScriptContractsGenerator.Types.String;
+using Array = Laraue.CodeTranslation.TypeScript.Types.Array;
+using String = Laraue.CodeTranslation.TypeScript.Types.String;
 
 namespace Laraue.CodeTranslation.UnitTests.Metadata
 {

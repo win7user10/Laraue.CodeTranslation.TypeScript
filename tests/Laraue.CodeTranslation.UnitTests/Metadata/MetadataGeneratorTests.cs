@@ -8,7 +8,7 @@ namespace Laraue.CodeTranslation.UnitTests.Metadata
 {
 	public class MetadataGeneratorTests
 	{
-		private readonly IPropertyMetadataGenerator _generator = new MetadataGenerator(new PropertyInfoResolver());
+		private readonly IMetadataGenerator _generator = new MetadataGenerator(new PropertyInfoResolver());
 
 		[Fact]
 		public void GenerateIntMetadata()

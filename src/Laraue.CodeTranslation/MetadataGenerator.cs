@@ -8,7 +8,7 @@ using Laraue.CodeTranslation.Extensions;
 
 namespace Laraue.CodeTranslation
 {
-	public class MetadataGenerator : BaseMetadataGenerator, ITypeMetadataGenerator, IPropertyMetadataGenerator
+	public class MetadataGenerator : BaseMetadataGenerator, IMetadataGenerator
 	{
 		protected readonly IPropertyInfoResolver PropertyInfoResolver;
 
