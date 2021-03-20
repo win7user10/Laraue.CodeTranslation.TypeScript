@@ -1,6 +1,6 @@
 ﻿using Laraue.CodeTranslation.Abstractions.Output;
 
-namespace Laraue.TypeScriptContractsGenerator.Types
+namespace Laraue.CodeTranslation.TypeScript.Types
 {
 	public class Number : StaticOutputType
 	{

@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
-using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
-using Laraue.TypeScriptContractsGenerator.Types;
+using Laraue.CodeTranslation.TypeScript.Types;
 using Newtonsoft.Json.Linq;
-using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
-using Boolean = Laraue.TypeScriptContractsGenerator.Types.Boolean;
-using Enum = Laraue.TypeScriptContractsGenerator.Types.Enum;
-using String = Laraue.TypeScriptContractsGenerator.Types.String;
+using Array = Laraue.CodeTranslation.TypeScript.Types.Array;
+using Boolean = Laraue.CodeTranslation.TypeScript.Types.Boolean;
+using Enum = Laraue.CodeTranslation.TypeScript.Types.Enum;
+using String = Laraue.CodeTranslation.TypeScript.Types.String;
 
-namespace Laraue.TypeScriptContractsGenerator
+namespace Laraue.CodeTranslation.TypeScript
 {
 	public class TypeScriptOutputTypeMetadataGenerator : OutputTypeMetadataGenerator
 	{

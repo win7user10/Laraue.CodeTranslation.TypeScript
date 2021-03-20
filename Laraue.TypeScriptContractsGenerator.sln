@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laraue.TypeScriptContractsGenerator", "src\Laraue.TypeScriptContractsGenerator\Laraue.TypeScriptContractsGenerator.csproj", "{ECCF70FF-4296-4680-AD53-AA8352C4D663}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laraue.CodeTranslation.TypeScript", "src\Laraue.CodeTranslation.TypeScript\Laraue.CodeTranslation.TypeScript.csproj", "{ECCF70FF-4296-4680-AD53-AA8352C4D663}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9CDC27E2-01F4-4AA6-972C-D140415AA103}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{E904A729-6FC1-471D-A324-7D82C92DF86A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laraue.TypeScriptContractsGenerator.UnitTests", "tests\Laraue.TypeScriptContractsGenerator.UnitTests\Laraue.TypeScriptContractsGenerator.UnitTests.csproj", "{DB2373CB-F9EA-414A-8276-96FCE2F76E7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laraue.CodeTranslation.UnitTests", "tests\Laraue.CodeTranslation.UnitTests\Laraue.CodeTranslation.UnitTests.csproj", "{DB2373CB-F9EA-414A-8276-96FCE2F76E7D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Laraue.CodeTranslation.Abstractions", "src\Laraue.CodeTranslation.Abstractions\Laraue.CodeTranslation.Abstractions.csproj", "{9A1F8746-DDE2-458D-9BF8-F1CE143E884C}"
 EndProject

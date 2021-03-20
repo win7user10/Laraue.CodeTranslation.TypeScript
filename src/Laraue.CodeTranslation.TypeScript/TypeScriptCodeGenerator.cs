@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
 
-namespace Laraue.TypeScriptContractsGenerator
+namespace Laraue.CodeTranslation.TypeScript
 {
 	public class TypeScriptCodeGenerator : ICodeGenerator
 	{

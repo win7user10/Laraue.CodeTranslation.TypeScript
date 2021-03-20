@@ -5,13 +5,13 @@ using System.Text;
 using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
-using Laraue.TypeScriptContractsGenerator.Extensions;
-using Laraue.TypeScriptContractsGenerator.Types;
-using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
-using Enum = Laraue.TypeScriptContractsGenerator.Types.Enum;
-using String = Laraue.TypeScriptContractsGenerator.Types.String;
+using Laraue.CodeTranslation.TypeScript.Extensions;
+using Laraue.CodeTranslation.TypeScript.Types;
+using Array = Laraue.CodeTranslation.TypeScript.Types.Array;
+using Enum = Laraue.CodeTranslation.TypeScript.Types.Enum;
+using String = Laraue.CodeTranslation.TypeScript.Types.String;
 
-namespace Laraue.TypeScriptContractsGenerator
+namespace Laraue.CodeTranslation.TypeScript
 {
     public class TypePartsGenerator : ITypePartsCodeGenerator
     {

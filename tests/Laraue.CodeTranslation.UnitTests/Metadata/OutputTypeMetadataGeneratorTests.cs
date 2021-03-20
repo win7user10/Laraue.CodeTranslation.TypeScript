@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
-using Laraue.TypeScriptContractsGenerator.Types;
 using Xunit;
 using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
 using String = Laraue.TypeScriptContractsGenerator.Types.String;
 
-namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
+namespace Laraue.CodeTranslation.UnitTests.Metadata
 {
 	public class OutputTypeMetadataGeneratorTests
 	{

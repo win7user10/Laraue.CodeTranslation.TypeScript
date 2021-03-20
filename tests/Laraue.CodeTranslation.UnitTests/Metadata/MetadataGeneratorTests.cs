@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Linq;
-using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 using Newtonsoft.Json.Linq;
 using Xunit;
 
-namespace Laraue.TypeScriptContractsGenerator.UnitTests.Metadata
+namespace Laraue.CodeTranslation.UnitTests.Metadata
 {
 	public class MetadataGeneratorTests
 	{

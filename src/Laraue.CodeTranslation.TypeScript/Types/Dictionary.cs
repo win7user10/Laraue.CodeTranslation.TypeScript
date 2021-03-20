@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Laraue.CodeTranslation.Abstractions.Output;
 
-namespace Laraue.TypeScriptContractsGenerator.Types
+namespace Laraue.CodeTranslation.TypeScript.Types
 {
 	public class Dictionary : DynamicOutputType
 	{

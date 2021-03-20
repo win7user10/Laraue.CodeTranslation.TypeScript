@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 
-namespace Laraue.TypeScriptContractsGenerator.UnitTests
+namespace Laraue.CodeTranslation.UnitTests
 {
 	public class MainClass
 	{

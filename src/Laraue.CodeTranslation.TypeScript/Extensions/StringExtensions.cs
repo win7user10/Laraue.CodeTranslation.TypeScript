@@ -1,4 +1,4 @@
-﻿namespace Laraue.TypeScriptContractsGenerator.Extensions
+﻿namespace Laraue.CodeTranslation.TypeScript.Extensions
 {
     public static class StringExtensions
     {

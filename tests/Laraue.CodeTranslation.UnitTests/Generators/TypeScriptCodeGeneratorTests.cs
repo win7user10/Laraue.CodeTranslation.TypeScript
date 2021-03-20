@@ -1,8 +1,6 @@
-using System.Linq;
-using Laraue.CodeTranslation;
 using Xunit;
 
-namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
+namespace Laraue.CodeTranslation.UnitTests.Generators
 {
 	public class TypeScriptCodeGeneratorTests
 	{

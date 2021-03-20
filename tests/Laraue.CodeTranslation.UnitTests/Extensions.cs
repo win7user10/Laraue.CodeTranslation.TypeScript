@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Laraue.TypeScriptContractsGenerator.UnitTests
+namespace Laraue.CodeTranslation.UnitTests
 {
 	public static class Extensions
 	{
