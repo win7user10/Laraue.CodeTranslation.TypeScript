@@ -34,9 +34,14 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 		}
 
 		[Fact]
-		public void CodeTranslation()
+		public void CodeTranslationForEnum()
 		{
-			var code = GetTypeSourceCode();
+			var code = GetTypeSourceCode<EnumStartsWith10>();
+			Assert.Equal(
+@"export enum EnumStartsWith10 {
+  Value0 = 10,
+  Value1
+}", code);
 		}
 
 		private string GetPropertySourceCode(string propertyName)
@@ -54,10 +59,10 @@ namespace Laraue.TypeScriptContractsGenerator.UnitTests.Generators
 			return propertyCode;
 		}
 
-		private string GetTypeSourceCode()
+		private string GetTypeSourceCode<T>()
 		{
 			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
-			var typeMetadata = metadataGenerator.GetMetadata(typeof(MainClass));
+			var typeMetadata = metadataGenerator.GetMetadata(typeof(T));
 
 			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator();
 			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);

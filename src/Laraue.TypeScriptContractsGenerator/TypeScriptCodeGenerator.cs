@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using Laraue.CodeTranslation;
 using Laraue.CodeTranslation.Abstractions.Code;
@@ -37,14 +38,29 @@ namespace Laraue.TypeScriptContractsGenerator
 			using var codeBuilder = new IndentedStringBuilder(2);
 
 			// Import classes
-			foreach (var importString in _generator.GenerateImportStrings(type))
+			var importStrings = _generator.GenerateImportStrings(type);
+			foreach (var importString in importStrings)
 			{
 				codeBuilder.AppendLine(importString);
 			}
 
-			codeBuilder.AppendLine();
+			if (importStrings.Length > 0)
+			{
+				codeBuilder.AppendLine();
+			}
 
 			// Type definition
+			using var resultBuilder = type switch
+			{
+				Types.Enum enumType => GenerateEnumCode(codeBuilder, enumType),
+				_ => GenerateTypeCode(codeBuilder, type),
+			};
+
+			return resultBuilder.ToString();
+		}
+
+		protected virtual IndentedStringBuilder GenerateTypeCode(IndentedStringBuilder codeBuilder, OutputType type)
+		{
 			codeBuilder.AppendLine($"export class {_generator.GenerateName(type)} {{");
 			using (codeBuilder.Indent())
 			{
@@ -53,9 +69,42 @@ namespace Laraue.TypeScriptContractsGenerator
 					codeBuilder.AppendLine(GenerateCode(propertyType));
 				}
 			}
-			codeBuilder.AppendLine("}");
+			codeBuilder.Append("}");
 
-			return codeBuilder.ToString();
+			return codeBuilder;
+		}
+
+		protected virtual IndentedStringBuilder GenerateEnumCode(IndentedStringBuilder codeBuilder, Types.Enum type)
+		{
+			codeBuilder.AppendLine($"export enum {_generator.GenerateName(type)} {{");
+			using (codeBuilder.Indent())
+			{
+				var currentEnumValue = 0;
+
+				foreach (var enumValue in type.EnumValues)
+				{
+					string enumString;
+
+					if (currentEnumValue != enumValue.Value)
+					{
+						currentEnumValue = enumValue.Value;
+						enumString = $"{enumValue.Key} = {currentEnumValue}";
+					}
+					else
+					{
+						enumString = enumValue.Key;
+					}
+
+					currentEnumValue++;
+					if (enumValue.Key != type.EnumValues.Last().Key)
+						enumString += ",";
+
+					codeBuilder.AppendLine(enumString);
+				}
+			}
+			codeBuilder.Append("}");
+
+			return codeBuilder;
 		}
 	}
 }
