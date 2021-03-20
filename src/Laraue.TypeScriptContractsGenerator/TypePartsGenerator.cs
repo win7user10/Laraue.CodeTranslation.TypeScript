@@ -18,15 +18,17 @@ namespace Laraue.TypeScriptContractsGenerator
         /// <inheritdoc />
         public string[] GenerateImportStrings(OutputType type)
         {
-            throw new System.NotImplementedException();
+            var strings = type.UsedTypes.Select(usedType => GetImportString(type, usedType));
+            return strings.ToArray();
         }
+
         public virtual string GenerateName(OutputType type) => type.Name.Name.ToPascalCase();
 
         [CanBeNull]
-        public virtual string[] GetFilePathParts(OutputType type) => type.TypeMetadata?.ClrType?.FullName?.Split('.');
+        public virtual string[] GetFilePathParts(OutputType type) => type.TypeMetadata?.ClrType?.Namespace?.Split('.');
 
         [CanBeNull]
-        public virtual string GetFileName(OutputType type) => type.TypeMetadata?.ClrType.Name.ToCamelCase();
+        public virtual string GetFileName(OutputType type) => type.Name.Name.ToCamelCase();
 
         public virtual string GenerateName(OutputPropertyType property) => property.PropertyName.ToCamelCase();
 

@@ -35,18 +35,16 @@ namespace Laraue.CodeTranslation
 
 		public IIndentedStringBuilder Indent()
 		{
-			_indent++;
+			_indent += _indentSize;
 			return this;
 		}
 
-		public IIndentedStringBuilder DecreaseIndent()
+		private void DecreaseIndent()
 		{
 			if (_indent > 0)
 			{
-				_indent--;
+				_indent -= _indentSize;
 			}
-
-			return this;
 		}
 
 		/// <inheritdoc />

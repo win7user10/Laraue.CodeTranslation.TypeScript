@@ -9,6 +9,7 @@ using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.TypeScriptContractsGenerator.Types;
 using Newtonsoft.Json.Linq;
 using Array = Laraue.TypeScriptContractsGenerator.Types.Array;
+using Boolean = Laraue.TypeScriptContractsGenerator.Types.Boolean;
 using Enum = Laraue.TypeScriptContractsGenerator.Types.Enum;
 using String = Laraue.TypeScriptContractsGenerator.Types.String;
 
@@ -27,6 +28,7 @@ namespace Laraue.TypeScriptContractsGenerator
 				.AddMap<short, Number>()
 				.AddMap<float, Number>()
 				.AddMap<string, String>()
+				.AddMap<bool, Boolean>()
 				.AddMap<Guid, String>()
 				.AddMap<JObject, Any>()
 				.AddMap<JToken, Any>()
@@ -42,7 +44,7 @@ namespace Laraue.TypeScriptContractsGenerator
 		{
 			var typeName = GetTypeName(metadata);
 			var propertiesMetadata = metadata.PropertiesMetadata.Select(x => GetOutputPropertyType(x, callNumber));
-			return new (typeName, GetUsedTypes(metadata), propertiesMetadata, metadata);
+			return new (typeName, GetAllUsedTypes(metadata, callNumber), propertiesMetadata, metadata);
 		}
 
 		public virtual Enum GetEnumMetadata(TypeMetadata metadata, int callNumber)
@@ -73,7 +75,7 @@ namespace Laraue.TypeScriptContractsGenerator
 			var enumerableType = genericArgs[0];
 
 			var type = GetOutputType(enumerableType, callNumber);
-			return type is not null ? new(type.Name, GetUsedTypes(enumerableType), metadata) : null;
+			return type is not null ? new(type.Name, GetAllUsedTypes(enumerableType, callNumber), metadata) : null;
 		}
 
 		protected virtual Dictionary GetDictionaryMetadata(TypeMetadata metadata, int callNumber)
@@ -84,21 +86,22 @@ namespace Laraue.TypeScriptContractsGenerator
 				throw new ArgumentOutOfRangeException(nameof(genericArgs));
 			}
 
-			var keyValueTypeNames = genericArgs.Select(x => GetOutputType(x, callNumber)).Select(x => x.Name);
-			return new(keyValueTypeNames, GetUsedTypes(metadata));
+			var keyValueTypeNames = genericArgs.Select(x => GetOutputType(x, callNumber)).Select(x => x?.Name);
+			return new(keyValueTypeNames, GetAllUsedTypes(metadata, callNumber));
 		}
 
-		protected virtual IEnumerable<OutputType> GetUsedTypes(TypeMetadata metadata)
+		protected virtual IEnumerable<OutputType> GetAllUsedTypes(TypeMetadata metadata, int callNumber)
 		{
 			var allUsedTypes = new List<OutputType>(16);
 			var parentType = GetUsedParentType(metadata);
 
 			if (parentType is not null)
 			{
-				allUsedTypes.AddRange(GetUsedGenericTypes(parentType));
+				allUsedTypes.AddRange(FilterImportingTypes(new []{ parentType }, callNumber));
 			}
 
-			allUsedTypes.AddRange(GetUsedGenericTypes(metadata.GenericTypeArguments?.ToArray()));
+			allUsedTypes.AddRange(FilterImportingTypes(metadata.GenericTypeArguments?.ToArray(), callNumber));
+			allUsedTypes.AddRange(FilterImportingTypes(metadata.PropertiesMetadata.Select(x => x.PropertyType).ToArray(), callNumber));
 
 			var result = new HashSet<OutputType>(allUsedTypes, new UsedOutputTypesEqualityComparer());
 			return result.ToArray();
@@ -107,15 +110,26 @@ namespace Laraue.TypeScriptContractsGenerator
 		[CanBeNull]
 		protected virtual TypeMetadata GetUsedParentType(TypeMetadata metadata)
 		{
-			var parentMetadata = metadata.ParentTypeMetadata;
-			if (parentMetadata is null) return null;
-			return parentMetadata.ClrType.Assembly.FullName.Contains("System") ? null : parentMetadata;
+			return metadata.ParentTypeMetadata;
 		}
 
 		[NotNull]
-		protected virtual IEnumerable<OutputType> GetUsedGenericTypes([CanBeNull] params TypeMetadata[] metadata)
+		protected virtual IEnumerable<TypeMetadata> GetUsedGenericTypes([CanBeNull] params TypeMetadata[] metadata)
 		{
-			return metadata?.Select(GetOutputType).Where(x => x is not StaticOutputType) ?? System.Array.Empty<OutputType>();
+			return metadata?.SelectMany(x => x.GenericTypeArguments) ?? Enumerable.Empty<TypeMetadata>();
+		}
+
+		[NotNull]
+		protected virtual IEnumerable<OutputType> FilterImportingTypes([CanBeNull]TypeMetadata[] metadata, int callNumber)
+		{
+			var typeMetadata = metadata?.Select(x => GetOutputType(x, callNumber));
+			var result = typeMetadata?
+				.Where(x => x is not StaticOutputType)
+				.Where(x => x is not Array)
+				.Where(x => x?.TypeMetadata != null)
+				.Where(x => !x.TypeMetadata.ClrType.Assembly.FullName.Contains("System"));
+
+			return result ?? System.Array.Empty<OutputType>();
 		}
 
 		/// <inheritdoc />
@@ -127,7 +141,7 @@ namespace Laraue.TypeScriptContractsGenerator
 			}
 
 			var descriptor = Collection.GetMap(metadata);
-			return descriptor.GetOutputType(metadata, ++callNumber);
+			return descriptor?.GetOutputType(metadata, ++callNumber);
 		}
 
 		[NotNull]

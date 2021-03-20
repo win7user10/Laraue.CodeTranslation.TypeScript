@@ -19,6 +19,7 @@ namespace Laraue.TypeScriptContractsGenerator
 		public string GenerateCode(OutputPropertyType property)
 		{
 			var codeBuilder = new StringBuilder();
+
 			codeBuilder.Append(_generator.GenerateName(property));
 
 			if (_generator.ShouldBeUsedTypingInPropertyDefinition(property))
@@ -35,6 +36,15 @@ namespace Laraue.TypeScriptContractsGenerator
 		{
 			using var codeBuilder = new IndentedStringBuilder(2);
 
+			// Import classes
+			foreach (var importString in _generator.GenerateImportStrings(type))
+			{
+				codeBuilder.AppendLine(importString);
+			}
+
+			codeBuilder.AppendLine();
+
+			// Type definition
 			codeBuilder.AppendLine($"export class {_generator.GenerateName(type)} {{");
 			using (codeBuilder.Indent())
 			{
