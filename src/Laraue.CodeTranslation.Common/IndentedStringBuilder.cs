@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Laraue.CodeTranslation.Abstractions.Code;
 using System.Text;
+using Laraue.CodeTranslation.Abstractions.Code;
 
-namespace Laraue.CodeTranslation
+namespace Laraue.CodeTranslation.Common
 {
 	public class IndentedStringBuilder : IIndentedStringBuilder
 	{

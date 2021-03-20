@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Laraue.CodeTranslation.TypeDiscovery.Extensions
+namespace Laraue.CodeTranslation.Extensions
 {
     public static class TypeCollectionExtensions
     {

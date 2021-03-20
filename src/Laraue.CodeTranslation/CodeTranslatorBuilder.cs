@@ -2,14 +2,15 @@
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
+using Laraue.CodeTranslation.Common;
 using Laraue.CodeTranslation.TypeScript;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Laraue.CodeTranslation.TypeDiscovery
+namespace Laraue.CodeTranslation
 {
     public class CodeTranslatorBuilder
     {
-        private readonly ServiceCollection _services = new ServiceCollection();
+        private readonly ServiceCollection _services = new ();
 
         public CodeTranslatorBuilder AddDependency<TService, TImplementation>()
             where TService : class 

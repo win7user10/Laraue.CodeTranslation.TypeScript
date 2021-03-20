@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Laraue.CodeTranslation.TypeDiscovery.Extensions
+namespace Laraue.CodeTranslation.Extensions
 {
     public static class FilterExtensions
     {

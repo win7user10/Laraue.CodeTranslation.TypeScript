@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Laraue.CodeTranslation.TypeDiscovery.Extensions
+namespace Laraue.CodeTranslation.Extensions
 {
     public static class FileStorageExtensions
     {

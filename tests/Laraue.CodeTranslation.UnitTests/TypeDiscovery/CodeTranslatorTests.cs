@@ -1,5 +1,4 @@
 ﻿using System;
-using Laraue.CodeTranslation.TypeDiscovery;
 using Xunit;
 
 namespace Laraue.CodeTranslation.UnitTests.TypeDiscovery

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Laraue.CodeTranslation.Extensions
+namespace Laraue.CodeTranslation.Common.Extensions
 {
     public static class TypeExtensions
     {

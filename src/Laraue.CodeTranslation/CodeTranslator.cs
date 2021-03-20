@@ -6,7 +6,7 @@ using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Laraue.CodeTranslation.TypeDiscovery
+namespace Laraue.CodeTranslation
 {
     public class CodeTranslator : IDisposable
     {

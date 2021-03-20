@@ -1,7 +1,7 @@
 ﻿using System;
-using Laraue.CodeTranslation.Extensions;
+using Laraue.CodeTranslation.Common.Extensions;
 
-namespace Laraue.CodeTranslation
+namespace Laraue.CodeTranslation.Common
 {
 	public abstract class BaseMetadataGenerator
 	{

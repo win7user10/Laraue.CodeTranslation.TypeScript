@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
+using Laraue.CodeTranslation.Common;
 using Laraue.CodeTranslation.TypeScript.Types;
 using Newtonsoft.Json.Linq;
 using Array = Laraue.CodeTranslation.TypeScript.Types.Array;

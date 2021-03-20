@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 
-namespace Laraue.CodeTranslation
+namespace Laraue.CodeTranslation.Common
 {
 	public class PropertyInfoResolver : IPropertyInfoResolver
 	{

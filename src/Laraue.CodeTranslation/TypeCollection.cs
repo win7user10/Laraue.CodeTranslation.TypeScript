@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Laraue.CodeTranslation.TypeDiscovery
+namespace Laraue.CodeTranslation
 {
     public class TypeCollection : HashSet<Type>
     {

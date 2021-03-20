@@ -1,4 +1,4 @@
-﻿namespace Laraue.CodeTranslation.TypeDiscovery
+﻿namespace Laraue.CodeTranslation
 {
     public record GeneratedCode
     {

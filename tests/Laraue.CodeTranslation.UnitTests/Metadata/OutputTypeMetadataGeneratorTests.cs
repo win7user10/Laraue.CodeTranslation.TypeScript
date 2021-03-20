@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
+using Laraue.CodeTranslation.Common;
 using Laraue.CodeTranslation.TypeScript;
 using Laraue.CodeTranslation.TypeScript.Types;
 using Xunit;

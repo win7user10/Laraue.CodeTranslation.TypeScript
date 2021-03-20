@@ -4,9 +4,9 @@ using System.Linq;
 using System.Reflection;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
-using Laraue.CodeTranslation.Extensions;
+using Laraue.CodeTranslation.Common.Extensions;
 
-namespace Laraue.CodeTranslation
+namespace Laraue.CodeTranslation.Common
 {
 	public class MetadataGenerator : BaseMetadataGenerator, IMetadataGenerator
 	{

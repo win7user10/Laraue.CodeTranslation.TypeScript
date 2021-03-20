@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
+using Laraue.CodeTranslation.Common;
 
 namespace Laraue.CodeTranslation.TypeScript
 {

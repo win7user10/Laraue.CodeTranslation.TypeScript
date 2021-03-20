@@ -3,7 +3,7 @@ using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
 
-namespace Laraue.CodeTranslation
+namespace Laraue.CodeTranslation.Common
 {
 	public abstract class OutputTypeMetadataGenerator : IOutputTypeMetadataGenerator
 	{

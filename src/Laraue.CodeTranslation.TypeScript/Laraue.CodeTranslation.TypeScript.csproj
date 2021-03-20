@@ -22,7 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Laraue.CodeTranslation.Abstractions\Laraue.CodeTranslation.Abstractions.csproj" />
-    <ProjectReference Include="..\Laraue.CodeTranslation\Laraue.CodeTranslation.csproj" />
+    <ProjectReference Include="..\Laraue.CodeTranslation.Common\Laraue.CodeTranslation.Common.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Laraue.CodeTranslation.Abstractions.Output;
 
-namespace Laraue.CodeTranslation
+namespace Laraue.CodeTranslation.Common
 {
 	public class UsedOutputTypesEqualityComparer : IEqualityComparer<OutputType>
 	{
