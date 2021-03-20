@@ -5,6 +5,7 @@
     <LangVersion>Latest</LangVersion>
     <PackageId>Laraue.CodeTranslation</PackageId>
     <Version>1.0.1</Version>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>

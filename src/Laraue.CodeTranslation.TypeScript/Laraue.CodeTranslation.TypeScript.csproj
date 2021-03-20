@@ -12,6 +12,7 @@
     <PackageTags>typescript;CSharp;code generation;contracts</PackageTags>
     <LangVersion>Latest</LangVersion>
     <PackageId>Laraue.TypeScriptContractsGenerator</PackageId>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
