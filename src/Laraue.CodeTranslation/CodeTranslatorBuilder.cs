@@ -1,9 +1,4 @@
 ﻿using System;
-using Laraue.CodeTranslation.Abstractions.Code;
-using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
-using Laraue.CodeTranslation.Abstractions.Output.Metadata;
-using Laraue.CodeTranslation.Common;
-using Laraue.CodeTranslation.TypeScript;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Laraue.CodeTranslation
@@ -28,20 +23,9 @@ namespace Laraue.CodeTranslation
             return this;
         }
 
-        public static CodeTranslator Create(int indentSize = 2)
+        public CodeTranslator Build()
         {
-            var builder = new CodeTranslatorBuilder();
-
-            builder
-                .AddDependency<ICodeGenerator, TypeScriptCodeGenerator>()
-                .AddDependency<ITypePartsCodeGenerator, TypeScriptTypePartsGenerator>()
-                .AddDependency<IMetadataGenerator, MetadataGenerator>()
-                .AddDependency<IPropertyInfoResolver, PropertyInfoResolver>()
-                .AddDependency<IOutputTypeMetadataGenerator, TypeScriptOutputTypeMetadataGenerator>()
-                .AddDependency<IIndentedStringBuilder, IndentedStringBuilder>(sp =>
-                    new IndentedStringBuilder(indentSize));
-
-            return new CodeTranslator(builder._services.BuildServiceProvider());
+            return new (_services.BuildServiceProvider());
         }
     }
 }

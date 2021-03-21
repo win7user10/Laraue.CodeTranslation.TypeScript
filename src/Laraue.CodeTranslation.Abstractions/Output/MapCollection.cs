@@ -15,33 +15,35 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 			return AddMap<TInput, TOutput>(new TOutput());
 		}
 
+		private MapCollection AddToSource(MapDescriptor descriptor)
+		{
+			_source.Add(descriptor);
+			return this;
+		}
+
 		public MapCollection AddMap<TInput, TOutput>(TOutput outputType)
 			where TOutput : OutputType
 		{
-			_source.Add(new MapDescriptor()
+			return AddToSource(new MapDescriptor()
 			{
-				GetOutputType = (metadata, callNumber) => outputType,
+				GetOutputType = (_, _) => outputType,
 				IsApplicable = (metadata) => metadata.ClrType == typeof(TInput),
 			});
-
-			return this;
 		}
 
 		public MapCollection AddMap<TOutput>(Func<TypeMetadata, bool> whenShouldBeUsed, Func<TypeMetadata, int, TOutput> getOutputTypeFunc)
 			where TOutput : OutputType
 		{
-			_source.Add(new MapDescriptor()
+			return AddToSource(new MapDescriptor()
 			{
 				GetOutputType = getOutputTypeFunc,
 				IsApplicable = whenShouldBeUsed,
 			});
-
-			return this;
 		}
 
 		public MapDescriptor GetMap(TypeMetadata metadata)
 		{
-			return _source.FirstOrDefault(x => x.IsApplicable(metadata));
+			return _source.LastOrDefault(x => x.IsApplicable(metadata));
 		}
 	}
 }

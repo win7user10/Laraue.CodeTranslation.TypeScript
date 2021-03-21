@@ -1,11 +1,12 @@
 ﻿using System;
+using Laraue.CodeTranslation.TypeScript;
 using Xunit;
 
 namespace Laraue.CodeTranslation.UnitTests.TypeDiscovery
 {
     public class CodeTranslatorTests : IDisposable
     {
-        private readonly CodeTranslator _translator = CodeTranslatorBuilder.Create();
+        private readonly CodeTranslator _translator = TypeScriptTranslatorBuilder.Create(new CodeTranslatorOptions());
 
         [Fact]
         public void BuiltCodeTranslatorShouldGenerateCodeWithoutException()

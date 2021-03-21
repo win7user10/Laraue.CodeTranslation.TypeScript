@@ -21,6 +21,10 @@ namespace Laraue.CodeTranslation.TypeScript
 			: base(new MapCollection())
 		{
 			Collection
+				.AddMap<Dictionary>(metadata => metadata.IsDictionary, GetDictionaryMetadata)
+				.AddMap<Class>(metadata => metadata.ClrType.IsClass && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetClassMetadata)
+				.AddMap<Array>(metadata => metadata.IsEnumerable && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetArrayMetadata)
+				.AddMap<Enum>(metadata => metadata.IsEnum, GetEnumMetadata)
 				.AddMap<int, Number>()
 				.AddMap<decimal, Number>()
 				.AddMap<double, Number>()
@@ -31,12 +35,8 @@ namespace Laraue.CodeTranslation.TypeScript
 				.AddMap<bool, Boolean>()
 				.AddMap<Guid, String>()
 				.AddMap<JObject, Any>()
-				.AddMap<JToken, Any>()
-				.AddMap<Enum>(metadata => metadata.IsEnum, GetEnumMetadata)
-				.AddMap<Array>(metadata => metadata.IsEnumerable && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetArrayMetadata)
-				.AddMap<Class>(metadata => metadata.ClrType.IsClass && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetClassMetadata)
-				.AddMap<Dictionary>(metadata => metadata.IsDictionary, GetDictionaryMetadata);
-
+				.AddMap<JToken, Any>();
+			
 			setupMap?.Invoke(Collection);
 		}
 
