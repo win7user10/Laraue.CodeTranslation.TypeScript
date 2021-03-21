@@ -7,11 +7,12 @@
     <RepositoryType>git</RepositoryType>
     <Authors>Belyanskiy Ilya</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.2.2</Version>
+    <Version>0.2.4</Version>
     <PackageProjectUrl>https://github.com/win7user10/Laraue.TypeScriptContractsGenerator</PackageProjectUrl>
     <PackageTags>typescript;CSharp;code generation;contracts</PackageTags>
     <LangVersion>Latest</LangVersion>
     <IsPackable>true</IsPackable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

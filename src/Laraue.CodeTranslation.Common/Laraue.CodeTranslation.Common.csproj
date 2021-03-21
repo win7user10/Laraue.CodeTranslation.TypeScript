@@ -4,8 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Common classes for other Laraue.CodeTranslation packages and default Laraue.CodeTranslation.Abstraction implementations of some classes.</Description>
     <LangVersion>Latest</LangVersion>
-    <Version>0.2.2</Version>
+    <Authors>Belyanskiy Ilya</Authors>
+    <Version>1.0.0</Version>
     <IsPackable>true</IsPackable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

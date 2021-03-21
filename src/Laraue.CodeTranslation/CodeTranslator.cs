@@ -17,6 +17,11 @@ namespace Laraue.CodeTranslation
             _provider = provider;
         }
 
+        /// <summary>
+        /// Generates code for passed type.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public GeneratedCode GenerateTypeCode(Type type)
         {
             var metadataGenerator = _provider.GetRequiredService<IMetadataGenerator>();
@@ -33,6 +38,11 @@ namespace Laraue.CodeTranslation
             return new GeneratedCode { Code = code, FilePathSegments = fileParts };
         }
 
+        /// <summary>
+        /// Generates code for passed types.
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
         public IEnumerable<GeneratedCode> GenerateTypesCode(IEnumerable<Type> types)
         {
             return types.Select(GenerateTypeCode);

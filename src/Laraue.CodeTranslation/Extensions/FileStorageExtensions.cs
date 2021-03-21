@@ -6,7 +6,7 @@ namespace Laraue.CodeTranslation.Extensions
 {
     public static class FileStorageExtensions
     {
-        public static void Store(this IEnumerable<GeneratedCode> types, string rootPath, bool dropRootFolderOnStart, string fileExtension = "ts")
+        public static void StoreTo(this IEnumerable<GeneratedCode> types, string rootPath, bool dropRootFolderOnStart, string fileExtension = "ts")
         {
             if (dropRootFolderOnStart && Directory.Exists(rootPath))
             {

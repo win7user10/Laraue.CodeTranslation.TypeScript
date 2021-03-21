@@ -11,7 +11,7 @@ namespace Laraue.CodeTranslation.Extensions
         /// <typeparam name="TAttribute"></typeparam>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static bool WithAttribute<TAttribute>(this Type type)
+        public static bool HasAttribute<TAttribute>(this Type type)
             where TAttribute : Attribute
         {
             return type.GetCustomAttribute(typeof(TAttribute)) != null;

@@ -22,16 +22,20 @@ namespace Laraue.CodeTranslation.TypeScript
             return strings.ToArray();
         }
 
+        /// <inheritdoc />
         public virtual string GenerateName(OutputType type) => type.Name.Name.ToPascalCase();
 
+        /// <inheritdoc />
         [CanBeNull]
-        public virtual string[] GetFilePathParts(OutputType type) => type.TypeMetadata?.ClrType?.Namespace?.Split('.');
+        public virtual string[] GetFilePathParts(OutputType type) => type.TypeMetadata?.ClrType?.FullName?.Split('.');
 
         [CanBeNull]
         public virtual string GetFileName(OutputType type) => type.Name.Name.ToCamelCase();
 
+        /// <inheritdoc />
         public virtual string GenerateName(OutputPropertyType property) => property.PropertyName.ToCamelCase();
 
+        /// <inheritdoc />
         public virtual string GenerateDefaultValue(OutputPropertyType property)
         {
             if (IsNullableType(property))
@@ -48,6 +52,7 @@ namespace Laraue.CodeTranslation.TypeScript
             };
         }
 
+        /// <inheritdoc />
         public virtual string GeneratePropertyType(OutputPropertyType property)
         {
             var codeBuilder = new StringBuilder(property.OutputType.Name);
@@ -59,6 +64,7 @@ namespace Laraue.CodeTranslation.TypeScript
             return codeBuilder.ToString();
         }
 
+        /// <inheritdoc />
         public virtual bool ShouldBeUsedTypingInPropertyDefinition(OutputPropertyType property)
         {
             switch (property.OutputType)
