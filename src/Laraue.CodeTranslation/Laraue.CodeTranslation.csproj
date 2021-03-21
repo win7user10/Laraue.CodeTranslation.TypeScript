@@ -2,9 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Description>Classes and extensions to create code translators which will generate code for some programming language.</Description>
     <LangVersion>Latest</LangVersion>
-    <Version>0.2.0</Version>
-    <IsPackable>false</IsPackable>
+    <Version>0.2.2</Version>
+    <IsPackable>true</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
