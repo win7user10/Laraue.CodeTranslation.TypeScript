@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 
 namespace Laraue.CodeTranslation.Abstractions.Output
@@ -9,6 +10,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 
 		public PropertyInfo Source { get; init; }
 
+		[NotNull]
 		public OutputType OutputType { get; init; }
 
 		public PropertyMetadata PropertyMetadata { get; init; }

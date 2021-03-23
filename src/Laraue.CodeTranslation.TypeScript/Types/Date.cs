@@ -2,11 +2,11 @@
 
 namespace Laraue.CodeTranslation.TypeScript.Types
 {
-	public class Any : StaticOutputType
+	public class Date : StaticOutputType
 	{
-		public Any()
+		public Date()
 		{
-			Name = "any";
+			Name = "Date";
 		}
 	}
 }

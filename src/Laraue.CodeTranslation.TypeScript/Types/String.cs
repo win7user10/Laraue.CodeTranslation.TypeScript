@@ -4,6 +4,9 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 {
 	public class String : StaticOutputType
 	{
-		public override OutputTypeName Name => "string";
+		public String()
+		{
+			Name = "string";
+		}
 	}
 }

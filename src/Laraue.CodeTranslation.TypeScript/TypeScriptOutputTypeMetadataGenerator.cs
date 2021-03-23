@@ -34,6 +34,8 @@ namespace Laraue.CodeTranslation.TypeScript
 				.AddMap<string, String>()
 				.AddMap<bool, Boolean>()
 				.AddMap<Guid, String>()
+				.AddMap<DateTime, Date>()
+				.AddMap<DateTimeOffset, Date>()
 				.AddMap<JObject, Any>()
 				.AddMap<JToken, Any>();
 			
@@ -44,7 +46,7 @@ namespace Laraue.CodeTranslation.TypeScript
 		{
 			var typeName = GetTypeName(metadata);
 			var propertiesMetadata = metadata.PropertiesMetadata.Select(x => GetOutputPropertyType(x, callNumber));
-			return new (typeName, GetAllUsedTypes(metadata, callNumber), propertiesMetadata, metadata);
+			return new (typeName, GetAllUsedTypes(metadata, callNumber), propertiesMetadata, metadata, metadata.ParentTypeMetadata is not null ? GetTypeName(metadata.ParentTypeMetadata) : null);
 		}
 
 		public virtual Enum GetEnumMetadata(TypeMetadata metadata, int callNumber)
@@ -58,7 +60,7 @@ namespace Laraue.CodeTranslation.TypeScript
 			return new ()
 			{
 				Source = metadata.Source,
-				OutputType = GetOutputType(metadata.PropertyType, callNumber),
+				OutputType = GetOutputType(metadata.PropertyType, callNumber) ?? throw new InvalidOperationException($"Mapping for {metadata.PropertyType.ClrType} is not registered"),
 				PropertyName = metadata.PropertyName,
 				PropertyMetadata = metadata,
 			};
@@ -112,12 +114,7 @@ namespace Laraue.CodeTranslation.TypeScript
 		{
 			return metadata.ParentTypeMetadata;
 		}
-
-		[NotNull]
-		protected virtual IEnumerable<TypeMetadata> GetUsedGenericTypes([CanBeNull] params TypeMetadata[] metadata)
-		{
-			return metadata?.SelectMany(x => x.GenericTypeArguments) ?? Enumerable.Empty<TypeMetadata>();
-		}
+		
 
 		[NotNull]
 		protected virtual IEnumerable<OutputType> FilterImportingTypes([CanBeNull]TypeMetadata[] metadata, int callNumber)
@@ -135,7 +132,7 @@ namespace Laraue.CodeTranslation.TypeScript
 		/// <inheritdoc />
 		public override OutputType GetOutputType(TypeMetadata metadata, int callNumber = 0)
 		{
-			if (callNumber > 10)
+			if (callNumber > 8)
 			{
 				return null;
 			}

@@ -6,9 +6,10 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 {
 	public class Class : DynamicOutputType
 	{
-		public Class(OutputTypeName name, IEnumerable<OutputType> usedTypes, IEnumerable<OutputPropertyType> properties, TypeMetadata metadata) 
+		public Class(OutputTypeName name, IEnumerable<OutputType> usedTypes, IEnumerable<OutputPropertyType> properties, TypeMetadata metadata, OutputTypeName parentTypeName) 
 			: base(name, usedTypes, properties, metadata)
 		{
+			ParentTypeName = parentTypeName;
 		}
 	}
 }

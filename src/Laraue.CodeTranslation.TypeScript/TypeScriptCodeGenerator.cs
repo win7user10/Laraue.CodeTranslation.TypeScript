@@ -61,7 +61,12 @@ namespace Laraue.CodeTranslation.TypeScript
 
 		protected virtual IndentedStringBuilder GenerateTypeCode(IndentedStringBuilder codeBuilder, OutputType type)
 		{
-			codeBuilder.AppendLine($"export class {_generator.GenerateName(type)} {{");
+			codeBuilder.Append($"export class {_generator.GenerateName(type.Name)} ");
+			if (type?.ParentTypeName is not null)
+			{
+				codeBuilder.Append($"extends {_generator.GenerateName(type.ParentTypeName)}");
+			}
+
 			using (codeBuilder.Indent())
 			{
 				foreach (var propertyType in type.Properties)
@@ -76,7 +81,7 @@ namespace Laraue.CodeTranslation.TypeScript
 
 		protected virtual IndentedStringBuilder GenerateEnumCode(IndentedStringBuilder codeBuilder, Types.Enum type)
 		{
-			codeBuilder.AppendLine($"export enum {_generator.GenerateName(type)} {{");
+			codeBuilder.AppendLine($"export enum {_generator.GenerateName(type.Name)} {{");
 			using (codeBuilder.Indent())
 			{
 				var currentEnumValue = 0;

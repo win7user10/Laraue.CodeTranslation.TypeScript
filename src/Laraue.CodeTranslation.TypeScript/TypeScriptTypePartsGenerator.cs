@@ -8,6 +8,7 @@ using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.TypeScript.Extensions;
 using Laraue.CodeTranslation.TypeScript.Types;
 using Array = Laraue.CodeTranslation.TypeScript.Types.Array;
+using Boolean = Laraue.CodeTranslation.TypeScript.Types.Boolean;
 using Enum = Laraue.CodeTranslation.TypeScript.Types.Enum;
 using String = Laraue.CodeTranslation.TypeScript.Types.String;
 
@@ -23,7 +24,7 @@ namespace Laraue.CodeTranslation.TypeScript
         }
 
         /// <inheritdoc />
-        public virtual string GenerateName(OutputType type) => type.Name.Name.ToPascalCase();
+        public virtual string GenerateName(OutputTypeName name) => name.Name.ToPascalCase();
 
         /// <inheritdoc />
         [CanBeNull]
@@ -47,7 +48,9 @@ namespace Laraue.CodeTranslation.TypeScript
             {
                 Number => "0",
                 String => "''",
+                Date => "new Date()",
                 Enum => GenerateDefaultEnumValue(property),
+                Boolean => "true",
                 _ => throw new NotImplementedException($"{property.OutputType.GetType()} default value is unknown")
             };
         }
@@ -92,7 +95,7 @@ namespace Laraue.CodeTranslation.TypeScript
                 throw new InvalidOperationException($"Impossible to get enum value from the type {property.OutputType.GetType()}");
             }
 
-            var enumName = GenerateName(property.OutputType);
+            var enumName = GenerateName(property.OutputType.Name);
             var enumValues = enumType.EnumValues;
             var firstEnumValue = enumValues.OrderBy(x => x.Value).First().Key;
             return $"{enumName}.{firstEnumValue}";
@@ -185,7 +188,7 @@ namespace Laraue.CodeTranslation.TypeScript
             var path = isImportFromThisFolder ? "./" : string.Empty;
             path += string.Join("/", pathSegmentsToImport.ToArray());
 
-            return $"import {{ {GenerateName(importingType)} }} from '{path}'";
+            return $"import {{ {GenerateName(importingType.Name)} }} from '{path}'";
         }
     }
 }

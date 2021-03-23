@@ -16,7 +16,7 @@ namespace Laraue.CodeTranslation.Abstractions.Code
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        string GenerateName(OutputType type);
+        string GenerateName(OutputTypeName name);
 
         /// <summary>
         /// Generates result name in output code for some <see cref="OutputPropertyType"/>.
