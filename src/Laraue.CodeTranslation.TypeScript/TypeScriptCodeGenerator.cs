@@ -64,8 +64,10 @@ namespace Laraue.CodeTranslation.TypeScript
 			codeBuilder.Append($"export class {_generator.GenerateName(type.Name)} ");
 			if (type?.ParentTypeName is not null)
 			{
-				codeBuilder.Append($"extends {_generator.GenerateName(type.ParentTypeName)}");
+				codeBuilder.Append($"extends {_generator.GenerateName(type.ParentTypeName)} ");
 			}
+
+			codeBuilder.AppendLine("{");
 
 			using (codeBuilder.Indent())
 			{
