@@ -32,6 +32,8 @@ namespace Laraue.CodeTranslation.UnitTests
 		public Guid? NullableGuidValue { get; set; }
 		public EnumStartsWith0 EnumStartsWith0 { get; set; }
 
+		public EnumStartsWith10[] EnumerableEnum { get; set; }
+
 	}
 
 	public class SubClass : MainClass

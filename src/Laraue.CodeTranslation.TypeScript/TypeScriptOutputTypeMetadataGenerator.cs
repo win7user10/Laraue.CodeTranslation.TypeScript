@@ -17,6 +17,8 @@ namespace Laraue.CodeTranslation.TypeScript
 {
 	public class TypeScriptOutputTypeMetadataGenerator : OutputTypeMetadataGenerator
 	{
+		private readonly Dictionary<Type, OutputType> _cache = new();
+
 		public TypeScriptOutputTypeMetadataGenerator(Action<MapCollection> setupMap = null) 
 			: base(new MapCollection())
 		{
@@ -36,6 +38,7 @@ namespace Laraue.CodeTranslation.TypeScript
 				.AddMap<Guid, String>()
 				.AddMap<DateTime, Date>()
 				.AddMap<DateTimeOffset, Date>()
+				.AddMap<Uri, String>()
 				.AddMap<JObject, Any>()
 				.AddMap<JToken, Any>();
 			
@@ -45,13 +48,25 @@ namespace Laraue.CodeTranslation.TypeScript
 		/// <inheritdoc />
 		public override OutputType GetOutputType(TypeMetadata metadata, int callNumber = 0)
 		{
+			if (_cache.TryGetValue(metadata.ClrType, out var result))
+			{
+				return result;
+			}
+
 			if (callNumber > 8)
 			{
 				return null;
 			}
 
 			var descriptor = Collection.GetMap(metadata);
-			return descriptor?.GetOutputType(metadata, ++callNumber);
+			result = descriptor?.GetOutputType(metadata, ++callNumber);
+			
+			if (_cache.ContainsKey(metadata.ClrType))
+			{
+				_cache.Add(metadata.ClrType, result);
+			}
+
+			return result;
 		}
 
 		protected virtual OutputPropertyType GetOutputPropertyType(PropertyMetadata metadata, int callNumber)
@@ -142,11 +157,15 @@ namespace Laraue.CodeTranslation.TypeScript
 
 		protected virtual bool ShouldBeImported([CanBeNull] OutputType type)
 		{
-			return type is not null 
-			       && type is not StaticOutputType
-			       && type is not Array
-			       && type?.TypeMetadata is not null
-			       && !type.TypeMetadata.ClrType.Assembly.FullName.Contains("System");
+			if (type?.TypeMetadata is null) return false;
+
+			return type switch
+			{
+				Enum => true,
+				StaticOutputType => false,
+				Array => false,
+				_ => !type.TypeMetadata.ClrType.Assembly.FullName.Contains("System")
+			};
 		}
 
 		[NotNull]
