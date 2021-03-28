@@ -26,12 +26,12 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		{
 			return AddToSource(new MapDescriptor()
 			{
-				GetOutputType = (_, _) => outputType,
+				GetOutputType = _ => outputType,
 				IsApplicable = (metadata) => metadata.ClrType == typeof(TInput),
 			});
 		}
 
-		public MapCollection AddMap<TOutput>(Func<TypeMetadata, bool> whenShouldBeUsed, Func<TypeMetadata, int, TOutput> getOutputTypeFunc)
+		public MapCollection AddMap<TOutput>(Func<TypeMetadata, bool> whenShouldBeUsed, Func<TypeMetadata, TOutput> getOutputTypeFunc)
 			where TOutput : OutputType
 		{
 			return AddToSource(new MapDescriptor()

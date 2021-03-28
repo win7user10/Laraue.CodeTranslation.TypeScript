@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Laraue.CodeTranslation.Abstractions.Metadata;
+﻿using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.CodeTranslation.TypeScript.Types
 {
 	public class Array : DynamicOutputType
 	{
-		public Array(OutputTypeName name, IEnumerable<OutputType> usedTypes, TypeMetadata typeMetadata) 
-			: base(GetName(name), usedTypes, Enumerable.Empty<OutputPropertyType>(), typeMetadata)
+		public Array(OutputTypeName name, OutputType[] usedTypes, TypeMetadata typeMetadata) 
+			: base(GetName(name), usedTypes, System.Array.Empty<OutputPropertyType>(), typeMetadata)
 		{
 		}
 

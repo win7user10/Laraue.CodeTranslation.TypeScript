@@ -7,6 +7,9 @@ namespace Laraue.CodeTranslation.UnitTests
 	[ShouldBeTaken]
 	public class MainClass
 	{
+		public EnumStartsWith0 EnumStartsWith0 { get; set; }
+		public EnumStartsWith10[] EnumerableEnum { get; set; }
+
 		public int IntValue { get; set; }
 		public string StringValue { get; set; }
 		public double DoubleValue { get; set; }
@@ -30,9 +33,6 @@ namespace Laraue.CodeTranslation.UnitTests
 		public JObject JObjectValue { get; set; }
 		public int? NullableIntValue { get; set; }
 		public Guid? NullableGuidValue { get; set; }
-		public EnumStartsWith0 EnumStartsWith0 { get; set; }
-
-		public EnumStartsWith10[] EnumerableEnum { get; set; }
 
 	}
 

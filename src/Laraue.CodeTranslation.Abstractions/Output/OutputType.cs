@@ -13,7 +13,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		public IEnumerable<OutputType> UsedTypes { get; protected set; } = Array.Empty<OutputType>();
 
 		[NotNull]
-		public IEnumerable<OutputPropertyType> Properties { get; protected set; } = Array.Empty<OutputPropertyType>();
+		public OutputPropertyType[] Properties { get; protected set; } = Array.Empty<OutputPropertyType>();
 
 		[CanBeNull]
 		public TypeMetadata TypeMetadata { get; protected set; }

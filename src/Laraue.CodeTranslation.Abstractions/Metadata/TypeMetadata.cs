@@ -7,7 +7,7 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 	/// <summary>
 	/// Contains meta information of some <see cref="System.Type">Clr type</see>.
 	/// </summary>
-	public record TypeMetadata
+	public sealed record TypeMetadata
 	{
 		/// <summary>
 		/// Source Clr Type.
@@ -52,5 +52,15 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		[NotNull]
 		public IEnumerable<PropertyMetadata> PropertiesMetadata { get; init; }
 
+		/// <inheritdoc />
+		public override int GetHashCode()
+		{
+			return ClrType.GetHashCode();
+		}
+
+		public bool Equals(TypeMetadata? other)
+		{
+			return other?.ClrType == ClrType;
+		}
 	}
 }

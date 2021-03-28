@@ -10,7 +10,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 
 		public PropertyInfo Source { get; init; }
 
-		[NotNull]
+		[CanBeNull]
 		public OutputType OutputType { get; init; }
 
 		public PropertyMetadata PropertyMetadata { get; init; }
