@@ -9,7 +9,6 @@ namespace Laraue.CodeTranslation.UnitTests
 	{
 		public EnumStartsWith0 EnumStartsWith0 { get; set; }
 		public EnumStartsWith10[] EnumerableEnum { get; set; }
-
 		public int IntValue { get; set; }
 		public string StringValue { get; set; }
 		public double DoubleValue { get; set; }
@@ -38,6 +37,11 @@ namespace Laraue.CodeTranslation.UnitTests
 
 	public class SubClass : MainClass
 	{
+	}
+
+	public class RecursiveClass
+	{
+		public IEnumerable<RecursiveClass> RecursiveProperty { get; set; }
 	}
 
 	public class OneTypeGenericSubClass<T>

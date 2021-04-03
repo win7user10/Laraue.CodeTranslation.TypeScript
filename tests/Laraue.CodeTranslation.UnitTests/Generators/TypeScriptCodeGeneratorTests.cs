@@ -40,7 +40,7 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 		[InlineData(nameof(MainClass.EnumStartsWith0), "enumStartsWith0: EnumStartsWith0 = EnumStartsWith0.Value0;")]
 		public void PropertyTranslation(string propertyName, string exceptedCode)
 		{
-			var code = GetPropertySourceCode(propertyName);
+			var code = GetPropertySourceCode<MainClass>(propertyName);
 			Assert.Equal(exceptedCode, code);
 		}
 
@@ -55,10 +55,20 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 }", code);
 		}
 
-		private string GetPropertySourceCode(string propertyName)
+		[Fact]
+		public void CodeTranslationForRecursiveClass()
+		{
+			var code = GetTypeSourceCode<RecursiveClass>();
+			Assert.Equal(
+				@"export class RecursiveClass {
+  recursiveProperty: RecursiveClass[] | null = null;
+}", code);
+		}
+
+		private string GetPropertySourceCode<T>(string propertyName)
 		{
 			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
-			var typeMetadata = metadataGenerator.GetMetadata(typeof(MainClass));
+			var typeMetadata = metadataGenerator.GetMetadata(typeof(T));
 
 			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator(null, _provider);
 			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
