@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
+using Laraue.CodeTranslation.Abstractions.Output;
+using Laraue.CodeTranslation.Common.Extensions;
 
 namespace Laraue.CodeTranslation.Common
 {
-    public class DependenciesGraph
+    public class DependenciesGraph : IDependenciesGraph
     {
         private readonly Dictionary<TypeMetadata, Node> _typeMetadataGraph = new();
 
@@ -25,49 +26,105 @@ namespace Laraue.CodeTranslation.Common
             return allUsedTypes;
         }
 
-        public IReadOnlyList<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata)
+        public IReadOnlyList<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata, DependencyType type)
         {
-            return GetResolvingTypesSequence(metadata, new List<TypeMetadata>(), new List<TypeMetadata>())
+            var sequence = GetResolvingTypesSequence(metadata, type, new List<TypeMetadata>(), new List<TypeMetadata>());
+            return sequence
                 .AsReadOnly();
         }
 
-        private List<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata, List<TypeMetadata> resolved, List<TypeMetadata> seen)
+        private List<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata, DependencyType type, List<TypeMetadata> resolved, List<TypeMetadata> seen)
         {
             var node = GetNode(metadata);
             seen.Add(metadata);
-            foreach (var edge in node.Edges)
+            foreach (var edge in node.Edges.Where(x => x.Type == type))
             {
-                if (!resolved.Contains(edge))
+                if (resolved.Contains(edge.Metadata))
                 {
-                    if (seen.Contains(edge))
-                    {
-                        throw new StackOverflowException($"Type {edge} circular dependency");
-                    }
-
-                    GetResolvingTypesSequence(edge, resolved, seen);
+                    continue;
                 }
+
+                if (seen.Contains(edge.Metadata))
+                {
+                    continue;
+                }
+
+                GetResolvingTypesSequence(edge.Metadata, type, resolved, seen);
             }
 
             resolved.Add(metadata);
             return resolved;
         }
-    }
 
-    public class Node
-    {
-        private HashSet<TypeMetadata> _edges = new ();
-
-        public bool AddEdge([NotNull]TypeMetadata metadata)
+        /// <summary>
+        /// Add types from type generic types to hashset with used properties.
+        /// </summary>
+        /// <param name="metadata"></param>
+        /// <param name="dependencyType"></param>
+        private void AddUsedGenericTypesToGraph(TypeMetadata metadata, DependencyType dependencyType)
         {
-            return _edges.Add(metadata);
+            if (metadata is null) return;
+            var typesToInspect = new Queue<TypeMetadata>(metadata?.GenericTypeArguments ?? Enumerable.Empty<TypeMetadata>());
+            while (typesToInspect.Count > 0)
+            {
+                var type = typesToInspect.Dequeue();
+                var node = GetNode(metadata);
+                if (!node.AddEdge(type, dependencyType | DependencyType.Generic)) continue;
+                typesToInspect.EnqueueRange(type.GenericTypeArguments);
+            }
         }
 
-        public IEnumerable<TypeMetadata> Edges => _edges;
-
-        /// <inheritdoc />
-        public override string ToString()
+        /// <summary>
+        /// Add types from type parent to hashset with used properties.
+        /// </summary>
+        /// <param name="metadata"></param>
+        private void AddUsedParentTypesToGraph(TypeMetadata metadata)
         {
-            return string.Join(", ", _edges.Select(x => x.GetType().Name));
+            var parentType = metadata.ParentTypeMetadata;
+            while (true)
+            {
+                if (parentType is null) break;
+                var node = GetNode(metadata);
+                if (node.AddEdge(parentType, DependencyType.Parent))
+                {
+                    metadata = parentType;
+                    parentType = parentType.ParentTypeMetadata;
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add types from type properties to hashset with used properties.
+        /// </summary>
+        /// <param name="metadata"></param>
+        private void AddPropertiesGenericTypesToGraph(TypeMetadata metadata)
+        {
+            var types = new Queue<TypeMetadata>(metadata?.PropertiesMetadata.Select(x => x.PropertyType) ?? Enumerable.Empty<TypeMetadata>());
+            while (types.Count > 0)
+            {
+                var type = types.Dequeue();
+                var node = GetNode(metadata);
+
+                if (node.AddEdge(type, DependencyType.Properties))
+                {
+                    AddUsedGenericTypesToGraph(type, DependencyType.Properties);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Build dependencies graph for passed type.
+        /// </summary>
+        /// <param name="metadata"></param>
+        public void AddToGraph(TypeMetadata metadata)
+        {
+            AddUsedGenericTypesToGraph(metadata, DependencyType.This);
+            AddUsedParentTypesToGraph(metadata);
+            AddPropertiesGenericTypesToGraph(metadata);
         }
     }
 }

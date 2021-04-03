@@ -1,12 +1,22 @@
+using System.Collections.Generic;
 using System.Linq;
 using Laraue.CodeTranslation.Common;
 using Laraue.CodeTranslation.TypeScript;
+using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Laraue.CodeTranslation.UnitTests.Generators
 {
 	public class TypeScriptCodeGeneratorTests
 	{
+		private readonly DependenciesGraph _dependenciesGraph = new();
+		private readonly OutputTypeProvider _provider;
+
+		public TypeScriptCodeGeneratorTests()
+		{
+			_provider = new OutputTypeProvider(_dependenciesGraph);
+		}
+
 		[Theory]
 		[InlineData(nameof(MainClass.IntValue), "intValue = 0;")]
 		[InlineData(nameof(MainClass.StringValue), "stringValue: string | null = null;")]
@@ -50,9 +60,9 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
 			var typeMetadata = metadataGenerator.GetMetadata(typeof(MainClass));
 
-			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator();
+			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator(null, _provider);
 			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
-			var propertyOutputType = outputType.Properties.Single(x => x.Source.Name == propertyName);
+			var propertyOutputType = outputType.Properties.Single(x => x.PropertyMetadata.Source.Name == propertyName);
 
 			var propertyCodeGenerator = new TypeScriptCodeGenerator(new TypeScriptTypePartsGenerator());
 			var propertyCode = propertyCodeGenerator.GenerateCode(propertyOutputType);
@@ -65,7 +75,7 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
 			var typeMetadata = metadataGenerator.GetMetadata(typeof(T));
 
-			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator();
+			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator(null, _provider);
 			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
 
 			var codeGenerator = new TypeScriptCodeGenerator(new TypeScriptTypePartsGenerator());

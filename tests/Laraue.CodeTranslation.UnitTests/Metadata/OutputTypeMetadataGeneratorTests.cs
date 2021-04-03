@@ -14,7 +14,7 @@ namespace Laraue.CodeTranslation.UnitTests.Metadata
 {
 	public class OutputTypeMetadataGeneratorTests
 	{
-		private readonly IOutputTypeMetadataGenerator _generator = new TypeScriptOutputTypeMetadataGenerator();
+		private readonly IOutputTypeMetadataGenerator _generator = new TypeScriptOutputTypeMetadataGenerator(null, new OutputTypeProvider(new DependenciesGraph()));
 
 		[Theory]
 		[InlineData(typeof(int), typeof(Number))]

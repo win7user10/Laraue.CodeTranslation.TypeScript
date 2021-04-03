@@ -5,8 +5,8 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 {
 	public class Array : DynamicOutputType
 	{
-		public Array(OutputTypeName name, OutputType[] usedTypes, TypeMetadata typeMetadata) 
-			: base(GetName(name), usedTypes, System.Array.Empty<OutputPropertyType>(), typeMetadata)
+		public Array(OutputTypeName name, TypeMetadata metadata, IOutputTypeProvider provider)
+			: base(GetName(name), metadata, provider)
 		{
 		}
 

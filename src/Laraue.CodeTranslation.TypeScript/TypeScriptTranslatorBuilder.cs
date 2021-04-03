@@ -1,8 +1,10 @@
 ﻿using System;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
+using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
 using Laraue.CodeTranslation.Common;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Laraue.CodeTranslation.TypeScript
 {
@@ -23,7 +25,8 @@ namespace Laraue.CodeTranslation.TypeScript
                 .AddDependency<ITypePartsCodeGenerator, TypeScriptTypePartsGenerator>()
                 .AddDependency<IMetadataGenerator, MetadataGenerator>()
                 .AddDependency<IPropertyInfoResolver, PropertyInfoResolver>()
-                .AddDependency<IOutputTypeMetadataGenerator, TypeScriptOutputTypeMetadataGenerator>(_ => new TypeScriptOutputTypeMetadataGenerator(options.ConfigureTypeMap))
+                .AddDependency<IOutputTypeMetadataGenerator, TypeScriptOutputTypeMetadataGenerator>(
+                    sp => new TypeScriptOutputTypeMetadataGenerator(options.ConfigureTypeMap, sp.GetRequiredService<IOutputTypeProvider>()))
                 .AddDependency<IIndentedStringBuilder, IndentedStringBuilder>(_ => new IndentedStringBuilder(options.IndentSize));
 
             configureServices?.Invoke(builder);

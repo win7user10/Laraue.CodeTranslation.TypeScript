@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.CodeTranslation.TypeScript.Types
 {
 	public class Dictionary : DynamicOutputType
 	{
-		public Dictionary(IEnumerable<OutputTypeName> genericArgNames, IEnumerable<OutputType> usedTypes)
+		public Dictionary(TypeMetadata metadata, IOutputTypeProvider provider) : base(GetName(), metadata, provider)
 		{
-			UsedTypes = usedTypes;
-			Name = GetName(genericArgNames);
 		}
 
-		public OutputTypeName GetName(IEnumerable<OutputTypeName> typeNames)
+		private static OutputTypeName GetName()
 		{
-			try
+			return new Any().Name;
+			/*try
 			{
 				return new("Dictionary", typeNames);
 			}
 			catch (Exception)
 			{
 				return new Any().Name;
-			}
+			}*/
 		}
 	}
 }

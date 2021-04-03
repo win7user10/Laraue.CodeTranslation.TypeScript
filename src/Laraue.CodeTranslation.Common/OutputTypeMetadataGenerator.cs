@@ -5,7 +5,6 @@ using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
-using Laraue.CodeTranslation.Common.Extensions;
 
 namespace Laraue.CodeTranslation.Common
 {
@@ -18,22 +17,19 @@ namespace Laraue.CodeTranslation.Common
 		protected readonly MapCollection Collection;
 
 		/// <summary>
-		/// Dependencies graph for called types.
-		/// </summary>
-		protected readonly DependenciesGraph DependenciesGraph = new();
-
-		/// <summary>
 		/// Resolver, which contains all computed <see cref="OutputType"/> for <see cref="Type"/> keys.
 		/// </summary>
-		protected readonly OutputTypeProvider TypeProvider = new();
+		protected readonly IOutputTypeProvider TypeProvider;
 
 		/// <summary>
 		/// Initialize instance of type <see cref="OutputTypeMetadataGenerator"/> using passed mapping.
 		/// </summary>
 		/// <param name="collection"></param>
-		protected OutputTypeMetadataGenerator(MapCollection collection)
+		/// <param name="provider"></param>
+		protected OutputTypeMetadataGenerator(MapCollection collection, IOutputTypeProvider provider)
 		{
 			Collection = collection;
+			TypeProvider = provider;
 		}
 
 		/// <inheritdoc />
@@ -54,18 +50,25 @@ namespace Laraue.CodeTranslation.Common
 		[CanBeNull]
 		public OutputType GetOutputType(TypeMetadata metadata)
 		{
-			FillDependenciesGraph(metadata);
+			CacheAllUsedTypes(metadata);
+			return TypeProvider.Get(metadata);
+		}
 
-			var dependencyGraph = DependenciesGraph.GetResolvingTypesSequence(metadata);
-			var usedTypes = dependencyGraph.Take(dependencyGraph.Count - 1);
+		private void CacheAllUsedTypes(TypeMetadata metadata)
+		{
+			TypeProvider.DependenciesGraph.AddToGraph(metadata);
 
-			OutputType lastOutputType = null;
-			foreach (var type in usedTypes)
+			void ResolveAndCache(IEnumerable<TypeMetadata> types)
 			{
-				lastOutputType = TypeProvider.GetOrAdd(type.ClrType, () => GetOutputTypeInternal(type));
+				foreach (var type in types)
+				{
+					TypeProvider.GetOrAdd(type, () => GetOutputTypeInternal(type));
+				}
 			}
 
-			return lastOutputType;
+			ResolveAndCache(TypeProvider.DependenciesGraph.GetResolvingTypesSequence(metadata, DependencyType.This));
+			ResolveAndCache(TypeProvider.DependenciesGraph.GetResolvingTypesSequence(metadata, DependencyType.Parent));
+			ResolveAndCache(TypeProvider.DependenciesGraph.GetResolvingTypesSequence(metadata, DependencyType.Properties));
 		}
 
 		/// <summary>
@@ -76,81 +79,11 @@ namespace Laraue.CodeTranslation.Common
 		protected abstract OutputType GetOutputTypeInternal(TypeMetadata metadata);
 
 		/// <summary>
-		/// Add types from type generic types to hashset with used properties.
-		/// </summary>
-		/// <param name="metadata"></param>
-		private void AddUsedGenericTypesToGraph(TypeMetadata metadata)
-		{
-			if (metadata is null) return;
-			var typesToInspect = new Queue<TypeMetadata>(metadata?.GenericTypeArguments ?? Enumerable.Empty<TypeMetadata>());
-			while (typesToInspect.Count > 0)
-			{
-				var type = typesToInspect.Dequeue();
-				var node = DependenciesGraph.GetNode(metadata);
-				if (!node.AddEdge(type)) continue;
-				typesToInspect.EnqueueRange(type.GenericTypeArguments);
-			}
-		}
-
-		/// <summary>
-		/// Add types from type parent to hashset with used properties.
-		/// </summary>
-		/// <param name="metadata"></param>
-		private void AddUsedParentTypesToGraph(TypeMetadata metadata)
-		{
-			var parentType = GetUsedParentType(metadata);
-			while (true)
-			{
-				if (parentType is null) break;
-				var node = DependenciesGraph.GetNode(metadata);
-				if (node.AddEdge(parentType))
-				{
-					metadata = parentType;
-					parentType = parentType.ParentTypeMetadata;
-				}
-				else
-				{
-					break;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Add types from type properties to hashset with used properties.
-		/// </summary>
-		/// <param name="metadata"></param>
-		private void AddPropertiesGenericTypesToGraph(TypeMetadata metadata)
-		{
-			var types = new Queue<TypeMetadata>(metadata?.PropertiesMetadata.Select(x => x.PropertyType) ?? Enumerable.Empty<TypeMetadata>());
-			while (types.Count > 0)
-			{
-				var type = types.Dequeue();
-				var node = DependenciesGraph.GetNode(metadata);
-
-				if (node.AddEdge(type))
-				{
-					AddUsedGenericTypesToGraph(type);
-				}
-			}
-		}
-
-		/// <summary>
 		/// Returns <see cref="TypeMetadata"/> represents some parent type if it exists.
 		/// </summary>
 		/// <param name="metadata"></param>
 		/// <returns></returns>
 		[CanBeNull]
 		protected abstract TypeMetadata GetUsedParentType([CanBeNull] TypeMetadata metadata);
-
-		/// <summary>
-		/// Build dependencies graph for passed type.
-		/// </summary>
-		/// <param name="metadata"></param>
-		private void FillDependenciesGraph(TypeMetadata metadata)
-		{
-			AddUsedGenericTypesToGraph(metadata);
-			AddUsedParentTypesToGraph(metadata);
-			AddPropertiesGenericTypesToGraph(metadata);
-		}
 	}
 }

@@ -17,8 +17,8 @@ namespace Laraue.CodeTranslation.TypeScript
 {
 	public class TypeScriptOutputTypeMetadataGenerator : OutputTypeMetadataGenerator
 	{
-		public TypeScriptOutputTypeMetadataGenerator(Action<MapCollection> setupMap = null) 
-			: base(new MapCollection())
+		public TypeScriptOutputTypeMetadataGenerator(Action<MapCollection> setupMap, IOutputTypeProvider provider) 
+			: base(new MapCollection(), provider)
 		{
 			Collection
 				.AddMap<Dictionary>(metadata => metadata.IsDictionary, GetDictionaryMetadata)
@@ -50,25 +50,12 @@ namespace Laraue.CodeTranslation.TypeScript
 			return descriptor?.GetOutputType(metadata);
 		}
 
-		protected virtual OutputPropertyType GetOutputPropertyType(PropertyMetadata metadata)
-		{
-			return new()
-			{
-				Source = metadata.Source,
-				OutputType = TypeProvider.Get(metadata.PropertyType.ClrType) ?? throw new InvalidOperationException($"Mapping for {metadata.PropertyType.ClrType} is not registered"),
-				PropertyName = metadata.PropertyName,
-				PropertyMetadata = metadata,
-			};
-		}
-
 		[CanBeNull]
 		public virtual Class GetClassMetadata([CanBeNull]TypeMetadata metadata)
 		{
 			if (metadata is null) return null;
 			var typeName = GetTypeName(metadata);
-			var propertiesMetadata = metadata.PropertiesMetadata.Select(GetOutputPropertyType).ToArray();
-			var parentTypeMetadata = GetClassMetadata(GetUsedParentType(metadata));
-			return new(typeName, GetAllUsedTypes(metadata), propertiesMetadata, metadata, ShouldBeImported(parentTypeMetadata) ? parentTypeMetadata.Name : null);
+			return new(typeName, metadata, TypeProvider);
 		}
 
 		public virtual Enum GetEnumMetadata(TypeMetadata metadata)
@@ -88,7 +75,7 @@ namespace Laraue.CodeTranslation.TypeScript
 			var enumerableType = genericArgs[0];
 
 			var type = GetOutputType(enumerableType);
-			return type is not null ? new(type.Name, GetAllUsedTypes(enumerableType), metadata) : null;
+			return type is not null ? new(type.Name, metadata, TypeProvider) : null;
 		}
 
 		protected virtual Dictionary GetDictionaryMetadata(TypeMetadata metadata)
@@ -99,16 +86,7 @@ namespace Laraue.CodeTranslation.TypeScript
 				throw new ArgumentOutOfRangeException(nameof(genericArgs));
 			}
 
-			var keyValueTypeNames = genericArgs.Select(x => TypeProvider.Get(x.ClrType)).Select(x => x?.Name);
-			return new(keyValueTypeNames, GetAllUsedTypes(metadata));
-		}
-
-		protected virtual OutputType[] GetAllUsedTypes(TypeMetadata metadata)
-		{
-			var allUsedTypes = DependenciesGraph.GetResolvingTypesSequence(metadata);
-			var usedMetadataOutputTypes = allUsedTypes.Select(x => TypeProvider.Get(x.ClrType));
-			var filteredTypes = FilterImportingTypes(usedMetadataOutputTypes.ToArray());
-			return filteredTypes;
+			return new(metadata, TypeProvider);
 		}
 
 		/// <inheritdoc />
@@ -180,8 +158,8 @@ namespace Laraue.CodeTranslation.TypeScript
 		{
 			var typeName = GetNonGenericStringTypeName(metadata);
 			var genericArgs = GetGenericTypeArguments(metadata);
-			var genericOutputTypes = genericArgs.Select(x => TypeProvider.Get(x.ClrType)).Where(x => x is not null).ToArray();
-			return new OutputTypeName(typeName, genericOutputTypes.Select(x => x.Name));
+			// var genericOutputTypes = genericArgs.Select(TypeProvider.Get).Where(x => x is not null).ToArray();
+			return new OutputTypeName(typeName, Enumerable.Empty<OutputTypeName>());
 		}
 	}
 }

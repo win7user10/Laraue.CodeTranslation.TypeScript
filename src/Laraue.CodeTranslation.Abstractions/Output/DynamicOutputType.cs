@@ -1,20 +1,23 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 
 namespace Laraue.CodeTranslation.Abstractions.Output
 {
 	public abstract class DynamicOutputType : OutputType
 	{
-		protected DynamicOutputType(OutputTypeName name, OutputType[] usedTypes, OutputPropertyType[] properties, TypeMetadata typeMetadata)
+		protected readonly IOutputTypeProvider TypeProvider;
+
+		protected DynamicOutputType(OutputTypeName name, TypeMetadata metadata, IOutputTypeProvider provider)
 		{
 			Name = name;
-			UsedTypes = usedTypes;
-			Properties = properties;
-			TypeMetadata = typeMetadata;
+			TypeProvider = provider;
+			TypeMetadata = metadata;
 		}
 
-		protected DynamicOutputType()
-		{ }
+		/// <inheritdoc />
+		public override IEnumerable<OutputPropertyType> Properties => TypeProvider.GetProperties(TypeMetadata);
+
+		/// <inheritdoc />
+		public override IEnumerable<OutputType> UsedTypes => TypeProvider.GetUsedTypes(TypeMetadata);
 	}
 }

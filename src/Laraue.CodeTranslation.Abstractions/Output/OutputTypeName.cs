@@ -14,21 +14,15 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		public OutputTypeName ChildName { get; init; }
 
 		[NotNull]
-		public OutputTypeName[] GenericNames { get; init; }
+		public IEnumerable<OutputTypeName> GenericNames { get; init; }
 
 		public bool IsArray { get; init; }
 
 		public OutputTypeName([NotNull] string name, [NotNull] IEnumerable<OutputTypeName> genericNames, bool isArray = false)
 		{
 			Name = name;
-			GenericNames = genericNames.Where(x => x != null).ToArray();
+			GenericNames = genericNames.Where(x => x != null);
 			IsArray = isArray;
-		}
-
-		public OutputTypeName([NotNull] OutputTypeName typeName, [NotNull] IEnumerable<OutputTypeName> genericNames, bool isArray = false)
-			: this(typeName.Name, genericNames, isArray)
-		{
-			ChildName = typeName;
 		}
 
 		private OutputTypeName(string name)
@@ -47,8 +41,9 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		public override string ToString()
 		{
 			var result = Name;
+			return result;
 
-			if (GenericNames.Length > 0)
+			if (GenericNames.Count() > 0)
 			{
 				var genericNames = string.Join(", ", GenericNames.Select(x => x.ToString()));
 				result += $"<{genericNames}>";
