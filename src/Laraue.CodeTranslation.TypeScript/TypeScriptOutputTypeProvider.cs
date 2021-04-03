@@ -12,7 +12,7 @@ namespace Laraue.CodeTranslation.TypeScript
 		}
 
 		/// <inheritdoc />
-		protected override bool ShouldBeImported(OutputType type)
+		public override bool ShouldBeImported(OutputType type)
 		{
 			if (type?.TypeMetadata is null) return false;
 

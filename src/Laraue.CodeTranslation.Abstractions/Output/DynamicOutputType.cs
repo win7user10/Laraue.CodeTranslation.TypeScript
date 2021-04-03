@@ -24,11 +24,12 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		/// <summary>
 		/// Return generic type arguments generated names for passed type.
 		/// </summary>
+		/// <param name="metadata"></param>
 		/// <returns></returns>
 		[NotNull]
-		protected virtual OutputTypeName[] GetGenericTypeNames()
+		protected virtual OutputTypeName[] GetGenericTypeNames(TypeMetadata metadata)
 		{
-			var names = TypeMetadata
+			var names = metadata
 				?.GenericTypeArguments
 				?.Select(x => TypeProvider.Get(x)?.Name)
 				.Where(x => x != null)

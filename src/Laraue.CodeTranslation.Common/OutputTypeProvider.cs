@@ -73,6 +73,6 @@ namespace Laraue.CodeTranslation.Common
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        protected abstract bool ShouldBeImported([CanBeNull] OutputType type);
+        public abstract bool ShouldBeImported([CanBeNull] OutputType type);
     }
 }

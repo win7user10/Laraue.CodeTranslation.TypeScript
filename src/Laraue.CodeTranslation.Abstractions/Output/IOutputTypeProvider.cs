@@ -43,5 +43,12 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		/// <param name="getValue"></param>
 		/// <returns></returns>
 		[CanBeNull] OutputType GetOrAdd(TypeMetadata key, Func<OutputType> getValue);
+
+		/// <summary>
+		/// Returns, should some <see cref="OutputType"/> be imported and used for inheritance.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		bool ShouldBeImported([CanBeNull] OutputType type);
 	}
 }

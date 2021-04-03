@@ -15,7 +15,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 
 		[CanBeNull] public TypeMetadata TypeMetadata { get; protected set; }
 
-		[CanBeNull] public OutputTypeName ParentTypeName { get; protected set; }
+		[CanBeNull] public virtual OutputTypeName ParentTypeName { get; protected set; }
 
 		/// <inheritdoc />
 		public override string ToString()

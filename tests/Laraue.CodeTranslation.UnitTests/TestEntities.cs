@@ -39,11 +39,6 @@ namespace Laraue.CodeTranslation.UnitTests
 	{
 	}
 
-	public class RecursiveClass
-	{
-		public IEnumerable<RecursiveClass> RecursiveProperty { get; set; }
-	}
-
 	public class OneTypeGenericSubClass<T>
 	{
 		public T GenericType { get; set; }

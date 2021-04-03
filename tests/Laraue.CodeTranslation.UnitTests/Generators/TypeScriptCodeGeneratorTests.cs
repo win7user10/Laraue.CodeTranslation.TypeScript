@@ -60,10 +60,26 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 		{
 			var code = GetTypeSourceCode<RecursiveClass>();
 			Assert.Equal(
-				@"export class RecursiveClass {
+@"export class RecursiveClass {
   recursiveProperty: RecursiveClass[] | null = null;
 }", code);
 		}
+
+		internal class RecursiveClass { public IEnumerable<RecursiveClass> RecursiveProperty { get; set; } }
+
+
+		[Fact]
+		public void CodeTranslationForInheritedClass()
+		{
+			var code = GetTypeSourceCode<InheritedClass>();
+			Assert.Equal(
+@"import { RecursiveClass } from './recursiveClass'
+
+export class InheritedClass extends RecursiveClass {
+}", code);
+		}
+
+		internal class InheritedClass : RecursiveClass { }
 
 		private string GetPropertySourceCode<T>(string propertyName)
 		{

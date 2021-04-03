@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Laraue.CodeTranslation.Abstractions.Metadata;
+﻿using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.CodeTranslation.TypeScript.Types
@@ -12,19 +11,23 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 		}
 
 		/// <inheritdoc />
-		public override OutputTypeName Name
-		{
-			get
-			{
-				if (TypeMetadata is null)
-				{
-					return string.Empty;
-				}
+		public override OutputTypeName Name => GetOutputTypeName(TypeMetadata);
 
-				var className = GetNonGenericStringTypeName(TypeMetadata);
-				var genericTypeNames = GetGenericTypeNames();
-				return new OutputTypeName(className, genericTypeNames);
+		/// <inheritdoc />
+		public override OutputTypeName ParentTypeName => TypeProvider.ShouldBeImported(TypeProvider.Get(TypeMetadata?.ParentTypeMetadata)) 
+			? GetOutputTypeName(TypeMetadata?.ParentTypeMetadata)
+			: null;
+
+		private OutputTypeName GetOutputTypeName(TypeMetadata metadata)
+		{
+			if (metadata is null)
+			{
+				return string.Empty;
 			}
+
+			var className = GetNonGenericStringTypeName(metadata);
+			var genericTypeNames = GetGenericTypeNames(metadata);
+			return new OutputTypeName(className, genericTypeNames);
 		}
 	}
 }
