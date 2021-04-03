@@ -25,6 +25,8 @@ namespace Laraue.CodeTranslation.TypeScript
                 .AddDependency<ITypePartsCodeGenerator, TypeScriptTypePartsGenerator>()
                 .AddDependency<IMetadataGenerator, MetadataGenerator>()
                 .AddDependency<IPropertyInfoResolver, PropertyInfoResolver>()
+                .AddDependency<IOutputTypeProvider, OutputTypeProvider>()
+                .AddDependency<IDependenciesGraph, DependenciesGraph>()
                 .AddDependency<IOutputTypeMetadataGenerator, TypeScriptOutputTypeMetadataGenerator>(
                     sp => new TypeScriptOutputTypeMetadataGenerator(options.ConfigureTypeMap, sp.GetRequiredService<IOutputTypeProvider>()))
                 .AddDependency<IIndentedStringBuilder, IndentedStringBuilder>(_ => new IndentedStringBuilder(options.IndentSize));

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 
 namespace Laraue.CodeTranslation.Abstractions.Output
@@ -7,9 +9,8 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 	{
 		protected readonly IOutputTypeProvider TypeProvider;
 
-		protected DynamicOutputType(OutputTypeName name, TypeMetadata metadata, IOutputTypeProvider provider)
+		protected DynamicOutputType(TypeMetadata metadata, IOutputTypeProvider provider)
 		{
-			Name = name;
 			TypeProvider = provider;
 			TypeMetadata = metadata;
 		}
@@ -19,5 +20,21 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 
 		/// <inheritdoc />
 		public override IEnumerable<OutputType> UsedTypes => TypeProvider.GetUsedTypes(TypeMetadata);
+
+		/// <summary>
+		/// Return generic type arguments generated names for passed type.
+		/// </summary>
+		/// <returns></returns>
+		[NotNull]
+		protected virtual OutputTypeName[] GetGenericTypeNames()
+		{
+			var names = TypeMetadata
+				?.GenericTypeArguments
+				?.Select(x => TypeProvider.Get(x)?.Name)
+				.Where(x => x != null)
+				.ToArray();
+
+			return names ?? System.Array.Empty<OutputTypeName>();
+		}
 	}
 }

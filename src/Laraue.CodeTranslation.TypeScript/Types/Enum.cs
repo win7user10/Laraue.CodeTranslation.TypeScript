@@ -18,10 +18,10 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 			}
 		}
 
-		public Enum(OutputTypeName name, [NotNull]TypeMetadata typeMetadata)
+		public Enum([NotNull] TypeMetadata metadata)
 		{
-			Name = name;
-			TypeMetadata = typeMetadata;
+			Name = GetNonGenericStringTypeName(metadata);
+			TypeMetadata = metadata;
 		}
 	}
 }

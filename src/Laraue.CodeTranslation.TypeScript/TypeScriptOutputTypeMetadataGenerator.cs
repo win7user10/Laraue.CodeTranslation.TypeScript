@@ -54,14 +54,12 @@ namespace Laraue.CodeTranslation.TypeScript
 		public virtual Class GetClassMetadata([CanBeNull]TypeMetadata metadata)
 		{
 			if (metadata is null) return null;
-			var typeName = GetTypeName(metadata);
-			return new(typeName, metadata, TypeProvider);
+			return new(metadata, TypeProvider);
 		}
 
 		public virtual Enum GetEnumMetadata(TypeMetadata metadata)
 		{
-			var typeName = GetTypeName(metadata);
-			return new(typeName, metadata);
+			return new(metadata);
 		}
 
 		protected virtual Array GetArrayMetadata(TypeMetadata metadata)
@@ -123,43 +121,6 @@ namespace Laraue.CodeTranslation.TypeScript
 				Array => false,
 				_ => !type.TypeMetadata.ClrType.Assembly.FullName.Contains("System")
 			};
-		}
-
-		/// <summary>
-		/// Return generic type arguments for some type.
-		/// </summary>
-		/// <param name="metadata"></param>
-		/// <returns></returns>
-		[NotNull]
-		protected virtual TypeMetadata[] GetGenericTypeArguments([NotNull] TypeMetadata metadata)
-		{
-			return metadata.GenericTypeArguments?.ToArray() ?? System.Array.Empty<TypeMetadata>();
-		}
-
-		/// <summary>
-		/// Returns clear type name without generic parameters.
-		/// </summary>
-		/// <param name="metadata"></param>
-		/// <returns></returns>
-		[NotNull]
-		protected virtual string GetNonGenericStringTypeName([NotNull] TypeMetadata metadata)
-		{
-			var typeName = metadata.ClrType.Name;
-			return Regex.Replace(typeName, @"`\d+", string.Empty);
-		}
-
-		/// <summary>
-		/// Get <see cref="OutputTypeName"/> for type. 
-		/// </summary>
-		/// <param name="metadata"></param>
-		/// <returns></returns>
-		[NotNull]
-		public OutputTypeName GetTypeName([NotNull] TypeMetadata metadata)
-		{
-			var typeName = GetNonGenericStringTypeName(metadata);
-			var genericArgs = GetGenericTypeArguments(metadata);
-			// var genericOutputTypes = genericArgs.Select(TypeProvider.Get).Where(x => x is not null).ToArray();
-			return new OutputTypeName(typeName, Enumerable.Empty<OutputTypeName>());
 		}
 	}
 }

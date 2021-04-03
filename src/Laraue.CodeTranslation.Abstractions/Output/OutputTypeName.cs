@@ -31,21 +31,21 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 			GenericNames = Array.Empty<OutputTypeName>();
 		}
 
-		public static implicit operator string(OutputTypeName typeName)
-			=> typeName.ToString();
+		public static implicit operator string([CanBeNull] OutputTypeName typeName)
+			=> typeName?.ToString();
 
-		public static implicit operator OutputTypeName(string typeName)
+		public static implicit operator OutputTypeName([CanBeNull] string typeName)
 			=> new (typeName);
 
 		/// <inheritdoc />
 		public override string ToString()
 		{
 			var result = Name;
-			return result;
+			var computedGenericNames = GenericNames.ToArray();
 
-			if (GenericNames.Count() > 0)
+			if (computedGenericNames.Length> 0)
 			{
-				var genericNames = string.Join(", ", GenericNames.Select(x => x.ToString()));
+				var genericNames = string.Join(", ", computedGenericNames.Select(x => x.ToString()));
 				result += $"<{genericNames}>";
 			}
 
@@ -57,7 +57,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 			return result;
 		}
 
-		public int GetArrayDepth()
+		private int GetArrayDepth()
 		{
 			var result = 0;
 			if (IsArray) result++;

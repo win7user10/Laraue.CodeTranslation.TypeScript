@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 
@@ -20,6 +21,18 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		public override string ToString()
 		{
 			return $"Clr = {TypeMetadata?.ClrType} Output = {GetType().Name} Name = {Name}";
+		}
+
+		/// <summary>
+		/// Returns clear type name without generic parameters.
+		/// </summary>
+		/// <param name="metadata"></param>
+		/// <returns></returns>
+		[NotNull]
+		protected string GetNonGenericStringTypeName([NotNull] TypeMetadata metadata)
+		{
+			var typeName = metadata.ClrType.Name;
+			return Regex.Replace(typeName, @"`\d+", string.Empty);
 		}
 	}
 }
