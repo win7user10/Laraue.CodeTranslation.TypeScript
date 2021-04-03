@@ -13,9 +13,9 @@ namespace Laraue.CodeTranslation.Abstractions.Output
         /// Returns list of <see cref="TypeMetadata"/> in right order to resolve dependencies.
         /// </summary>
         /// <param name="metadata"></param>
-        /// <param name="type"></param>
+        /// <param name="types"></param>
         /// <returns></returns>
-        public IReadOnlyList<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata, DependencyType type);
+        public IReadOnlyList<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata, params DependencyType[] types);
 
         /// <summary>
         /// Build dependencies graph for passed type.

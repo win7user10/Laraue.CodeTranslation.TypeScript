@@ -26,21 +26,21 @@ namespace Laraue.CodeTranslation.Common
             return allUsedTypes;
         }
 
-        public IReadOnlyList<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata, DependencyType type)
+        public IReadOnlyList<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata, params DependencyType[] types)
         {
-            var sequence = GetResolvingTypesSequence(metadata, type, new List<TypeMetadata>(), new List<TypeMetadata>());
+            var sequence = GetResolvingTypesSequence(metadata, new List<TypeMetadata>(), new List<TypeMetadata>(), types);
             return sequence
                 .AsReadOnly();
         }
 
-        private List<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata, DependencyType type, List<TypeMetadata> resolved, List<TypeMetadata> seen)
+        private List<TypeMetadata> GetResolvingTypesSequence(TypeMetadata metadata, List<TypeMetadata> resolved, List<TypeMetadata> seen, params DependencyType[] types)
         {
             var node = GetNode(metadata);
             seen.Add(metadata);
 
             var needEdges = node
                 .Edges
-                .Where(x => x.Type.HasFlag(type));
+                .Where(x => types.Any(type => x.Type.HasFlag(type)));
 
             foreach (var edge in needEdges)
             {
@@ -54,7 +54,7 @@ namespace Laraue.CodeTranslation.Common
                     continue;
                 }
 
-                GetResolvingTypesSequence(edge.Metadata, type, resolved, seen);
+                GetResolvingTypesSequence(edge.Metadata, resolved, seen, types);
             }
 
             resolved.Add(metadata);
