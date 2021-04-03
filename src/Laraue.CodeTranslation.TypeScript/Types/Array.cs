@@ -1,4 +1,5 @@
-﻿using Laraue.CodeTranslation.Abstractions.Metadata;
+﻿using System.Linq;
+using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.CodeTranslation.TypeScript.Types
@@ -13,7 +14,7 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 
 		private static OutputTypeName GetName(OutputTypeName sourceType)
 		{
-			return new (sourceType, sourceType.GenericNames, true);
+			return new (sourceType, Enumerable.Empty<OutputTypeName>(), true);
 		}
 	}
 }

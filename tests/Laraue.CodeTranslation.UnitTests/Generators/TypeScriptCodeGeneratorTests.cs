@@ -14,7 +14,7 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 
 		public TypeScriptCodeGeneratorTests()
 		{
-			_provider = new OutputTypeProvider(_dependenciesGraph);
+			_provider = new TypeScriptOutputTypeProvider(_dependenciesGraph);
 		}
 
 		[Theory]

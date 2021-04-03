@@ -25,7 +25,7 @@ namespace Laraue.CodeTranslation.TypeScript
                 .AddDependency<ITypePartsCodeGenerator, TypeScriptTypePartsGenerator>()
                 .AddDependency<IMetadataGenerator, MetadataGenerator>()
                 .AddDependency<IPropertyInfoResolver, PropertyInfoResolver>()
-                .AddDependency<IOutputTypeProvider, OutputTypeProvider>()
+                .AddDependency<IOutputTypeProvider, TypeScriptOutputTypeProvider>()
                 .AddDependency<IDependenciesGraph, DependenciesGraph>()
                 .AddDependency<IOutputTypeMetadataGenerator, TypeScriptOutputTypeMetadataGenerator>(
                     sp => new TypeScriptOutputTypeMetadataGenerator(options.ConfigureTypeMap, sp.GetRequiredService<IOutputTypeProvider>()))

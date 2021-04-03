@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Common.Extensions;
@@ -10,12 +11,12 @@ namespace Laraue.CodeTranslation.Common
     /// <summary>
     /// Provider, which can resolve <see cref="OutputType"/> fro passed <see cref="Type"/>.
     /// </summary>
-    public class OutputTypeProvider : IOutputTypeProvider
+    public abstract class OutputTypeProvider : IOutputTypeProvider
     {
         private readonly Dictionary<TypeMetadata, OutputType> _cache = new();
         public IDependenciesGraph DependenciesGraph { get; }
 
-        public OutputTypeProvider(IDependenciesGraph dependenciesGraph)
+        protected OutputTypeProvider(IDependenciesGraph dependenciesGraph)
         {
             DependenciesGraph = dependenciesGraph;
         }
@@ -29,12 +30,13 @@ namespace Laraue.CodeTranslation.Common
         /// <inheritdoc />
         public IEnumerable<OutputType> GetUsedTypes(TypeMetadata key)
         {
-            var dependencies = DependenciesGraph.GetResolvingTypesSequence(key, DependencyType.Properties | DependencyType.This)
+            var dependencies = DependenciesGraph
+                .GetResolvingTypesSequence(key, DependencyType.Properties)
                 .Where(x => x != key);
 
             var result = dependencies
-                .Select(x => Get(key))
-                .Where(x => x is not null);
+                .Select(Get)
+                .Where(ShouldBeImported);
 
             return result;
         }
@@ -65,5 +67,12 @@ namespace Laraue.CodeTranslation.Common
                 }
             }
         }
+
+        /// <summary>
+        /// Returns true, if this type should be imported in generated code.
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        protected abstract bool ShouldBeImported([CanBeNull] OutputType type);
     }
 }

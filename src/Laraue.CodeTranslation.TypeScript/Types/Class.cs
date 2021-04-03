@@ -23,10 +23,7 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 
 				var className = GetNonGenericStringTypeName(TypeMetadata);
 				var genericTypeNames = GetGenericTypeNames();
-
-				return className + (genericTypeNames.Length > 0
-					? $"<{string.Join(", ", genericTypeNames.Select(x => x.ToString()))}>"
-					: string.Empty);
+				return new OutputTypeName(className, genericTypeNames);
 			}
 		}
 	}
