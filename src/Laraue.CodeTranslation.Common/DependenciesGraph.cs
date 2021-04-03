@@ -37,7 +37,12 @@ namespace Laraue.CodeTranslation.Common
         {
             var node = GetNode(metadata);
             seen.Add(metadata);
-            foreach (var edge in node.Edges.Where(x => x.Type == type))
+
+            var needEdges = node
+                .Edges
+                .Where(x => x.Type.HasFlag(type));
+
+            foreach (var edge in needEdges)
             {
                 if (resolved.Contains(edge.Metadata))
                 {

@@ -9,10 +9,25 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 		public Class(TypeMetadata metadata, IOutputTypeProvider provider) 
 			: base(metadata, provider)
 		{
-			var className = GetNonGenericStringTypeName(metadata);
-			var genericTypeNames = GetGenericTypeNames();
+		}
 
-			Name = className + (genericTypeNames.Length > 0 ? $"<{string.Join(", ", genericTypeNames.Select(x => x.ToString()))}>" : string.Empty);
+		/// <inheritdoc />
+		public override OutputTypeName Name
+		{
+			get
+			{
+				if (TypeMetadata is null)
+				{
+					return string.Empty;
+				}
+
+				var className = GetNonGenericStringTypeName(TypeMetadata);
+				var genericTypeNames = GetGenericTypeNames();
+
+				return className + (genericTypeNames.Length > 0
+					? $"<{string.Join(", ", genericTypeNames.Select(x => x.ToString()))}>"
+					: string.Empty);
+			}
 		}
 	}
 }

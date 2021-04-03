@@ -53,5 +53,11 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		public TypeMetadata Metadata { get; set; }
 
 		public DependencyType Type { get; set; }
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return $"{Metadata}:{Type}";
+		}
 	}
 }

@@ -7,7 +7,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 {
 	public abstract class OutputType
 	{
-		[NotNull] public OutputTypeName Name { get; protected set; }
+		[NotNull] public virtual OutputTypeName Name { get; protected set; }
 
 		[NotNull] public abstract IEnumerable<OutputType> UsedTypes { get; }
 
