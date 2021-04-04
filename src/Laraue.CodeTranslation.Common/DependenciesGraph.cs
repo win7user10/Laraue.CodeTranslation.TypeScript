@@ -54,7 +54,7 @@ namespace Laraue.CodeTranslation.Common
                     continue;
                 }
 
-                GetResolvingTypesSequence(edge.Metadata, resolved, seen, types);
+                GetResolvingTypesSequence(edge.Metadata, resolved, seen, types.Select(x => x ^ DependencyType.Parent).Where(x => x != 0).ToArray());
             }
 
             resolved.Add(metadata);
@@ -127,7 +127,7 @@ namespace Laraue.CodeTranslation.Common
         /// <param name="metadata"></param>
         public void AddToGraph(TypeMetadata metadata)
         {
-            AddUsedGenericTypesToGraph(metadata, DependencyType.This);
+            AddUsedGenericTypesToGraph(metadata, 0);
             AddUsedParentTypesToGraph(metadata);
             AddPropertiesGenericTypesToGraph(metadata);
         }

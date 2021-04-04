@@ -62,5 +62,11 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		{
 			return other?.ClrType == ClrType;
 		}
+
+		/// <inheritdoc />
+		public override string ToString()
+		{
+			return ClrType.Name;
+		}
 	}
 }

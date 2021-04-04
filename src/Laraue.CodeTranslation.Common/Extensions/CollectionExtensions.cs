@@ -60,7 +60,11 @@ namespace Laraue.CodeTranslation.Common.Extensions
             }
 
             value = getValue();
-            dictionary.Add(key, value);
+
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary.Add(key, value);
+            }
 
             return value;
         }

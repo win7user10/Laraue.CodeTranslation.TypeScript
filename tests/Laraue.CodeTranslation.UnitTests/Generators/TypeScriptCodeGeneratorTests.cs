@@ -81,6 +81,19 @@ export class InheritedClass extends RecursiveClass {
 
 		internal class InheritedClass : RecursiveClass { }
 
+		[Fact]
+		public void CodeTranslationForInheritedFrmInheritedClass()
+		{
+			var code = GetTypeSourceCode<InheritedFromInheritedClass>();
+			Assert.Equal(
+				@"import { InheritedClass } from './inheritedClass'
+
+export class InheritedFromInheritedClass extends InheritedClass {
+}", code);
+		}
+
+		internal class InheritedFromInheritedClass : InheritedClass { }
+
 		private string GetPropertySourceCode<T>(string propertyName)
 		{
 			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
