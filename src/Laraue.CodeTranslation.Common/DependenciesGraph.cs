@@ -54,7 +54,12 @@ namespace Laraue.CodeTranslation.Common
                     continue;
                 }
 
-                GetResolvingTypesSequence(edge.Metadata, resolved, seen, types.Select(x => x ^ DependencyType.Parent).Where(x => x != 0).ToArray());
+                var newFlags = types
+                    .Select(x => x.HasFlag(DependencyType.Parent) ? x ^ DependencyType.Parent : x)
+                    .Where(x => x != 0)
+                    .ToArray();
+
+                GetResolvingTypesSequence(edge.Metadata, resolved, seen, newFlags);
             }
 
             resolved.Add(metadata);
