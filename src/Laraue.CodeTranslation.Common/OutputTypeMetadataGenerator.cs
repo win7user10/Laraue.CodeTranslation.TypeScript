@@ -56,18 +56,13 @@ namespace Laraue.CodeTranslation.Common
 
 		private void CacheAllUsedTypes(TypeMetadata metadata)
 		{
-			if (TypeProvider.Get(metadata) != null)
-			{
-				return;
-			}
-
 			TypeProvider.DependenciesGraph.AddToGraph(metadata);
 
 			void ResolveAndCache(IEnumerable<TypeMetadata> types)
 			{
 				foreach (var type in types)
 				{
-					TypeProvider.GetOrAdd(type, () => GetOutputTypeInternal(type));
+					TypeProvider.Add(type, () => GetOutputTypeInternal(type));
 				}
 			}
 

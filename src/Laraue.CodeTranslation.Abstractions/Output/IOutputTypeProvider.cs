@@ -42,7 +42,7 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		/// <param name="key"></param>
 		/// <param name="getValue"></param>
 		/// <returns></returns>
-		[CanBeNull] OutputType GetOrAdd(TypeMetadata key, Func<OutputType> getValue);
+		[CanBeNull] void Add(TypeMetadata key, Func<OutputType> getValue);
 
 		/// <summary>
 		/// Returns, should some <see cref="OutputType"/> be imported and used for inheritance.

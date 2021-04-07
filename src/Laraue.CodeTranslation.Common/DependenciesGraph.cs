@@ -56,6 +56,7 @@ namespace Laraue.CodeTranslation.Common
 
                 var newFlags = types
                     .Select(x => x.HasFlag(DependencyType.Parent) ? x ^ DependencyType.Parent : x)
+                    .Select(x => x.HasFlag(DependencyType.Properties) ? x ^ DependencyType.Properties : x)
                     .Where(x => x != 0)
                     .ToArray();
 
@@ -111,7 +112,7 @@ namespace Laraue.CodeTranslation.Common
         /// Add types from type properties to hashset with used properties.
         /// </summary>
         /// <param name="metadata"></param>
-        private void AddPropertiesGenericTypesToGraph(TypeMetadata metadata)
+        private void AddPropertiesToGraph(TypeMetadata metadata)
         {
             var types = new Queue<TypeMetadata>(metadata?.PropertiesMetadata.Select(x => x.PropertyType) ?? Enumerable.Empty<TypeMetadata>());
             while (types.Count > 0)
@@ -134,7 +135,7 @@ namespace Laraue.CodeTranslation.Common
         {
             AddUsedGenericTypesToGraph(metadata, 0);
             AddUsedParentTypesToGraph(metadata);
-            AddPropertiesGenericTypesToGraph(metadata);
+            AddPropertiesToGraph(metadata);
         }
     }
 }

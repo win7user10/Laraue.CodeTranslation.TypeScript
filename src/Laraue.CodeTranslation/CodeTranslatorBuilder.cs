@@ -23,9 +23,10 @@ namespace Laraue.CodeTranslation
             return this;
         }
 
-        public CodeTranslator Build()
+        public ICodeTranslator Build()
         {
-            return new (_services.BuildServiceProvider());
+            var provider = _services.BuildServiceProvider();
+            return provider.GetRequiredService<ICodeTranslator>();
         }
     }
 }

@@ -16,13 +16,25 @@ namespace Laraue.CodeTranslation.Common
         private readonly Dictionary<TypeMetadata, OutputType> _cache = new();
         public IDependenciesGraph DependenciesGraph { get; }
 
+        private readonly HashSet<TypeMetadata> NowProcessing = new();
+
         protected OutputTypeProvider(IDependenciesGraph dependenciesGraph)
         {
             DependenciesGraph = dependenciesGraph;
         }
 
         /// <inheritdoc />
-        public OutputType GetOrAdd(TypeMetadata key, Func<OutputType> getValue) => _cache.GetOrAdd(key, getValue);
+        public void Add(TypeMetadata key, Func<OutputType> getValue)
+        {
+            if (NowProcessing.Contains(key))
+            {
+                return;
+            }
+
+            NowProcessing.Add(key);
+            _cache.GetOrAdd(key, getValue);
+            NowProcessing.Remove(key);
+        }
 
         /// <inheritdoc />
         public OutputType Get(TypeMetadata key) => _cache.Get(key);

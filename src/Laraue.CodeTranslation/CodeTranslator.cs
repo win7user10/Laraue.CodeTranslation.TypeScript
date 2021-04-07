@@ -4,54 +4,41 @@ using System.Linq;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Laraue.CodeTranslation
 {
-    public class CodeTranslator : IDisposable
+    public class CodeTranslator : ICodeTranslator
     {
-        private readonly ServiceProvider _provider;
+        private readonly IMetadataGenerator _metadataGenerator;
+        private readonly IOutputTypeMetadataGenerator _outputTypeMetadataGenerator;
+        private readonly ICodeGenerator _codeGenerator;
+        private readonly ITypePartsCodeGenerator _typePartsCodeGenerator;
 
-        internal CodeTranslator(ServiceProvider provider)
+        public CodeTranslator(IMetadataGenerator metadataGenerator, IOutputTypeMetadataGenerator outputTypeMetadataGenerator, ICodeGenerator codeGenerator, ITypePartsCodeGenerator typePartsCodeGenerator)
         {
-            _provider = provider;
+            _metadataGenerator = metadataGenerator;
+            _outputTypeMetadataGenerator = outputTypeMetadataGenerator;
+            _codeGenerator = codeGenerator;
+            _typePartsCodeGenerator = typePartsCodeGenerator;
         }
 
-        /// <summary>
-        /// Generates code for passed type.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
+        /// <inheritdoc />
         public GeneratedCode GenerateTypeCode(Type type)
         {
-            var metadataGenerator = _provider.GetRequiredService<IMetadataGenerator>();
-            var outputTypeGenerator = _provider.GetRequiredService<IOutputTypeMetadataGenerator>();
-            var codeGenerator = _provider.GetRequiredService<ICodeGenerator>();
-            var typePartsGenerator = _provider.GetRequiredService<ITypePartsCodeGenerator>();
+            var typeMetadata = _metadataGenerator.GetMetadata(type);
+            var outputType = _outputTypeMetadataGenerator.Generate(typeMetadata).OutputType;
 
-            var typeMetadata = metadataGenerator.GetMetadata(type);
-            var outputType = outputTypeGenerator.Generate(typeMetadata).OutputType;
-
-            var fileParts = typePartsGenerator.GetFilePathParts(outputType);
-            var code = codeGenerator.GenerateCode(outputType);
+            var fileParts = _typePartsCodeGenerator.GetFilePathParts(outputType);
+            var code = _codeGenerator.GenerateCode(outputType);
 
             return new GeneratedCode { Code = code, FilePathSegments = fileParts };
         }
 
-        /// <summary>
-        /// Generates code for passed types.
-        /// </summary>
-        /// <param name="types"></param>
-        /// <returns></returns>
+
+        /// <inheritdoc />
         public IEnumerable<GeneratedCode> GenerateTypesCode(IEnumerable<Type> types)
         {
             return types.Select(GenerateTypeCode);
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            _provider.Dispose();
         }
     }
 }

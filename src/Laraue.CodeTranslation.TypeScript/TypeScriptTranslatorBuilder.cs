@@ -16,11 +16,12 @@ namespace Laraue.CodeTranslation.TypeScript
         /// <param name="options"></param>
         /// <param name="configureServices"></param>
         /// <returns></returns>
-        public static CodeTranslator Create(CodeTranslatorOptions options, Action<CodeTranslatorBuilder> configureServices = null)
+        public static ICodeTranslator Create(CodeTranslatorOptions options, Action<CodeTranslatorBuilder> configureServices = null)
         {
             var builder = new CodeTranslatorBuilder();
 
             builder
+                .AddDependency<ICodeTranslator, CodeTranslator>()
                 .AddDependency<ICodeGenerator, TypeScriptCodeGenerator>()
                 .AddDependency<ITypePartsCodeGenerator, TypeScriptTypePartsGenerator>()
                 .AddDependency<IMetadataGenerator, MetadataGenerator>()

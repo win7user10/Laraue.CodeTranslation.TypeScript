@@ -67,6 +67,26 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 
 		internal class RecursiveClass { public IEnumerable<RecursiveClass> RecursiveProperty { get; set; } }
 
+		[Fact]
+		public void CodeTranslationForSomeParentClass()
+		{
+			var childCode = GetTypeSourceCode<ChildClass>();
+			Assert.Equal(
+				@"import { ParentClass } from './parentClass'
+
+export class ChildClass extends ParentClass {
+}", childCode);
+
+			var parentCode = GetTypeSourceCode<ParentClass>();
+			Assert.Equal(
+				@"export class ParentClass {
+  someProperty = 0;
+}", parentCode);
+		}
+
+		internal class ParentClass { public int SomeProperty { get; set; } }
+		internal class ChildClass : ParentClass { }
+
 
 		[Fact]
 		public void CodeTranslationForInheritedClass()
