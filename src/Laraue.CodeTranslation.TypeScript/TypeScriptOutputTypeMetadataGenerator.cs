@@ -3,6 +3,7 @@ using System.Linq;
 using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
+using Laraue.CodeTranslation.Abstractions.Translation;
 using Laraue.CodeTranslation.Common;
 using Laraue.CodeTranslation.TypeScript.Types;
 using Newtonsoft.Json.Linq;
@@ -15,7 +16,7 @@ namespace Laraue.CodeTranslation.TypeScript
 {
 	public class TypeScriptOutputTypeMetadataGenerator : OutputTypeMetadataGenerator
 	{
-		public TypeScriptOutputTypeMetadataGenerator(Action<MapCollection> setupMap, IOutputTypeProvider provider) 
+		public TypeScriptOutputTypeMetadataGenerator(CodeTranslatorOptions options, IOutputTypeProvider provider) 
 			: base(new MapCollection(), provider)
 		{
 			Collection
@@ -37,8 +38,8 @@ namespace Laraue.CodeTranslation.TypeScript
 				.AddMap<Uri, String>()
 				.AddMap<JObject, Any>()
 				.AddMap<JToken, Any>();
-			
-			setupMap?.Invoke(Collection);
+
+			options.ConfigureTypeMap?.Invoke(Collection);
 		}
 
 		/// <inheritdoc />

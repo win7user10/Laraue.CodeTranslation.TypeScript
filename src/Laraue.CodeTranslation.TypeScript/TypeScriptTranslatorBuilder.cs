@@ -22,10 +22,8 @@ namespace Laraue.CodeTranslation.TypeScript
         {
             var builder = new CodeTranslatorBuilder();
 
-            options.ClassNamingStrategy ??= new PascalCaseStrategy();
-            options.PathSegmentNamingStrategy ??= new CamelCaseNamingStrategy();
-
             builder
+                .AddDependency(options)
                 .AddDependency<ICodeTranslator, CodeTranslator>()
                 .AddDependency<ICodeGenerator, TypeScriptCodeGenerator>()
                 .AddDependency<ITypePartsCodeGenerator, TypeScriptTypePartsGenerator>()
@@ -33,9 +31,8 @@ namespace Laraue.CodeTranslation.TypeScript
                 .AddDependency<IPropertyInfoResolver, PropertyInfoResolver>()
                 .AddDependency<IOutputTypeProvider, TypeScriptOutputTypeProvider>()
                 .AddDependency<IDependenciesGraph, DependenciesGraph>()
-                .AddDependency<IOutputTypeMetadataGenerator, TypeScriptOutputTypeMetadataGenerator>(
-                    sp => new TypeScriptOutputTypeMetadataGenerator(options.ConfigureTypeMap, sp.GetRequiredService<IOutputTypeProvider>()))
-                .AddDependency<IIndentedStringBuilder, IndentedStringBuilder>(_ => new IndentedStringBuilder(options.IndentSize));
+                .AddDependency<IOutputTypeMetadataGenerator, TypeScriptOutputTypeMetadataGenerator>()
+                .AddDependency<IIndentedStringBuilder, IndentedStringBuilder>();
 
             configureServices?.Invoke(builder);
 

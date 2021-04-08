@@ -36,15 +36,15 @@ namespace Laraue.CodeTranslation.TypeScript
 
         /// <inheritdoc />
         [NotNull] public virtual string[] GetFilePathParts(OutputType type) 
-            => type.TypeMetadata?
-                   .ClrType?
-                   .FullName?
-                   .Split('.')?
-                   .Select(
+            => type.TypeMetadata
+                   ?.ClrType
+                   ?.FullName
+                   ?.Split('.')
+                   ?.Select(
                        x => _options
                            .PathSegmentNamingStrategy
-                           .Resolve(x))?
-                   .ToArray()
+                           .Resolve(x))
+                   ?.ToArray()
                ?? System.Array.Empty<string>();
 
         [CanBeNull]

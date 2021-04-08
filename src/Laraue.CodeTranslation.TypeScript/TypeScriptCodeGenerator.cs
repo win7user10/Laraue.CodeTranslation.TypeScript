@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
+using Laraue.CodeTranslation.Abstractions.Translation;
 using Laraue.CodeTranslation.Common;
 
 namespace Laraue.CodeTranslation.TypeScript
@@ -10,10 +11,12 @@ namespace Laraue.CodeTranslation.TypeScript
 	public class TypeScriptCodeGenerator : ICodeGenerator
 	{
 		private readonly ITypePartsCodeGenerator _generator;
+		private readonly CodeTranslatorOptions _options;
 
-		public TypeScriptCodeGenerator(ITypePartsCodeGenerator generator)
+		public TypeScriptCodeGenerator(ITypePartsCodeGenerator generator, CodeTranslatorOptions options)
 		{
 			_generator = generator ?? throw new ArgumentNullException(nameof(generator));
+			_options = options ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		/// <inheritdoc />
@@ -35,7 +38,7 @@ namespace Laraue.CodeTranslation.TypeScript
 
 		public string GenerateCode(OutputType type)
 		{
-			using var codeBuilder = new IndentedStringBuilder(2);
+			using var codeBuilder = new IndentedStringBuilder(_options.IndentSize);
 
 			// Import classes
 			var importStrings = _generator.GenerateImportStrings(type);

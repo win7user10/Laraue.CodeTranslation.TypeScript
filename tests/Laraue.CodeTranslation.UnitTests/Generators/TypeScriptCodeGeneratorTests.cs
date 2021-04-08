@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Laraue.CodeTranslation.Abstractions.Translation;
 using Laraue.CodeTranslation.Common;
 using Laraue.CodeTranslation.TypeScript;
 using Xunit;
@@ -10,10 +11,15 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 	{
 		private readonly DependenciesGraph _dependenciesGraph = new();
 		private readonly OutputTypeProvider _provider;
+		private readonly TypeScriptCodeGenerator _generator;
+		private readonly OutputTypeMetadataGenerator _metadataGenerator;
+		private readonly TypeScriptCodeTranslatorOptions _options = new ();
 
 		public TypeScriptCodeGeneratorTests()
 		{
 			_provider = new TypeScriptOutputTypeProvider(_dependenciesGraph);
+			_generator = new TypeScriptCodeGenerator(new TypeScriptTypePartsGenerator(_options), _options);
+			_metadataGenerator = new TypeScriptOutputTypeMetadataGenerator(_options, _provider);
 		}
 
 		[Theory]
@@ -117,13 +123,11 @@ export class InheritedFromInheritedClass extends InheritedClass {
 		{
 			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
 			var typeMetadata = metadataGenerator.GetMetadata(typeof(T));
-
-			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator(null, _provider);
-			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
+			
+			var outputType = _metadataGenerator.GetOutputType(typeMetadata);
 			var propertyOutputType = outputType.Properties.Single(x => x.PropertyMetadata.Source.Name == propertyName);
-
-			var propertyCodeGenerator = new TypeScriptCodeGenerator(new TypeScriptTypePartsGenerator());
-			var propertyCode = propertyCodeGenerator.GenerateCode(propertyOutputType);
+			
+			var propertyCode = _generator.GenerateCode(propertyOutputType);
 
 			return propertyCode;
 		}
@@ -133,11 +137,9 @@ export class InheritedFromInheritedClass extends InheritedClass {
 			var metadataGenerator = new MetadataGenerator(new PropertyInfoResolver());
 			var typeMetadata = metadataGenerator.GetMetadata(typeof(T));
 
-			var outputTypeGenerator = new TypeScriptOutputTypeMetadataGenerator(null, _provider);
-			var outputType = outputTypeGenerator.GetOutputType(typeMetadata);
+			var outputType = _metadataGenerator.GetOutputType(typeMetadata);
 
-			var codeGenerator = new TypeScriptCodeGenerator(new TypeScriptTypePartsGenerator());
-			return codeGenerator.GenerateCode(outputType);
+			return _generator.GenerateCode(outputType);
 		}
 	}
 }

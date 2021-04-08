@@ -40,6 +40,19 @@ namespace Laraue.CodeTranslation.Abstractions.Translation
         }
 
         /// <summary>
+        /// Add some dependency to the container.
+        /// </summary>
+        /// <typeparam name="TService"></typeparam>
+        /// <param name="service"></param>
+        /// <returns></returns>
+        public CodeTranslatorBuilder AddDependency<TService>(TService service)
+            where TService : class
+        {
+            _services.AddSingleton(service);
+            return this;
+        }
+
+        /// <summary>
         /// Build container and return new <see cref="ICodeTranslator"/>.
         /// </summary>
         /// <returns></returns>

@@ -1,11 +1,12 @@
-﻿using Laraue.CodeTranslation.TypeScript;
+﻿using Laraue.CodeTranslation.Abstractions.Translation;
+using Laraue.CodeTranslation.TypeScript;
 using Xunit;
 
 namespace Laraue.CodeTranslation.UnitTests.TypeDiscovery
 {
     public class CodeTranslatorTests
     {
-        private readonly ICodeTranslator _translator = TypeScriptTranslatorBuilder.Create(new CodeTranslatorOptions());
+        private readonly ICodeTranslator _translator = TypeScriptTranslatorBuilder.Create(new TypeScriptCodeTranslatorOptions());
 
         [Fact]
         public void BuiltCodeTranslatorShouldGenerateCodeWithoutException()
