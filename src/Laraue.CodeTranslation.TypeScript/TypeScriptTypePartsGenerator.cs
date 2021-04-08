@@ -32,7 +32,7 @@ namespace Laraue.CodeTranslation.TypeScript
         }
 
         /// <inheritdoc />
-        public virtual string GenerateName(OutputTypeName name) => _options.ClassNamingStrategy.Resolve(name.Name);
+        public virtual string GenerateName(OutputTypeName name) => _options.TypeNamingStrategy.Resolve(name.Name);
 
         /// <inheritdoc />
         [NotNull] public virtual string[] GetFilePathParts(OutputType type) 
@@ -48,10 +48,10 @@ namespace Laraue.CodeTranslation.TypeScript
                ?? System.Array.Empty<string>();
 
         [CanBeNull]
-        public virtual string GetFileName(OutputType type) => type.Name.Name.ToCamelCase();
+        public virtual string GetFileName(OutputType type) => _options.PathSegmentNamingStrategy.Resolve(type.Name.Name);
 
         /// <inheritdoc />
-        public virtual string GenerateName(OutputPropertyType property) => property.PropertyName.ToCamelCase();
+        public virtual string GenerateName(OutputPropertyType property) => _options.PropertiesNamingStrategy.Resolve(property.PropertyName);
 
         /// <inheritdoc />
         public virtual string GenerateDefaultValue(OutputPropertyType property)
@@ -203,7 +203,7 @@ namespace Laraue.CodeTranslation.TypeScript
             pathSegmentsToImport.Add(GetFileName(importingType));
 
             var path = isImportFromThisFolder ? "./" : string.Empty;
-            path += string.Join("/", pathSegmentsToImport.Select(x => _options.PathSegmentNamingStrategy.Resolve(x)).ToArray());
+            path += string.Join("/", pathSegmentsToImport.ToArray());
 
             return $"import {{ {GenerateName(importingType.Name)} }} from '{path}'";
         }

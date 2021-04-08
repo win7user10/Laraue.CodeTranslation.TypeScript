@@ -22,11 +22,16 @@ namespace Laraue.CodeTranslation.Abstractions.Translation
         /// <summary>
         /// Strategy for resolving type names in the result code.
         /// </summary>
-        public INamingStrategy ClassNamingStrategy { get; set; }
+        public INamingStrategy TypeNamingStrategy { get; set; }
 
         /// <summary>
         /// Strategy for resolving path segments of result types.
         /// </summary>
         public INamingStrategy PathSegmentNamingStrategy { get; set; }
+
+        /// <summary>
+        /// Strategy for resolving property names of result types.
+        /// </summary>
+        public INamingStrategy PropertiesNamingStrategy { get; set; }
     }
 }
