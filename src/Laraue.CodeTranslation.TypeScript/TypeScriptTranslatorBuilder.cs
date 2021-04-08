@@ -3,7 +3,9 @@ using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
+using Laraue.CodeTranslation.Abstractions.Translation;
 using Laraue.CodeTranslation.Common;
+using Laraue.CodeTranslation.NamingStrategies;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Laraue.CodeTranslation.TypeScript
@@ -19,6 +21,9 @@ namespace Laraue.CodeTranslation.TypeScript
         public static ICodeTranslator Create(CodeTranslatorOptions options, Action<CodeTranslatorBuilder> configureServices = null)
         {
             var builder = new CodeTranslatorBuilder();
+
+            options.ClassNamingStrategy ??= new PascalCaseStrategy();
+            options.PathSegmentNamingStrategy ??= new CamelCaseNamingStrategy();
 
             builder
                 .AddDependency<ICodeTranslator, CodeTranslator>()

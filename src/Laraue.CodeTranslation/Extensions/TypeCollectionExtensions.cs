@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
+using Laraue.CodeTranslation.Abstractions.Translation;
 
 namespace Laraue.CodeTranslation.Extensions
 {

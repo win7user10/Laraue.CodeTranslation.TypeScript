@@ -5,17 +5,29 @@ using JetBrains.Annotations;
 
 namespace Laraue.CodeTranslation.Abstractions.Output
 {
+	/// <summary>
+	/// Represents generated name of property for <see cref="OutputType"/>.
+	/// </summary>
 	public record OutputTypeName
 	{
-		[NotNull]
-		public string Name { get; init; }
+		/// <summary>
+		/// Type name without generic and array parameters.
+		/// </summary>
+		[NotNull] public string Name { get; init; }
 
-		[CanBeNull] 
-		public OutputTypeName ChildName { get; init; }
+		/// <summary>
+		/// Depth of child used to calculate array depth.
+		/// </summary>
+		[CanBeNull] public OutputTypeName ChildName { get; init; }
 
-		[NotNull]
-		public IEnumerable<OutputTypeName> GenericNames { get; init; }
+		/// <summary>
+		/// Generic type names.
+		/// </summary>
+		[NotNull] public IEnumerable<OutputTypeName> GenericNames { get; init; }
 
+		/// <summary>
+		/// Is this type is array.
+		/// </summary>
 		public bool IsArray { get; init; }
 
 		public OutputTypeName([NotNull] string name, [NotNull] IEnumerable<OutputTypeName> genericNames, bool isArray = false)
@@ -31,9 +43,17 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 			GenericNames = Array.Empty<OutputTypeName>();
 		}
 
+		/// <summary>
+		/// New name from a string.
+		/// </summary>
+		/// <param name="typeName"></param>
 		public static implicit operator string([CanBeNull] OutputTypeName typeName)
 			=> typeName?.ToString();
 
+		/// <summary>
+		/// New string name from <see cref="OutputTypeName"/>.
+		/// </summary>
+		/// <param name="typeName"></param>
 		public static implicit operator OutputTypeName([CanBeNull] string typeName)
 			=> new (typeName);
 

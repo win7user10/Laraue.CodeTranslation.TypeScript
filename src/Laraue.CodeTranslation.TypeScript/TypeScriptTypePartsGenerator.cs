@@ -5,7 +5,8 @@ using System.Text;
 using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
-using Laraue.CodeTranslation.TypeScript.Extensions;
+using Laraue.CodeTranslation.Abstractions.Translation;
+using Laraue.CodeTranslation.Extensions;
 using Laraue.CodeTranslation.TypeScript.Types;
 using Array = Laraue.CodeTranslation.TypeScript.Types.Array;
 using Boolean = Laraue.CodeTranslation.TypeScript.Types.Boolean;
@@ -16,6 +17,13 @@ namespace Laraue.CodeTranslation.TypeScript
 {
     public class TypeScriptTypePartsGenerator : ITypePartsCodeGenerator
     {
+        private readonly CodeTranslatorOptions _options;
+
+        public TypeScriptTypePartsGenerator(CodeTranslatorOptions options)
+        {
+            _options = options;
+        }
+
         /// <inheritdoc />
         public string[] GenerateImportStrings(OutputType type)
         {
@@ -24,11 +32,20 @@ namespace Laraue.CodeTranslation.TypeScript
         }
 
         /// <inheritdoc />
-        public virtual string GenerateName(OutputTypeName name) => name.Name.ToPascalCase();
+        public virtual string GenerateName(OutputTypeName name) => _options.ClassNamingStrategy.Resolve(name.Name);
 
         /// <inheritdoc />
-        [CanBeNull]
-        public virtual string[] GetFilePathParts(OutputType type) => type.TypeMetadata?.ClrType?.FullName?.Split('.');
+        [NotNull] public virtual string[] GetFilePathParts(OutputType type) 
+            => type.TypeMetadata?
+                   .ClrType?
+                   .FullName?
+                   .Split('.')?
+                   .Select(
+                       x => _options
+                           .PathSegmentNamingStrategy
+                           .Resolve(x))?
+                   .ToArray()
+               ?? System.Array.Empty<string>();
 
         [CanBeNull]
         public virtual string GetFileName(OutputType type) => type.Name.Name.ToCamelCase();
@@ -51,7 +68,7 @@ namespace Laraue.CodeTranslation.TypeScript
                 Date => "new Date()",
                 Enum => GenerateDefaultEnumValue(property),
                 Boolean => "true",
-                _ => throw new NotImplementedException($"{property.OutputType.GetType()} default value is unknown")
+                _ => throw new NotImplementedException($"{property?.OutputType?.GetType()?.ToString() ?? property.PropertyMetadata.ToString()} default value is unknown")
             };
         }
 
@@ -186,7 +203,7 @@ namespace Laraue.CodeTranslation.TypeScript
             pathSegmentsToImport.Add(GetFileName(importingType));
 
             var path = isImportFromThisFolder ? "./" : string.Empty;
-            path += string.Join("/", pathSegmentsToImport.ToArray());
+            path += string.Join("/", pathSegmentsToImport.Select(x => _options.PathSegmentNamingStrategy.Resolve(x)).ToArray());
 
             return $"import {{ {GenerateName(importingType.Name)} }} from '{path}'";
         }

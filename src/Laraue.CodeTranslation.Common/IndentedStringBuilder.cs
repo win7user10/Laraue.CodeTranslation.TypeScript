@@ -5,6 +5,7 @@ using Laraue.CodeTranslation.Abstractions.Code;
 
 namespace Laraue.CodeTranslation.Common
 {
+	/// <inheritdoc />
 	public class IndentedStringBuilder : IIndentedStringBuilder
 	{
 		private readonly StringBuilder _stringBuilder;
@@ -21,18 +22,22 @@ namespace Laraue.CodeTranslation.Common
 			_indentSize = indentSize;
 		}
 
+		/// <inheritdoc />
 		public void Append(string value)
 		{
 			_stringBuilder.Append(IndentationString)
 				.Append(value);
 		}
 
+		/// <inheritdoc />
 		public void AppendLine(string value)
 			=> Append(value + Environment.NewLine);
 
+		/// <inheritdoc />
 		public void AppendLine()
 			=> Append(Environment.NewLine);
 
+		/// <inheritdoc />
 		public IIndentedStringBuilder Indent()
 		{
 			_indent += _indentSize;
@@ -53,6 +58,7 @@ namespace Laraue.CodeTranslation.Common
 			DecreaseIndent();
 		}
 
+		/// <inheritdoc />
 		public override string ToString()
 		{
 			return _stringBuilder.ToString();

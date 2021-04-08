@@ -1,4 +1,4 @@
-﻿namespace Laraue.CodeTranslation.TypeScript.Extensions
+﻿namespace Laraue.CodeTranslation.Extensions
 {
     public static class StringExtensions
     {

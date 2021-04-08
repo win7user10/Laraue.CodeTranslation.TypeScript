@@ -4,9 +4,11 @@ using System.Linq;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
+using Laraue.CodeTranslation.Abstractions.Translation;
 
 namespace Laraue.CodeTranslation
 {
+    /// <inheritdoc />
     public class CodeTranslator : ICodeTranslator
     {
         private readonly IMetadataGenerator _metadataGenerator;

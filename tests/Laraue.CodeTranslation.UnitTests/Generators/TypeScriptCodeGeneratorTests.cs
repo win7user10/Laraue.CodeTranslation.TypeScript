@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Laraue.CodeTranslation.Common;
 using Laraue.CodeTranslation.TypeScript;
-using Newtonsoft.Json.Linq;
 using Xunit;
 
 namespace Laraue.CodeTranslation.UnitTests.Generators

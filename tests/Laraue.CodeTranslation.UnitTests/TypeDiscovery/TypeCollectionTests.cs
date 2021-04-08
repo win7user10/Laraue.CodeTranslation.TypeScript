@@ -1,4 +1,5 @@
-﻿using Laraue.CodeTranslation.Extensions;
+﻿using Laraue.CodeTranslation.Abstractions.Translation;
+using Laraue.CodeTranslation.Extensions;
 using Xunit;
 
 namespace Laraue.CodeTranslation.UnitTests.TypeDiscovery

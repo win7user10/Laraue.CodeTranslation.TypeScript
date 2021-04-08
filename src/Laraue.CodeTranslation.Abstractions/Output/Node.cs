@@ -33,7 +33,6 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 
 			existsEdge.Type |= dependencyType;
 			return true;
-
 		}
 
 		/// <summary>
@@ -48,10 +47,19 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		}
 	}
 
+	/// <summary>
+	/// One value of <see cref="Node"/>.
+	/// </summary>
 	public class NodeValue
 	{
+		/// <summary>
+		/// Related type.
+		/// </summary>
 		public TypeMetadata Metadata { get; set; }
 
+		/// <summary>
+		/// How the type is related.
+		/// </summary>
 		public DependencyType Type { get; set; }
 
 		/// <inheritdoc />

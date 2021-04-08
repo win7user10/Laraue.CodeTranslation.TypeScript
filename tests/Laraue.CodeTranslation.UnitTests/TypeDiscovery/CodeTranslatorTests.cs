@@ -1,5 +1,4 @@
-﻿using System;
-using Laraue.CodeTranslation.TypeScript;
+﻿using Laraue.CodeTranslation.TypeScript;
 using Xunit;
 
 namespace Laraue.CodeTranslation.UnitTests.TypeDiscovery

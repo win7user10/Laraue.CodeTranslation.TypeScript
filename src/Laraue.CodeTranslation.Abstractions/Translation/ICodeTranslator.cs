@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Laraue.CodeTranslation
+namespace Laraue.CodeTranslation.Abstractions.Translation
 {
+    /// <summary>
+    /// Translate some type to some programming language.
+    /// </summary>
     public interface ICodeTranslator
     {
         /// <summary>
