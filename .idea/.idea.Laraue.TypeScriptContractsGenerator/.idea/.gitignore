@@ -1,0 +1,13 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/modules.xml
+/contentModel.xml
+/.idea.Laraue.TypeScriptContractsGenerator.iml
+/projectSettingsUpdater.xml
+# Datasource local storage ignored files
+/../../../../../../:\repos\Laraue.TypeScriptContractsGenerator\.idea\.idea.Laraue.TypeScriptContractsGenerator\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/

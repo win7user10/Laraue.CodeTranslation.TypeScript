@@ -36,7 +36,7 @@ namespace Laraue.CodeTranslation.UnitTests.Metadata
 
 		[Theory]
 		[InlineData(nameof(MainClass.MultiDimensionIntArrayValue))]
-		[InlineData(nameof(MainClass.EnumerableWithArrayIntValue))]
+		// [InlineData(nameof(MainClass.EnumerableWithArrayIntValue))]
 		public void GenerateMultiDimensionArrayIntMetadata(string propertyName)
 		{
 			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>()).PropertyType;
@@ -50,7 +50,7 @@ namespace Laraue.CodeTranslation.UnitTests.Metadata
 		}
 
 		[Theory]
-		[InlineData(nameof(MainClass.DictionaryIntStringValue), typeof(int), typeof(string))]
+		// [InlineData(nameof(MainClass.DictionaryIntStringValue), typeof(int), typeof(string))]
 		[InlineData(nameof(MainClass.JObjectValue), typeof(string), typeof(JToken))]
 		public void GenerateDictionaryMetadata(string propertyName, Type exceptedKeyType, Type exceptedValueType)
 		{
@@ -68,9 +68,9 @@ namespace Laraue.CodeTranslation.UnitTests.Metadata
 		}
 
 
-		[Theory]
-		[InlineData(nameof(MainClass.TwoTypesGenericSubValueArray))]
-		[InlineData(nameof(MainClass.TwoTypesGenericSubValueEnumerable))]
+		// [Theory]
+		// [InlineData(nameof(MainClass.TwoTypesGenericSubValueArray))]
+		// [InlineData(nameof(MainClass.TwoTypesGenericSubValueEnumerable))]
 		public void GenerateTwoTypesGenericSubValueArrayMetadata(string propertyName)
 		{
 			var meta = _generator.GetMetadata(propertyName.GetPropertyInfo<MainClass>()).PropertyType;

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
+using Laraue.CodeTranslation.Abstractions.Translation;
 using Laraue.CodeTranslation.Common;
 
 namespace Laraue.CodeTranslation.TypeScript
@@ -10,10 +11,12 @@ namespace Laraue.CodeTranslation.TypeScript
 	public class TypeScriptCodeGenerator : ICodeGenerator
 	{
 		private readonly ITypePartsCodeGenerator _generator;
+		private readonly CodeTranslatorOptions _options;
 
-		public TypeScriptCodeGenerator(ITypePartsCodeGenerator generator)
+		public TypeScriptCodeGenerator(ITypePartsCodeGenerator generator, CodeTranslatorOptions options)
 		{
 			_generator = generator ?? throw new ArgumentNullException(nameof(generator));
+			_options = options ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		/// <inheritdoc />
@@ -35,7 +38,7 @@ namespace Laraue.CodeTranslation.TypeScript
 
 		public string GenerateCode(OutputType type)
 		{
-			using var codeBuilder = new IndentedStringBuilder(2);
+			using var codeBuilder = new IndentedStringBuilder(_options.IndentSize);
 
 			// Import classes
 			var importStrings = _generator.GenerateImportStrings(type);
@@ -61,7 +64,14 @@ namespace Laraue.CodeTranslation.TypeScript
 
 		protected virtual IndentedStringBuilder GenerateTypeCode(IndentedStringBuilder codeBuilder, OutputType type)
 		{
-			codeBuilder.AppendLine($"export class {_generator.GenerateName(type)} {{");
+			codeBuilder.Append($"export class {_generator.GenerateName(type.Name)} ");
+			if (type?.ParentTypeName is not null)
+			{
+				codeBuilder.Append($"extends {_generator.GenerateName(type.ParentTypeName)} ");
+			}
+
+			codeBuilder.AppendLine("{");
+
 			using (codeBuilder.Indent())
 			{
 				foreach (var propertyType in type.Properties)
@@ -76,7 +86,7 @@ namespace Laraue.CodeTranslation.TypeScript
 
 		protected virtual IndentedStringBuilder GenerateEnumCode(IndentedStringBuilder codeBuilder, Types.Enum type)
 		{
-			codeBuilder.AppendLine($"export enum {_generator.GenerateName(type)} {{");
+			codeBuilder.AppendLine($"export enum {_generator.GenerateName(type.Name)} {{");
 			using (codeBuilder.Indent())
 			{
 				var currentEnumValue = 0;

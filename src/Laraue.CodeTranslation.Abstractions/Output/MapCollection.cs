@@ -5,10 +5,19 @@ using Laraue.CodeTranslation.Abstractions.Metadata;
 
 namespace Laraue.CodeTranslation.Abstractions.Output
 {
+	/// <summary>
+	/// Collection of mappings between <see cref="TypeMetadata"/> and functions returns <see cref="OutputType"/> represented by <see cref="MapDescriptor"/>.
+	/// </summary>
 	public class MapCollection
 	{
 		private readonly List<MapDescriptor> _source = new();
 
+		/// <summary>
+		/// Adds new map between <see cref="TypeMetadata"/> and <see cref="OutputType"/> when result type does not depends from input.
+		/// </summary>
+		/// <typeparam name="TInput"></typeparam>
+		/// <typeparam name="TOutput"></typeparam>
+		/// <returns></returns>
 		public MapCollection AddMap<TInput, TOutput>()
 			where TOutput : OutputType, new()
 		{
@@ -21,17 +30,31 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 			return this;
 		}
 
+		/// <summary>
+		/// Adds new map between <see cref="TypeMetadata"/> and <see cref="OutputType"/> when result type does not depends from input.
+		/// </summary>
+		/// <typeparam name="TInput"></typeparam>
+		/// <typeparam name="TOutput"></typeparam>
+		/// <param name="outputType"></param>
+		/// <returns></returns>
 		public MapCollection AddMap<TInput, TOutput>(TOutput outputType)
 			where TOutput : OutputType
 		{
 			return AddToSource(new MapDescriptor()
 			{
-				GetOutputType = (_, _) => outputType,
+				GetOutputType = _ => outputType,
 				IsApplicable = (metadata) => metadata.ClrType == typeof(TInput),
 			});
 		}
 
-		public MapCollection AddMap<TOutput>(Func<TypeMetadata, bool> whenShouldBeUsed, Func<TypeMetadata, int, TOutput> getOutputTypeFunc)
+		/// <summary>
+		/// Adds new map between <see cref="TypeMetadata"/> and <see cref="OutputType"/> when result type depends from input type.
+		/// </summary>
+		/// <typeparam name="TOutput"></typeparam>
+		/// <param name="whenShouldBeUsed"></param>
+		/// <param name="getOutputTypeFunc"></param>
+		/// <returns></returns>
+		public MapCollection AddMap<TOutput>(Func<TypeMetadata, bool> whenShouldBeUsed, Func<TypeMetadata, TOutput> getOutputTypeFunc)
 			where TOutput : OutputType
 		{
 			return AddToSource(new MapDescriptor()
@@ -41,6 +64,11 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 			});
 		}
 
+		/// <summary>
+		/// Get first applicable <see cref="MapDescriptor"/> for the passed type.
+		/// </summary>
+		/// <param name="metadata"></param>
+		/// <returns></returns>
 		public MapDescriptor GetMap(TypeMetadata metadata)
 		{
 			return _source.LastOrDefault(x => x.IsApplicable(metadata));

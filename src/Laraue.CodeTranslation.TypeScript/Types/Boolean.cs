@@ -4,6 +4,9 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 {
 	public class Boolean : StaticOutputType
 	{
-		public override OutputTypeName Name => "boolean";
+		public Boolean()
+		{
+			Name = "boolean";
+		}
 	}
 }

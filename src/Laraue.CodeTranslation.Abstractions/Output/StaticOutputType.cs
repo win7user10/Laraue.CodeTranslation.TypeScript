@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Laraue.CodeTranslation.Abstractions.Metadata;
 
 namespace Laraue.CodeTranslation.Abstractions.Output
 {
+	/// <summary>
+	/// Some type which not depends from other types. Something like int, string or guid value.
+	/// </summary>
 	public abstract class StaticOutputType : OutputType
 	{
-		public override IEnumerable<OutputType> UsedTypes { get; } = Array.Empty<OutputType>();
+		/// <inheritdoc />
 		public override IEnumerable<OutputPropertyType> Properties { get; } = Array.Empty<OutputPropertyType>();
-		public override TypeMetadata TypeMetadata { get; } = null;
+
+		/// <inheritdoc />
+		public override IEnumerable<OutputType> UsedTypes { get; } = Array.Empty<OutputType>();
 	}
 }

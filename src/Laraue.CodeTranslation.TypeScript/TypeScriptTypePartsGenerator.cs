@@ -5,9 +5,11 @@ using System.Text;
 using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
-using Laraue.CodeTranslation.TypeScript.Extensions;
+using Laraue.CodeTranslation.Abstractions.Translation;
+using Laraue.CodeTranslation.Extensions;
 using Laraue.CodeTranslation.TypeScript.Types;
 using Array = Laraue.CodeTranslation.TypeScript.Types.Array;
+using Boolean = Laraue.CodeTranslation.TypeScript.Types.Boolean;
 using Enum = Laraue.CodeTranslation.TypeScript.Types.Enum;
 using String = Laraue.CodeTranslation.TypeScript.Types.String;
 
@@ -15,6 +17,13 @@ namespace Laraue.CodeTranslation.TypeScript
 {
     public class TypeScriptTypePartsGenerator : ITypePartsCodeGenerator
     {
+        private readonly CodeTranslatorOptions _options;
+
+        public TypeScriptTypePartsGenerator(CodeTranslatorOptions options)
+        {
+            _options = options;
+        }
+
         /// <inheritdoc />
         public string[] GenerateImportStrings(OutputType type)
         {
@@ -23,17 +32,26 @@ namespace Laraue.CodeTranslation.TypeScript
         }
 
         /// <inheritdoc />
-        public virtual string GenerateName(OutputType type) => type.Name.Name.ToPascalCase();
+        public virtual string GenerateName(OutputTypeName name) => _options.TypeNamingStrategy.Resolve(name.Name);
 
         /// <inheritdoc />
-        [CanBeNull]
-        public virtual string[] GetFilePathParts(OutputType type) => type.TypeMetadata?.ClrType?.FullName?.Split('.');
+        [NotNull] public virtual string[] GetFilePathParts(OutputType type) 
+            => type.TypeMetadata
+                   ?.ClrType
+                   ?.FullName
+                   ?.Split('.')
+                   ?.Select(
+                       x => _options
+                           .PathSegmentNamingStrategy
+                           .Resolve(x))
+                   ?.ToArray()
+               ?? System.Array.Empty<string>();
 
         [CanBeNull]
-        public virtual string GetFileName(OutputType type) => type.Name.Name.ToCamelCase();
+        public virtual string GetFileName(OutputType type) => _options.PathSegmentNamingStrategy.Resolve(type.Name.Name);
 
         /// <inheritdoc />
-        public virtual string GenerateName(OutputPropertyType property) => property.PropertyName.ToCamelCase();
+        public virtual string GenerateName(OutputPropertyType property) => _options.PropertiesNamingStrategy.Resolve(property.PropertyName);
 
         /// <inheritdoc />
         public virtual string GenerateDefaultValue(OutputPropertyType property)
@@ -47,8 +65,10 @@ namespace Laraue.CodeTranslation.TypeScript
             {
                 Number => "0",
                 String => "''",
+                Date => "new Date()",
                 Enum => GenerateDefaultEnumValue(property),
-                _ => throw new NotImplementedException($"{property.OutputType.GetType()} default value is unknown")
+                Boolean => "true",
+                _ => throw new NotImplementedException($"{property?.OutputType?.GetType()?.ToString() ?? property.PropertyMetadata.ToString()} default value is unknown")
             };
         }
 
@@ -92,7 +112,7 @@ namespace Laraue.CodeTranslation.TypeScript
                 throw new InvalidOperationException($"Impossible to get enum value from the type {property.OutputType.GetType()}");
             }
 
-            var enumName = GenerateName(property.OutputType);
+            var enumName = GenerateName(property.OutputType.Name);
             var enumValues = enumType.EnumValues;
             var firstEnumValue = enumValues.OrderBy(x => x.Value).First().Key;
             return $"{enumName}.{firstEnumValue}";
@@ -185,7 +205,7 @@ namespace Laraue.CodeTranslation.TypeScript
             var path = isImportFromThisFolder ? "./" : string.Empty;
             path += string.Join("/", pathSegmentsToImport.ToArray());
 
-            return $"import {{ {GenerateName(importingType)} }} from '{path}'";
+            return $"import {{ {GenerateName(importingType.Name)} }} from '{path}'";
         }
     }
 }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
+using Laraue.CodeTranslation.Abstractions.Translation;
 
 namespace Laraue.CodeTranslation.Extensions
 {
@@ -23,22 +24,22 @@ namespace Laraue.CodeTranslation.Extensions
         }
 
         /// <summary>
-        /// <para>Loads all referenced to run project assemblies satisfied passed <paramref name="filterLoadingAssemblyName"/> condition.</para>
+        /// <para>Loads all referenced to run project assemblies satisfied passed <paramref name="filterLoadingAssemblyPath"/> condition.</para>
         /// <para>From these assemblies will be taken only types satisfied passed <paramref name="filterLoadingType"/> condition.</para>
         /// </summary>
         /// <param name="collection"></param>
-        /// <param name="filterLoadingAssemblyName"></param>
+        /// <param name="filterLoadingAssemblyPath"></param>
         /// <param name="filterLoadingType"></param>
         /// <returns></returns>
-        public static TypeCollection AddTypesFromAllReferencedAssemblies(this TypeCollection collection, [CanBeNull]Func<string, bool> filterLoadingAssemblyName = null, [CanBeNull]Func<Type, bool> filterLoadingType = null)
+        public static TypeCollection AddTypesFromAllReferencedAssemblies(this TypeCollection collection, [CanBeNull]Func<string, bool> filterLoadingAssemblyPath = null, [CanBeNull]Func<Type, bool> filterLoadingType = null)
         {
-            var assemblyNames = (IEnumerable<string>)Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
-            if (filterLoadingAssemblyName is not null)
+            var assemblyFilePaths = (IEnumerable<string>)Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll");
+            if (filterLoadingAssemblyPath is not null)
             {
-                assemblyNames = assemblyNames.Where(filterLoadingAssemblyName);
+                assemblyFilePaths = assemblyFilePaths.Where(filterLoadingAssemblyPath);
             }
 
-            var assemblies = assemblyNames.Select(x => Assembly.Load(AssemblyName.GetAssemblyName(x)));
+            var assemblies = assemblyFilePaths.Select(x => Assembly.Load(AssemblyName.GetAssemblyName(x)));
             foreach (var assembly in assemblies)
             {
                 collection.AddAssemblyTypes(assembly, filterLoadingType);

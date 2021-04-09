@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 using Laraue.CodeTranslation.Abstractions.Output;
+using Laraue.CodeTranslation.Abstractions.Translation;
 using Laraue.CodeTranslation.Common;
 using Laraue.CodeTranslation.TypeScript.Types;
 using Newtonsoft.Json.Linq;
@@ -17,8 +16,8 @@ namespace Laraue.CodeTranslation.TypeScript
 {
 	public class TypeScriptOutputTypeMetadataGenerator : OutputTypeMetadataGenerator
 	{
-		public TypeScriptOutputTypeMetadataGenerator(Action<MapCollection> setupMap = null) 
-			: base(new MapCollection())
+		public TypeScriptOutputTypeMetadataGenerator(CodeTranslatorOptions options, IOutputTypeProvider provider) 
+			: base(new MapCollection(), provider)
 		{
 			Collection
 				.AddMap<Dictionary>(metadata => metadata.IsDictionary, GetDictionaryMetadata)
@@ -34,37 +33,35 @@ namespace Laraue.CodeTranslation.TypeScript
 				.AddMap<string, String>()
 				.AddMap<bool, Boolean>()
 				.AddMap<Guid, String>()
+				.AddMap<DateTime, Date>()
+				.AddMap<DateTimeOffset, Date>()
+				.AddMap<Uri, String>()
 				.AddMap<JObject, Any>()
 				.AddMap<JToken, Any>();
-			
-			setupMap?.Invoke(Collection);
+
+			options.ConfigureTypeMap?.Invoke(Collection);
 		}
 
-		public virtual Class GetClassMetadata(TypeMetadata metadata, int callNumber)
+		/// <inheritdoc />
+		protected override OutputType GetOutputTypeInternal(TypeMetadata metadata)
 		{
-			var typeName = GetTypeName(metadata);
-			var propertiesMetadata = metadata.PropertiesMetadata.Select(x => GetOutputPropertyType(x, callNumber));
-			return new (typeName, GetAllUsedTypes(metadata, callNumber), propertiesMetadata, metadata);
+			var descriptor = Collection.GetMap(metadata);
+			return descriptor?.GetOutputType(metadata);
 		}
 
-		public virtual Enum GetEnumMetadata(TypeMetadata metadata, int callNumber)
+		[CanBeNull]
+		public virtual Class GetClassMetadata([CanBeNull]TypeMetadata metadata)
 		{
-			var typeName = GetTypeName(metadata);
-			return new(typeName, metadata);
+			if (metadata is null) return null;
+			return new(metadata, TypeProvider);
 		}
 
-		protected virtual OutputPropertyType GetOutputPropertyType(PropertyMetadata metadata, int callNumber)
+		public virtual Enum GetEnumMetadata(TypeMetadata metadata)
 		{
-			return new ()
-			{
-				Source = metadata.Source,
-				OutputType = GetOutputType(metadata.PropertyType, callNumber),
-				PropertyName = metadata.PropertyName,
-				PropertyMetadata = metadata,
-			};
+			return new(metadata);
 		}
 
-		protected virtual Array GetArrayMetadata(TypeMetadata metadata, int callNumber)
+		protected virtual Array GetArrayMetadata(TypeMetadata metadata)
 		{
 			var genericArgs = metadata.GenericTypeArguments?.ToArray();
 			if (genericArgs is null || genericArgs.Length != 1)
@@ -74,11 +71,11 @@ namespace Laraue.CodeTranslation.TypeScript
 
 			var enumerableType = genericArgs[0];
 
-			var type = GetOutputType(enumerableType, callNumber);
-			return type is not null ? new(type.Name, GetAllUsedTypes(enumerableType, callNumber), metadata) : null;
+			var type = GetOutputType(enumerableType);
+			return type is not null ? new(type.Name, metadata, TypeProvider) : null;
 		}
 
-		protected virtual Dictionary GetDictionaryMetadata(TypeMetadata metadata, int callNumber)
+		protected virtual Dictionary GetDictionaryMetadata(TypeMetadata metadata)
 		{
 			var genericArgs = metadata.GenericTypeArguments?.ToArray();
 			if (genericArgs is null || genericArgs.Length != 2)
@@ -86,82 +83,43 @@ namespace Laraue.CodeTranslation.TypeScript
 				throw new ArgumentOutOfRangeException(nameof(genericArgs));
 			}
 
-			var keyValueTypeNames = genericArgs.Select(x => GetOutputType(x, callNumber)).Select(x => x?.Name);
-			return new(keyValueTypeNames, GetAllUsedTypes(metadata, callNumber));
-		}
-
-		protected virtual IEnumerable<OutputType> GetAllUsedTypes(TypeMetadata metadata, int callNumber)
-		{
-			var allUsedTypes = new List<OutputType>(16);
-			var parentType = GetUsedParentType(metadata);
-
-			if (parentType is not null)
-			{
-				allUsedTypes.AddRange(FilterImportingTypes(new []{ parentType }, callNumber));
-			}
-
-			allUsedTypes.AddRange(FilterImportingTypes(metadata.GenericTypeArguments?.ToArray(), callNumber));
-			allUsedTypes.AddRange(FilterImportingTypes(metadata.PropertiesMetadata.Select(x => x.PropertyType).ToArray(), callNumber));
-
-			var result = new HashSet<OutputType>(allUsedTypes, new UsedOutputTypesEqualityComparer());
-			return result.ToArray();
-		}
-
-		[CanBeNull]
-		protected virtual TypeMetadata GetUsedParentType(TypeMetadata metadata)
-		{
-			return metadata.ParentTypeMetadata;
-		}
-
-		[NotNull]
-		protected virtual IEnumerable<TypeMetadata> GetUsedGenericTypes([CanBeNull] params TypeMetadata[] metadata)
-		{
-			return metadata?.SelectMany(x => x.GenericTypeArguments) ?? Enumerable.Empty<TypeMetadata>();
-		}
-
-		[NotNull]
-		protected virtual IEnumerable<OutputType> FilterImportingTypes([CanBeNull]TypeMetadata[] metadata, int callNumber)
-		{
-			var typeMetadata = metadata?.Select(x => GetOutputType(x, callNumber));
-			var result = typeMetadata?
-				.Where(x => x is not StaticOutputType)
-				.Where(x => x is not Array)
-				.Where(x => x?.TypeMetadata != null)
-				.Where(x => !x.TypeMetadata.ClrType.Assembly.FullName.Contains("System"));
-
-			return result ?? System.Array.Empty<OutputType>();
+			return new(metadata, TypeProvider);
 		}
 
 		/// <inheritdoc />
-		public override OutputType GetOutputType(TypeMetadata metadata, int callNumber = 0)
+		protected override TypeMetadata GetUsedParentType(TypeMetadata metadata)
 		{
-			if (callNumber > 10)
-			{
-				return null;
-			}
-
-			var descriptor = Collection.GetMap(metadata);
-			return descriptor?.GetOutputType(metadata, ++callNumber);
+			return metadata?.ParentTypeMetadata;
 		}
-
+		
+		/// <summary>
+		/// Filters all passed types and takes only should be imported in result code.
+		/// </summary>
+		/// <param name="types"></param>
+		/// <returns></returns>
 		[NotNull]
-		protected virtual TypeMetadata[] GetGenericTypeArguments(TypeMetadata metadata)
+		protected virtual OutputType[] FilterImportingTypes([CanBeNull]OutputType[] types)
 		{
-			return metadata.GenericTypeArguments?.ToArray() ?? System.Array.Empty<TypeMetadata>();
+			var result = types?.Where(ShouldBeImported)?.ToArray();
+			return result ?? System.Array.Empty<OutputType>();
 		}
 
-		protected virtual string GetNonGenericStringTypeName(TypeMetadata metadata)
+		/// <summary>
+		/// Returns true, if this type should be imported in generated code.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <returns></returns>
+		protected virtual bool ShouldBeImported([CanBeNull] OutputType type)
 		{
-			var typeName = metadata.ClrType.Name;
-			return Regex.Replace(typeName, @"`\d+", string.Empty);
-		}
+			if (type?.TypeMetadata is null) return false;
 
-		public OutputTypeName GetTypeName(TypeMetadata metadata)
-		{
-			var typeName = GetNonGenericStringTypeName(metadata);
-			var genericArgs = GetGenericTypeArguments(metadata);
-			var genericOutputTypes = genericArgs.Select(GetOutputType).ToArray();
-			return new OutputTypeName(typeName, genericOutputTypes.Select(x => x.Name));
+			return type switch
+			{
+				Enum => true,
+				StaticOutputType => false,
+				Array => false,
+				_ => !type.TypeMetadata.ClrType.Assembly.FullName.Contains("System")
+			};
 		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Metadata;
 
@@ -6,26 +7,35 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 {
 	public abstract class DynamicOutputType : OutputType
 	{
-		public override OutputTypeName Name { get; }
+		protected readonly IOutputTypeProvider TypeProvider;
 
-		[CanBeNull]
-		public override IEnumerable<OutputType> UsedTypes { get; }
-
-		[CanBeNull]
-		public override IEnumerable<OutputPropertyType> Properties { get; }
-
-		[NotNull]
-		public override TypeMetadata TypeMetadata { get; }
-
-		protected DynamicOutputType(OutputTypeName name, IEnumerable<OutputType> usedTypes, IEnumerable<OutputPropertyType> properties, TypeMetadata typeMetadata)
+		protected DynamicOutputType(TypeMetadata metadata, IOutputTypeProvider provider)
 		{
-			Name = name;
-			UsedTypes = usedTypes;
-			Properties = properties;
-			TypeMetadata = typeMetadata;
+			TypeProvider = provider;
+			TypeMetadata = metadata;
 		}
 
-		protected DynamicOutputType()
-		{ }
+		/// <inheritdoc />
+		public override IEnumerable<OutputPropertyType> Properties => TypeProvider.GetProperties(TypeMetadata);
+
+		/// <inheritdoc />
+		public override IEnumerable<OutputType> UsedTypes => TypeProvider.GetUsedTypes(TypeMetadata);
+
+		/// <summary>
+		/// Return generic type arguments generated names for passed type.
+		/// </summary>
+		/// <param name="metadata"></param>
+		/// <returns></returns>
+		[NotNull]
+		protected virtual OutputTypeName[] GetGenericTypeNames(TypeMetadata metadata)
+		{
+			var names = metadata
+				?.GenericTypeArguments
+				?.Select(x => TypeProvider.Get(x)?.Name)
+				.Where(x => x != null)
+				.ToArray();
+
+			return names ?? System.Array.Empty<OutputTypeName>();
+		}
 	}
 }

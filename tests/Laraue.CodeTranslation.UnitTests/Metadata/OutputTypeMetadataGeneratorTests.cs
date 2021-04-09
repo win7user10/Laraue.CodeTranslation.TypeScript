@@ -14,7 +14,7 @@ namespace Laraue.CodeTranslation.UnitTests.Metadata
 {
 	public class OutputTypeMetadataGeneratorTests
 	{
-		private readonly IOutputTypeMetadataGenerator _generator = new TypeScriptOutputTypeMetadataGenerator();
+		private readonly IOutputTypeMetadataGenerator _generator = new TypeScriptOutputTypeMetadataGenerator(new TypeScriptCodeTranslatorOptions(), new TypeScriptOutputTypeProvider(new DependenciesGraph()));
 
 		[Theory]
 		[InlineData(typeof(int), typeof(Number))]
@@ -54,6 +54,7 @@ namespace Laraue.CodeTranslation.UnitTests.Metadata
 		[InlineData(typeof(TwoTypeGenericSubClass<int, decimal>), new string[0])]
 		[InlineData(typeof(TwoTypeGenericSubClass<int, OneTypeGenericSubClass<int>>), new[]{ "OneTypeGenericSubClass" })]
 		[InlineData(typeof(SubClass), new[]{ "MainClass" })]
+		[InlineData(typeof(MainClass), new[]{ "EnumStartsWith0", "EnumStartsWith10", "SubClass", "OneTypeGenericSubClass", "TwoTypeGenericSubClass" })]
 		public void GenerateUsedTypes(Type inputType, string[] exceptedTypes)
 		{
 			var typeMetadata = GetTypeMetadata(inputType);

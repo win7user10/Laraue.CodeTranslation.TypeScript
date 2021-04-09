@@ -1,80 +1,68 @@
-Typescript contracts code generator
+Typescript code generator for DTO classes
 --------------------
 
 [![latest version](https://img.shields.io/nuget/v/Laraue.TypeScriptContractsGenerator)](https://www.nuget.org/packages/Laraue.TypeScriptContractsGenerator)
 
-This library made to have opportunity for generating typescript contacts from C# code.
+The problem: Frontend and backend have some contracts for communication, describing, what types are exists in a system. Manually creating of these contracts is slow and danger, because may be occured situation, when BE and FE contracts are not the same.
+
+This library generates Typescript contracts from passed C# types using reflection. Each type is translating using specified logic.
+
+Library is setup as default to process most common types such as below:
+```cs
+System.String -> string?
+System.Guid -> string
+System.Int32 -> number
+System.Int32? -> number?
+IEnumerable<System.String> -> string[]?
+```
+
+And also has options to setup default mapping.
 
 ### Get started
 
+As first necessary to create collection of types should be translated.
+
 ```cs
-var generator = new TypeScriptGeneratorBuilder()
-    .Build();
-    
-generator.GenerateTsCode()
-    .StoreTo("C://tsCode")
+var types = new TypeCollection();
 ```
 
-### How it works
-Library loads all available assemblies and all existing it these assemblies types. Then it generates typescript code bases on loaded types.
+Library contains some extensions in Laraue.CodeTranslation.Extensions namespace to fast creating this collection.
 
-##### Changing loading assemblies
 ```cs
-generator.ConfigureAssemblies(assemblyNames => assemblyNames.MatchAnyPattern(new[] { "Laraue.Contracts.*", "Laraue.Core.DataAccess.*" }))
+var types.AddTypesFromAllReferencedAssemblies(x => x.Contains("Laraue.Contracts."), x => x.HasAttribute<DataContractAttribute>())
 ```
 
-##### Changing source types
+Then can be created instance of CodeTranslator which will translate code from C# to Typescript. 
+It consumes translator options which can control output code view.
+
+Example of additional mapping: System.Net.HttpStatusCode -> number:
+
 ```cs
-generator.ConfigureTypes(types =>
+var options = new TypeScriptCodeTranslatorOptions()
 {
-    var projectTypes = types.WithAttribure<DataContractAttribute>();
-    return projectTypes.Concat(new[] { typeof(PaginatedRequest) });
-})
-```
-
-##### Changing indent of string builder
-```cs
-generator.WithIndentSize(2);
-```
-
-##### Changing generation code behaviour
-```cs
-public class NewTsTypeGenerator : DefaultTsTypeGenerator
-{
-}
-
-public class NewTsCodeGenerator : DefaultTsCodeGenerator
-{
+    ConfigureTypeMap = (mapCollection) => mapCollection.AddMap<HttpStatusCode, Number>()
 }
 ```
 
-and use it's into generator
+Example of camel case type naming for result code:
 
 ```cs
-generator.UseTypeGenerator(typeGenerator);
-generator.UseCodeGenerator(codeGenerator);
-```
-
-These classes contains different methods for generating code, such as class naming, type naming, should be class imported e t.c.
-
-### Manually creating generator without loading types from assemblies
-```cs
-new TypeScriptGenerator(IEnumerable<Type> sourceTypes, int indentSize, TsCodeGenerator tsCodeGenerator, TsTypeGenerator tsTypeGenerator);
-```
-
-After calling GenerateTsCode() generator returns collection of GeneratedType elements.
- ```cs
-public class GeneratedType
+var options = new TypeScriptCodeTranslatorOptions()
 {
-    public Type ClrType { get; }
-    
-    public string TsCode { get; }
-    
-    public string[] RelativeFilePathSegments { get; }
+    TypeNamingStrategy = new CamelCaseNamingStrategy()    
 }
 ```
 
-It can be saved to folder using next construction, or used as you want.
+Now CodeTranslator can be creating and result code can be generated 
+
 ```cs
-generatedCode.Store("C:/typescriptCode");
+var codeTranslator = TypeScriptTranslatorBuilder.Create(options);
+var typesCode = codeTranslator.GenerateTypesCode(types);
+```
+
+CodeTranslator returns sequence of files with generated code and path, where this file should be situated. 
+It can be easy stored to some place on the disk using special extension or used as you wish.
+
+```cs
+typesCode.StoreTo("D:/tsTypes", true);
 ```
