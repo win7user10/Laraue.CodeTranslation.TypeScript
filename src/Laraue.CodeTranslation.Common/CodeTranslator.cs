@@ -6,7 +6,7 @@ using Laraue.CodeTranslation.Abstractions.Metadata.Generators;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
 using Laraue.CodeTranslation.Abstractions.Translation;
 
-namespace Laraue.CodeTranslation
+namespace Laraue.CodeTranslation.Common
 {
     /// <inheritdoc />
     public class CodeTranslator : ICodeTranslator

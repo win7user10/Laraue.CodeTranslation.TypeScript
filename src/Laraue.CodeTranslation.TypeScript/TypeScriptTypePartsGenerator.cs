@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Translation;
-using Laraue.CodeTranslation.Extensions;
 using Laraue.CodeTranslation.TypeScript.Types;
 using Array = Laraue.CodeTranslation.TypeScript.Types.Array;
 using Boolean = Laraue.CodeTranslation.TypeScript.Types.Boolean;

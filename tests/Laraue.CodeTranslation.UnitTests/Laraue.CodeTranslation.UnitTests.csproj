@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Laraue.CodeTranslation\Laraue.CodeTranslation.csproj" />
+    <ProjectReference Include="..\..\src\Laraue.CodeTranslation.Extensions\Laraue.CodeTranslation.Extensions.csproj" />
     <ProjectReference Include="..\..\src\Laraue.CodeTranslation.Common\Laraue.CodeTranslation.Common.csproj" />
     <ProjectReference Include="..\..\src\Laraue.CodeTranslation.TypeScript\Laraue.CodeTranslation.TypeScript.csproj" />
   </ItemGroup>

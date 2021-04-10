@@ -5,7 +5,6 @@ using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Output.Metadata;
 using Laraue.CodeTranslation.Abstractions.Translation;
 using Laraue.CodeTranslation.Common;
-using Laraue.CodeTranslation.NamingStrategies;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Laraue.CodeTranslation.TypeScript

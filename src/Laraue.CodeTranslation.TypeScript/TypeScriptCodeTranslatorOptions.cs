@@ -1,5 +1,5 @@
 ﻿using Laraue.CodeTranslation.Abstractions.Translation;
-using Laraue.CodeTranslation.NamingStrategies;
+using Laraue.CodeTranslation.Extensions.NamingStrategies;
 
 namespace Laraue.CodeTranslation.TypeScript
 {

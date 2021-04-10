@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Classes and extensions to create code translators which will generate code for some programming language.</Description>
     <LangVersion>Latest</LangVersion>
-    <Version>1.0.0</Version>
+    <Version>1.0.2</Version>
     <Authors>Belyanskiy Ilya</Authors>
     <IsPackable>true</IsPackable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>

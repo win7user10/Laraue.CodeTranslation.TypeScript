@@ -1,7 +1,6 @@
 ﻿using Laraue.CodeTranslation.Abstractions.Translation;
-using Laraue.CodeTranslation.Extensions;
 
-namespace Laraue.CodeTranslation.NamingStrategies
+namespace Laraue.CodeTranslation.Extensions.NamingStrategies
 {
     /// <summary>
     /// Transformation like newName -> NewName.
