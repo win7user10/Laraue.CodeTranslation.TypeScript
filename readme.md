@@ -1,9 +1,9 @@
 Typescript code generator for DTO classes
 --------------------
 
-[![latest version](https://img.shields.io/nuget/v/Laraue.TypeScriptContractsGenerator)](https://www.nuget.org/packages/Laraue.TypeScriptContractsGenerator)
+[![latest version](https://img.shields.io/nuget/v/Laraue.CodeTranslation.Typescript)](https://www.nuget.org/packages/Laraue.CodeTranslation.Typescript)
 
-The problem: Frontend and backend have some contracts for communication, describing, what types are exists in a system. Manually creating of these contracts is slow and danger, because may be occured situation, when BE and FE contracts are not the same.
+The problem: Frontend and backend have some contracts for communication, describing, what types exist in a system. Manually creating these contracts is slow and dangerous, because maybe occurred situation, when BE and FE contracts are not the same.
 
 This library generates Typescript contracts from passed C# types using reflection. Each type is translating using specified logic.
 
@@ -16,26 +16,44 @@ System.Int32? -> number?
 IEnumerable<System.String> -> string[]?
 ```
 
-And also has options to setup default mapping.
+And also has options to extend default mapping.
 
 ### Get started
 
-As first necessary to create collection of types should be translated.
+As first necessary to create a collection of types should be translated.
 
 ```cs
 var types = new TypeCollection();
 ```
 
-Library contains some extensions in Laraue.CodeTranslation.Extensions namespace to fast creating this collection.
+The library contains some extensions in Laraue.CodeTranslation.Extensions namespace to fast creating this collection.
+For example, code below will load all referenced assemblies which name contains "Laraue.Contracts." and add to the collection all types
+contains attribute "DataContract".
 
 ```cs
 var types.AddTypesFromAllReferencedAssemblies(x => x.Contains("Laraue.Contracts."), x => x.HasAttribute<DataContractAttribute>())
 ```
 
-Then can be created instance of CodeTranslator which will translate code from C# to Typescript. 
-It consumes translator options which can control output code view.
+Then should be created instance of CodeTranslator, class which will translate code from C# to Typescript.
+It consumes translator options that can control output code view.
 
-Example of additional mapping: System.Net.HttpStatusCode -> number:
+```cs
+var codeTranslator = TypeScriptTranslatorBuilder.Create(new TypeScriptCodeTranslatorOptions());
+var typesCode = codeTranslator.GenerateTypesCode(types);
+```
+
+CodeTranslator returns a sequence of files with generated code and path, where each of file should be situated.
+It can be easily stored someplace on the disk using the special extension or used as you wish.
+
+```cs
+typesCode.StoreTo("D:/tsTypes", true);
+```
+
+### Code translator options
+
+Options contains some properties to control code will be generated.
+
+Example of adding additional mapping: System.Net.HttpStatusCode -> number:
 
 ```cs
 var options = new TypeScriptCodeTranslatorOptions()
@@ -44,7 +62,7 @@ var options = new TypeScriptCodeTranslatorOptions()
 }
 ```
 
-Example of camel case type naming for result code:
+Example of camel case type naming strategy for result code:
 
 ```cs
 var options = new TypeScriptCodeTranslatorOptions()
@@ -53,16 +71,11 @@ var options = new TypeScriptCodeTranslatorOptions()
 }
 ```
 
-Now CodeTranslator can be creating and result code can be generated 
+Example of custom indent size for generated code:
 
 ```cs
-var codeTranslator = TypeScriptTranslatorBuilder.Create(options);
-var typesCode = codeTranslator.GenerateTypesCode(types);
-```
-
-CodeTranslator returns sequence of files with generated code and path, where this file should be situated. 
-It can be easy stored to some place on the disk using special extension or used as you wish.
-
-```cs
-typesCode.StoreTo("D:/tsTypes", true);
+var options = new TypeScriptCodeTranslatorOptions()
+{
+    IndentSize = 4    
+}
 ```
