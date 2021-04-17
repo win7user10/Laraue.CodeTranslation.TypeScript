@@ -2,7 +2,7 @@
 
 namespace Laraue.CodeTranslation.UnitTests
 {
-	public static class Extensions
+	public static class PropertyInfoExtensions
 	{
 		public static PropertyInfo GetPropertyInfo<T>(this string memberInfo)
 		{

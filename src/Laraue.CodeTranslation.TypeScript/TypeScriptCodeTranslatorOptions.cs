@@ -8,7 +8,7 @@ namespace Laraue.CodeTranslation.TypeScript
     {
         public TypeScriptCodeTranslatorOptions()
         {
-            TypeNamingStrategy = new PascalCaseStrategy();
+            TypeNamingStrategy = new PascalCaseNamingStrategy();
             PathSegmentNamingStrategy = new CamelCaseNamingStrategy();
             PropertiesNamingStrategy = new CamelCaseNamingStrategy();
         }
