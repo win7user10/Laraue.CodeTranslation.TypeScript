@@ -43,6 +43,8 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 		[InlineData(nameof(MainClass.TwoTypesGenericSubValueArray), "twoTypesGenericSubValueArray: TwoTypeGenericSubClass<number, number>[] | null = null;")]
 		[InlineData(nameof(MainClass.TwoTypesGenericSubValueEnumerable), "twoTypesGenericSubValueEnumerable: TwoTypeGenericSubClass<number, number>[] | null = null;")]
 		[InlineData(nameof(MainClass.EnumStartsWith0), "enumStartsWith0: EnumStartsWith0 = EnumStartsWith0.Value0;")]
+		[InlineData(nameof(MainClass.Boolean), "boolean = true;")]
+		[InlineData(nameof(MainClass.NullableBoolean), "nullableBoolean: boolean | null = null;")]
 		public void PropertyTranslation(string propertyName, string exceptedCode)
 		{
 			var code = GetPropertySourceCode<MainClass>(propertyName);

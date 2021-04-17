@@ -32,6 +32,8 @@ namespace Laraue.CodeTranslation.UnitTests
 		public JObject JObjectValue { get; set; }
 		public int? NullableIntValue { get; set; }
 		public Guid? NullableGuidValue { get; set; }
+		public bool Boolean { get; set; }
+		public bool? NullableBoolean { get; set; }
 
 	}
 

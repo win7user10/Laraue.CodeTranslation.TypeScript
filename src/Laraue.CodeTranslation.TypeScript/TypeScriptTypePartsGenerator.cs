@@ -86,11 +86,16 @@ namespace Laraue.CodeTranslation.TypeScript
         /// <inheritdoc />
         public virtual bool ShouldBeUsedTypingInPropertyDefinition(OutputPropertyType property)
         {
+            if (IsNullableType(property))
+            {
+                return true;
+            }
+
             switch (property.OutputType)
             {
                 case Number:
                 case Boolean:
-                case String when !IsNullableType(property):
+                case String:
                     return false;
                 default:
                     return true;
