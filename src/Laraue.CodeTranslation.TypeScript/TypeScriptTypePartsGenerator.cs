@@ -89,6 +89,7 @@ namespace Laraue.CodeTranslation.TypeScript
             switch (property.OutputType)
             {
                 case Number:
+                case Boolean:
                 case String when !IsNullableType(property):
                     return false;
                 default:
