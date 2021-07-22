@@ -34,6 +34,8 @@ namespace Laraue.CodeTranslation.UnitTests
 		public Guid? NullableGuidValue { get; set; }
 		public bool Boolean { get; set; }
 		public bool? NullableBoolean { get; set; }
+		public ISomeInterface InterfaceValue { get; set; }
+		public IEnumerable<ISomeInterface> InterfaceValues { get; set; }
 
 	}
 
@@ -63,5 +65,10 @@ namespace Laraue.CodeTranslation.UnitTests
 	{
 		Value0 = 10,
 		Value1,
+	}
+
+	public interface ISomeInterface
+	{
+		int Value { get; }
 	}
 }

@@ -21,6 +21,7 @@ namespace Laraue.CodeTranslation.TypeScript
 		{
 			Collection
 				.AddMap<Dictionary>(metadata => metadata.IsDictionary, GetDictionaryMetadata)
+				.AddMap<Interface>(metadata => metadata.ClrType.IsInterface, GetInterfacesMetadata)
 				.AddMap<Class>(metadata => metadata.ClrType.IsClass && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetClassMetadata)
 				.AddMap<Array>(metadata => metadata.IsEnumerable && !metadata.IsDictionary && metadata.ClrType != typeof(string), GetArrayMetadata)
 				.AddMap<Enum>(metadata => metadata.IsEnum, GetEnumMetadata)
@@ -47,6 +48,13 @@ namespace Laraue.CodeTranslation.TypeScript
 		{
 			var descriptor = Collection.GetMap(metadata);
 			return descriptor?.GetOutputType(metadata);
+		}
+
+		[CanBeNull]
+		public virtual Interface GetInterfacesMetadata([CanBeNull] TypeMetadata metadata)
+		{
+			if (metadata is null) return null;
+			return new(metadata, TypeProvider);
 		}
 
 		[CanBeNull]

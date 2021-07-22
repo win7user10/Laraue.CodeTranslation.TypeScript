@@ -54,7 +54,7 @@ namespace Laraue.CodeTranslation.UnitTests.Metadata
 		[InlineData(typeof(TwoTypeGenericSubClass<int, decimal>), new string[0])]
 		[InlineData(typeof(TwoTypeGenericSubClass<int, OneTypeGenericSubClass<int>>), new[]{ "OneTypeGenericSubClass" })]
 		[InlineData(typeof(SubClass), new[]{ "MainClass" })]
-		[InlineData(typeof(MainClass), new[]{ "EnumStartsWith0", "EnumStartsWith10", "SubClass", "OneTypeGenericSubClass", "TwoTypeGenericSubClass" })]
+		[InlineData(typeof(MainClass), new[]{ "EnumStartsWith0", "EnumStartsWith10", "SubClass", "OneTypeGenericSubClass", "TwoTypeGenericSubClass", "ISomeInterface" })]
 		public void GenerateUsedTypes(Type inputType, string[] exceptedTypes)
 		{
 			var typeMetadata = GetTypeMetadata(inputType);

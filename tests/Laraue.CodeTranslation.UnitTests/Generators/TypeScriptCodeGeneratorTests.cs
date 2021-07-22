@@ -45,6 +45,8 @@ namespace Laraue.CodeTranslation.UnitTests.Generators
 		[InlineData(nameof(MainClass.EnumStartsWith0), "enumStartsWith0: EnumStartsWith0 = EnumStartsWith0.Value0;")]
 		[InlineData(nameof(MainClass.Boolean), "boolean = true;")]
 		[InlineData(nameof(MainClass.NullableBoolean), "nullableBoolean: boolean | null = null;")]
+		[InlineData(nameof(MainClass.InterfaceValue), "interfaceValue: ISomeInterface | null = null;")]
+		[InlineData(nameof(MainClass.InterfaceValues), "interfaceValues: ISomeInterface[] | null = null;")]
 		public void PropertyTranslation(string propertyName, string exceptedCode)
 		{
 			var code = GetPropertySourceCode<MainClass>(propertyName);
