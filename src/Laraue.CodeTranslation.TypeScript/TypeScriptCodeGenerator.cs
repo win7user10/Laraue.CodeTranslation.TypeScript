@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using JetBrains.Annotations;
 using Laraue.CodeTranslation.Abstractions.Code;
 using Laraue.CodeTranslation.Abstractions.Output;
 using Laraue.CodeTranslation.Abstractions.Translation;
 using Laraue.CodeTranslation.Common;
+using Laraue.CodeTranslation.TypeScript.Types;
 
 namespace Laraue.CodeTranslation.TypeScript
 {
@@ -56,19 +58,64 @@ namespace Laraue.CodeTranslation.TypeScript
 			using var resultBuilder = type switch
 			{
 				Types.Enum enumType => GenerateEnumCode(codeBuilder, enumType),
-				_ => GenerateTypeCode(codeBuilder, type),
+				Interface interfaceType => GenerateInterfaceCode(codeBuilder, interfaceType),
+				Class classType => GenerateClassCode(codeBuilder, classType),
 			};
 
 			return resultBuilder.ToString();
 		}
 
-		protected virtual IndentedStringBuilder GenerateTypeCode(IndentedStringBuilder codeBuilder, OutputType type)
+		[NotNull] protected virtual string GenerateImplementInterfacesString(ReferenceType type)
 		{
-			codeBuilder.Append($"export class {_generator.GenerateName(type.Name)} ");
+			var codeBuilder = new StringBuilder();
+
+			var interfaces = type?.Interfaces?.ToArray();
+			if (interfaces?.Length > 0)
+			{
+				codeBuilder.Append("implements ");
+				var interfacesString = string.Join(", ", interfaces.Select(x => _generator.GenerateName(x.Name)));
+				codeBuilder.Append(interfacesString);
+				codeBuilder.Append(" ");
+			}
+
+			return codeBuilder.ToString();
+		}
+
+		protected virtual IndentedStringBuilder GenerateInterfaceCode(IndentedStringBuilder codeBuilder, Interface type)
+		{
+			codeBuilder.Append($"export interface {_generator.GenerateName(type.Name)} ");
+			codeBuilder.Append(GenerateImplementInterfacesString(type));
+
+			codeBuilder.AppendLine("{");
+
+			using (codeBuilder.Indent())
+			{
+				foreach (var propertyType in type.Properties)
+				{
+					codeBuilder.AppendLine(GenerateCode(propertyType));
+				}
+			}
+			codeBuilder.Append("}");
+
+			return codeBuilder;
+		}
+
+		protected virtual IndentedStringBuilder GenerateClassCode(IndentedStringBuilder codeBuilder, Class type)
+		{
+			codeBuilder.Append("export ");
+			if (type.IsAbstract)
+			{
+				codeBuilder.Append("abstract ");
+			}
+
+			codeBuilder.Append($"class {_generator.GenerateName(type.Name)} ");
+
 			if (type?.ParentTypeName is not null)
 			{
 				codeBuilder.Append($"extends {_generator.GenerateName(type.ParentTypeName)} ");
 			}
+
+			codeBuilder.Append(GenerateImplementInterfacesString(type));
 
 			codeBuilder.AppendLine("{");
 

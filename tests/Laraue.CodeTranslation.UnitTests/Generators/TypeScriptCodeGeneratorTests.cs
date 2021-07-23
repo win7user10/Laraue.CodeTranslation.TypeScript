@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Laraue.CodeTranslation.Abstractions.Translation;
 using Laraue.CodeTranslation.Common;
 using Laraue.CodeTranslation.TypeScript;
 using Xunit;
@@ -91,6 +90,36 @@ export class ChildClass extends ParentClass {
 				@"export class ParentClass {
   someProperty = 0;
 }", parentCode);
+		}
+
+		internal interface ISomeInterface
+		{
+		}
+
+		internal interface IAnotherInterface : ISomeInterface
+		{
+		}
+
+		[Fact]
+		public void CodeTranslationForInterface()
+		{
+			var childCode = GetTypeSourceCode<IAnotherInterface>();
+			Assert.Equal(
+				@"export interface IAnotherInterface implements ISomeInterface {
+}", childCode);
+		}
+
+		internal abstract class AbstractClass
+		{
+		}
+
+		[Fact]
+		public void CodeTranslationForAbstractClass()
+		{
+			var childCode = GetTypeSourceCode<AbstractClass>();
+			Assert.Equal(
+				@"export abstract class AbstractClass {
+}", childCode);
 		}
 
 		internal class ParentClass { public int SomeProperty { get; set; } }

@@ -46,19 +46,40 @@ namespace Laraue.CodeTranslation.Abstractions.Metadata
 		/// </summary>
 		public bool IsNullable { get; init; }
 
+		/// <summary>
+		/// Is this type an interface.
+		/// </summary>
+		public bool IsInterface { get; init; }
+
+		/// <summary>
+		/// Is this type abstract.
+		/// </summary>
+		public bool IsAbstract { get; init; }
+
+		/// <summary>
+		/// If type has a parent this property is not empty
+		/// </summary>
 		[CanBeNull]
 		public TypeMetadata ParentTypeMetadata { get; init; }
 
+		/// <summary>
+		/// Metadata of all properties in a class.
+		/// </summary>
 		[NotNull]
 		public IEnumerable<PropertyMetadata> PropertiesMetadata { get; init; }
+
+		/// <summary>
+		/// Metadata of all implemented interfaces.
+		/// </summary>
+		public IEnumerable<TypeMetadata> ImplementedInterfaces { get; init; }
 
 		/// <inheritdoc />
 		public override int GetHashCode()
 		{
 			return ClrType.GetHashCode();
 		}
-
-		public bool Equals(TypeMetadata? other)
+		
+		public bool Equals(TypeMetadata other)
 		{
 			return other?.ClrType == ClrType;
 		}

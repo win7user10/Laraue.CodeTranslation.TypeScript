@@ -68,6 +68,7 @@ namespace Laraue.CodeTranslation.Common
 			ResolveAndCache(TypeProvider.DependenciesGraph.GetResolvingTypesSequence(metadata, DependencyType.Generic));
 			ResolveAndCache(TypeProvider.DependenciesGraph.GetResolvingTypesSequence(metadata, DependencyType.Parent));
 			ResolveAndCache(TypeProvider.DependenciesGraph.GetResolvingTypesSequence(metadata, DependencyType.Properties));
+			ResolveAndCache(TypeProvider.DependenciesGraph.GetResolvingTypesSequence(metadata, DependencyType.Interfaces));
 		}
 
 		/// <summary>

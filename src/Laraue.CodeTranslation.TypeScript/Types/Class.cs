@@ -3,7 +3,7 @@ using Laraue.CodeTranslation.Abstractions.Output;
 
 namespace Laraue.CodeTranslation.TypeScript.Types
 {
-	public class Class : DynamicOutputType
+	public class Class : ReferenceType
 	{
 		public Class(TypeMetadata metadata, IOutputTypeProvider provider) 
 			: base(metadata, provider)
@@ -11,23 +11,13 @@ namespace Laraue.CodeTranslation.TypeScript.Types
 		}
 
 		/// <inheritdoc />
-		public override OutputTypeName Name => GetOutputTypeName(TypeMetadata);
-
-		/// <inheritdoc />
 		public override OutputTypeName ParentTypeName => TypeProvider.ShouldBeImported(TypeProvider.Get(TypeMetadata?.ParentTypeMetadata)) 
 			? GetOutputTypeName(TypeMetadata?.ParentTypeMetadata)
 			: null;
 
-		private OutputTypeName GetOutputTypeName(TypeMetadata metadata)
-		{
-			if (metadata is null)
-			{
-				return string.Empty;
-			}
-
-			var className = GetNonGenericStringTypeName(metadata);
-			var genericTypeNames = GetGenericTypeNames(metadata);
-			return new OutputTypeName(className, genericTypeNames);
-		}
+		/// <summary>
+		/// Return if this class is abstract.
+		/// </summary>
+		public bool IsAbstract => TypeMetadata?.IsAbstract ?? false;
 	}
 }

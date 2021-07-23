@@ -32,6 +32,9 @@ namespace Laraue.CodeTranslation.Common
 				ParentTypeMetadata = notNullableType.BaseType is not null ? GetMetadata(notNullableType.BaseType) : null,
 				IsNullable = IsNullable(type),
 				PropertiesMetadata = GetPropertiesMetadata(type),
+				ImplementedInterfaces = GetImplementedInterfaces(type),
+				IsInterface = IsInterface(type),
+				IsAbstract = IsAbstract(type),
 			};
 		}
 
@@ -45,6 +48,14 @@ namespace Laraue.CodeTranslation.Common
 				PropertyType = GetMetadata(clrType),
 				PropertyName = property.Name,
 			};
+		}
+
+		protected virtual IEnumerable<TypeMetadata> GetImplementedInterfaces(Type type)
+		{
+			foreach (var @interface in type.GetInterfaces())
+			{
+				yield return GetMetadata(@interface);
+			}
 		}
 
 		protected IEnumerable<PropertyMetadata> GetPropertiesMetadata(Type type)

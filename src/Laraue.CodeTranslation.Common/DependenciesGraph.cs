@@ -107,6 +107,24 @@ namespace Laraue.CodeTranslation.Common
             }
         }
 
+        private void AddImplementedInterfacesToGraph(TypeMetadata metadata)
+        {
+            var types = new Queue<TypeMetadata>(metadata?.ImplementedInterfaces.Select(x => x) ?? Enumerable.Empty<TypeMetadata>());
+            while (types.Count > 0)
+            {
+                var type = types.Dequeue();
+                var node = GetNode(metadata);
+
+                if (node.AddEdge(type, DependencyType.Interfaces))
+                {
+                    foreach (var innerInterface in type.ImplementedInterfaces)
+                    {
+                        types.Enqueue(innerInterface);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Add types from type properties to hashset with used properties.
         /// </summary>
@@ -135,6 +153,7 @@ namespace Laraue.CodeTranslation.Common
             AddUsedGenericTypesToGraph(metadata, 0);
             AddUsedParentTypesToGraph(metadata);
             AddPropertiesToGraph(metadata);
+            AddImplementedInterfacesToGraph(metadata);
         }
     }
 }
