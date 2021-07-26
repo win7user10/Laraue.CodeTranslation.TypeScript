@@ -107,8 +107,7 @@ namespace Laraue.CodeTranslation.TypeScript
             var propertyType = property.PropertyMetadata.PropertyType;
             return propertyType.IsNullable
                    || property.OutputType is Array
-                   || propertyType.ClrType.IsClass
-                   || propertyType.ClrType.IsInterface;
+                   || propertyType.ClrType.IsClass;
         }
 
         protected virtual string GenerateDefaultEnumValue(OutputPropertyType property)
