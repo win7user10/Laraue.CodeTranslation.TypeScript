@@ -22,10 +22,5 @@ namespace Laraue.CodeTranslation.Abstractions.Output
 		/// This means that dependency was discovered in generic types of some type.
 		/// </summary>
 		Generic = 4,
-
-		/// <summary>
-		/// This means that dependency was discovered in one of the interfaces of type.
-		/// </summary>
-		Interfaces = 8,
 	}
 }

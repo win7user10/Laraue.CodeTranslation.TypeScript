@@ -35,15 +35,5 @@ namespace Laraue.CodeTranslation.Common
 			var underlyingType = Nullable.GetUnderlyingType(type);
 			return underlyingType ?? type;
 		}
-
-		protected virtual bool IsInterface(Type type)
-		{
-			return type.IsInterface;
-		}
-
-		protected virtual bool IsAbstract(Type type)
-		{
-			return type.IsAbstract;
-		}
 	}
 }
