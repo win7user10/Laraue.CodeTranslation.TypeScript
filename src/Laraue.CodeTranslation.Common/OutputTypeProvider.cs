@@ -43,7 +43,7 @@ namespace Laraue.CodeTranslation.Common
         public IEnumerable<OutputType> GetUsedTypes(TypeMetadata key)
         {
             var dependencies = DependenciesGraph
-                .GetResolvingTypesSequence(key, DependencyType.Properties, DependencyType.Generic, DependencyType.Parent, DependencyType.Interfaces)
+                .GetResolvingTypesSequence(key, DependencyType.Properties, DependencyType.Generic, DependencyType.Parent)
                 .Where(x => x != key);
 
             var result = dependencies

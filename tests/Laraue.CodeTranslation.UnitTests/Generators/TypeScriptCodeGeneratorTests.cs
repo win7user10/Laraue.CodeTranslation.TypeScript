@@ -105,9 +105,7 @@ export class ChildClass extends ParentClass {
 		{
 			var childCode = GetTypeSourceCode<IAnotherInterface>();
 			Assert.Equal(
-				@"import { ISomeInterface } from './iSomeInterface'
-
-export interface IAnotherInterface implements ISomeInterface {
+				@"export interface IAnotherInterface implements ISomeInterface {
 }", childCode);
 		}
 

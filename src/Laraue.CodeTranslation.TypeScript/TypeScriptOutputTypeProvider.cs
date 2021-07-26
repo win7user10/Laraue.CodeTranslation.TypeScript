@@ -21,6 +21,7 @@ namespace Laraue.CodeTranslation.TypeScript
 				Enum => true,
 				StaticOutputType => false,
 				Array => false,
+				Interface interfaceType => true,
 				_ => !type.TypeMetadata.ClrType.Assembly.FullName.Contains("System")
 			};
 		}
